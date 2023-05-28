@@ -6,6 +6,7 @@ import { chessApi } from '@/utils/chessApi'
 import { onBeforeMount, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import HomeButton from '../components/HomeButton.vue'
+import PlayedGamesTable from '../components/PlayedGamesTable.vue'
 
 let user = undefined
 const isLoading = ref(true)
@@ -33,8 +34,9 @@ onBeforeMount(() => {
   <UserNotFound :username="user" v-else-if="isError" />
   <div v-else>
     <HomeButton />
-    <div class="p-5 flex flex-col justify-start items-center min-h-screen">
-      <UserInfo :data="user" />
+    <div class="p-5 flex flex-col items-center space-y-8">
+      <div><UserInfo :data="user" /></div>
+      <div><PlayedGamesTable :username="user.username" /></div>
     </div>
   </div>
 </template>

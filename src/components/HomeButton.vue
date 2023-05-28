@@ -1,3 +1,6 @@
+<script setup>
+</script>
+
 <template>
   <button class="btn btn-square btn-outline btn-primary absolute top-5 left-5" @click="$router.push('/')">
         <svg
