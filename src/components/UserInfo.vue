@@ -25,7 +25,7 @@ defineProps({
         <div class="stat-value text-right">{{ data.followers }}</div>
       </div>
       <div class="stat">
-        <flag :iso="data.country.split('/').pop()" class="stat-figure rounded-xl text-6xl"/>
+        <flag :iso="data.country.split('/').pop()" class="stat-figure rounded-xl text-6xl" />
       </div>
     </div>
   </a>

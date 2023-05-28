@@ -1,6 +1,7 @@
 <script setup>
-import { onBeforeMount, ref } from 'vue'
 import { chessApi } from '@/utils/chessApi'
+import { onBeforeMount, ref } from 'vue'
+import GamePreview from './GamePreview.vue'
 
 const props = defineProps({
   username: String
@@ -20,9 +21,10 @@ onBeforeMount(() => {
 })
 
 function getGamesOfMonth() {
+  gamesInMonth.value = undefined
   const [year, month] = playedGamesArchive.value[activeMonth.value].split('/')
   chessApi.getPlayerCompleteMonthlyArchives(props.username, year, month).then((data) => {
-    gamesInMonth.value = data.body
+    gamesInMonth.value = data.body.games.filter((game) => game.pgn !== undefined)
   })
 }
 </script>
@@ -31,8 +33,8 @@ function getGamesOfMonth() {
   <div v-if="playedGamesArchive === undefined">
     <progress class="progress progress-primary w-48"></progress>
   </div>
-  <div v-else class="flex flex-row space-x-5">
-    <ul class="menu bg-base-100 shadow-2xl p-2 rounded-box space-y-2">
+  <div v-else class="flex flex-row space-x-5" style="width: 80vw">
+    <ul class="menu bg-base-100 shadow-2xl p-2 rounded-box space-y-2 h-min">
       <li v-for="(month, index) in playedGamesArchive" :key="index">
         <a
           :class="{ active: index === activeMonth }"
@@ -46,6 +48,13 @@ function getGamesOfMonth() {
         >
       </li>
     </ul>
-    <div class="w-96 bg-base-100 shadow-2xl rounded-md">{{ gamesInMonth }}</div>
+    <div class="menu bg-base-100 shadow-2xl p-2 rounded-box space-y-2 h-mi w-full">
+      <div v-if="gamesInMonth === undefined" class="text-center py-3">
+        <progress class="progress progress-primary w-48"></progress>
+      </div>
+      <li v-else v-for="game in gamesInMonth" :key="game.uuid">
+        <a><GamePreview :game-data="game" :username="username" /></a>
+      </li>
+    </div>
   </div>
 </template>

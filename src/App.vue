@@ -1,3 +1,3 @@
 <template>
-  <RouterView />
+  <router-view :key="$route.fullPath" />
 </template>
