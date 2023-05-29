@@ -12,6 +12,8 @@ const props = defineProps({
   username: String
 })
 
+let userHover = true
+
 const game = new Chess()
 
 onBeforeMount(() => {
@@ -33,7 +35,14 @@ function getResultImage() {
 </script>
 
 <template>
-  <div class="w-full flex flex-row justify-between">
+  <div
+    class="w-full flex flex-row justify-between"
+    @click="
+      () => {
+        if (userHover) $router.push('/analyze?id=' + props.gameData.url.split('/').pop())
+      }
+    "
+  >
     <div class="flex items-center space-x-8">
       <div class="flex">
         <Calendar class="mr-2" />
@@ -43,10 +52,12 @@ function getResultImage() {
         <Clock class="mr-2" />
         {{ game._header.EndTime }}
       </div>
-      <img :src="getResultImage()" class="h-9">
+      <img :src="getResultImage()" class="h-9" />
     </div>
     <div class="text-right">
       <UserInfoGame
+        @mouseenter="userHover = false"
+        @mouseleave="userHover = true"
         :username="
           username.toLowerCase() === game._header.White.toLowerCase()
             ? game._header.Black
