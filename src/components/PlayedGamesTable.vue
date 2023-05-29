@@ -9,6 +9,8 @@ const props = defineProps({
 
 const playedGamesArchive = ref(undefined)
 const activeMonth = ref(0)
+const activeRange = ref(0)
+const activeRangeInc = 6
 const gamesInMonth = ref(undefined)
 
 onBeforeMount(() => {
@@ -24,7 +26,7 @@ function getGamesOfMonth() {
   gamesInMonth.value = undefined
   const [year, month] = playedGamesArchive.value[activeMonth.value].split('/')
   chessApi.getPlayerCompleteMonthlyArchives(props.username, year, month).then((data) => {
-    gamesInMonth.value = data.body.games.filter((game) => game.pgn !== undefined)
+    gamesInMonth.value = data.body.games.filter((game) => game.pgn !== undefined).reverse()
   })
 }
 </script>
@@ -33,28 +35,47 @@ function getGamesOfMonth() {
   <div v-if="playedGamesArchive === undefined">
     <progress class="progress progress-primary w-48"></progress>
   </div>
-  <div v-else class="flex flex-row space-x-5" style="width: 80vw">
-    <ul class="menu bg-base-100 shadow-2xl p-2 rounded-box space-y-2 h-min">
-      <li v-for="(month, index) in playedGamesArchive" :key="index">
-        <a
-          :class="{ active: index === activeMonth }"
-          @click="
-            () => {
-              activeMonth = index
-              getGamesOfMonth()
-            }
-          "
-          >{{ month }}</a
+  <div v-else>
+    <div class="min-h-screen fixed top-0 flex flex-col justify-center" style="left: 10%;">
+      <ul class="menu bg-base-100 shadow-2xl p-2 rounded-box space-y-2 fixed">
+        <li :class="{ disabled: activeRange <= 0 }">
+          <a @click="() => {if (activeRange > 0) activeRange -= activeRangeInc}" class="flex justify-center">&raquo;</a>
+        </li>
+        <li
+          v-for="(month, index) in playedGamesArchive.slice(
+            activeRange,
+            activeRange + activeRangeInc
+          )"
         >
-      </li>
-    </ul>
-    <div class="menu bg-base-100 shadow-2xl p-2 rounded-box space-y-2 h-mi w-full">
-      <div v-if="gamesInMonth === undefined" class="text-center py-3">
-        <progress class="progress progress-primary w-48"></progress>
+          <a
+            :class="{ active: index + activeRange === activeMonth }"
+            @click="
+              () => {
+                activeMonth = index + activeRange
+                getGamesOfMonth()
+              }
+            "
+            >{{ month }}</a
+          >
+        </li>
+        <li :class="{ disabled: activeRange + activeRangeInc >= playedGamesArchive.length }">
+          <a @click="() => {if (activeRange + activeRangeInc < playedGamesArchive.length) activeRange += activeRangeInc}" class="flex justify-center">&laquo;</a>
+        </li>
+      </ul>
+    </div>
+    <div class="flex flex-row space-x-4" style="width: 80vw">
+      <div class="p-14"></div>
+      <div class="menu bg-base-100 shadow-2xl p-2 rounded-box space-y-2 h-mi w-full">
+        <div
+          v-if="gamesInMonth === undefined"
+          class="flex justify-center items-center flex-col h-full"
+        >
+          <progress class="progress progress-primary w-48"></progress>
+        </div>
+        <li v-else v-for="game in gamesInMonth" :key="game.uuid">
+          <a><GamePreview :game-data="game" :username="username" /></a>
+        </li>
       </div>
-      <li v-else v-for="game in gamesInMonth" :key="game.uuid">
-        <a><GamePreview :game-data="game" :username="username" /></a>
-      </li>
     </div>
   </div>
 </template>

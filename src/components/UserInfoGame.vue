@@ -18,7 +18,7 @@ onBeforeMount(() => {
       })
       .catch(() => {
         if (tries < 10) {
-          fetcher(tries++)
+          fetcher(++tries)
         }
       })
   }
