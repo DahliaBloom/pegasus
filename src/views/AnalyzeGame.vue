@@ -16,17 +16,27 @@ export default {
         };
     },
     methods: {
-        async initializeStockfish() {
+        async evaluatePosition() {
             this.stockfish = await Stockfish();
             this.stockfish.postMessage('setoption name use nnue value true');
-        },
-        async evaluatePosition() {
-            await this.initializeStockfish();
-
-            this.stockfish.onmessage = function (event) { console.log("Hello World"); };
             this.stockfish.postMessage(`position fen ${this.fen}`);
             this.stockfish.postMessage('eval');
+            var received = [];
+            this.stockfish.addMessageListener((line) => {
+                received.push(line);
+                console.log("LINE: " + line);
+            })
+            console.log(received);
+            var evaluationString = received[10];
+            console.log("EVAL STRING:" + evaluationString);
+            const regex = /Final evaluation\s+([+-]?\d+\.\d+)/;
+            const match = regex.exec(evaluationString);
 
+            if (match && match.length > 1) {
+                const evaluationNumber = parseFloat(match[1]);
+                console.log("SCORE:" + evaluationNumber);
+                this.score = evaluationNumber;
+            }
         },
     }
 }
