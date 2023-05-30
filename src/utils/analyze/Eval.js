@@ -1,4 +1,4 @@
-const stockfish = undefined
+let stockfish = undefined
 
 async function startStockfish() {
   if (stockfish === undefined) {
