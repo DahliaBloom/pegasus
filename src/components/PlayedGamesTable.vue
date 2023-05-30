@@ -36,10 +36,18 @@ function getGamesOfMonth() {
     <progress class="progress progress-primary w-48"></progress>
   </div>
   <div v-else>
-    <div class="min-h-screen fixed top-0 flex flex-col justify-center" style="left: 10%;">
+    <div class="min-h-screen fixed top-0 flex flex-col justify-center" style="left: 10%">
       <ul class="menu bg-base-100 shadow-2xl p-2 rounded-box space-y-2 fixed">
         <li :class="{ disabled: activeRange <= 0 }">
-          <a @click="() => {if (activeRange > 0) activeRange -= activeRangeInc}" class="flex justify-center">&raquo;</a>
+          <a
+            @click="
+              () => {
+                if (activeRange > 0) activeRange -= activeRangeInc
+              }
+            "
+            class="flex justify-center"
+            >&raquo;</a
+          >
         </li>
         <li
           v-for="(month, index) in playedGamesArchive.slice(
@@ -59,7 +67,16 @@ function getGamesOfMonth() {
           >
         </li>
         <li :class="{ disabled: activeRange + activeRangeInc >= playedGamesArchive.length }">
-          <a @click="() => {if (activeRange + activeRangeInc < playedGamesArchive.length) activeRange += activeRangeInc}" class="flex justify-center">&laquo;</a>
+          <a
+            @click="
+              () => {
+                if (activeRange + activeRangeInc < playedGamesArchive.length)
+                  activeRange += activeRangeInc
+              }
+            "
+            class="flex justify-center"
+            >&laquo;</a
+          >
         </li>
       </ul>
     </div>
