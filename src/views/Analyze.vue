@@ -21,7 +21,10 @@ export default {
   },
   methods: {
     evaluatePosition() {
-      evaluate(this.fen, 5)
+      evaluate(this.fen, (score) => {
+        console.log('Received score:', score);
+        this.score = score
+      });
     }
   }
 }
