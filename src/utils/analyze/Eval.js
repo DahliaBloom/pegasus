@@ -18,6 +18,8 @@ function listener(message) {
 }
 
 export async function evaluate(fen, depth) {
+  if (stockfish === undefined) return false
   stockfish.postMessage(`position fen ${fen}`)
   stockfish.postMessage(`go depth ${depth}`)
+  return true
 }
