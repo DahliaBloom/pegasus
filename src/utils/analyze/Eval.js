@@ -10,6 +10,7 @@ Stockfish().then((s) => {
 });
 
 function listener(message) {
+  //console.log(message)
   if (message.startsWith('Final')) {
     const regex = /Final evaluation\s+([+-]?\d+\.\d+)/;
     const match = regex.exec(message);
@@ -24,6 +25,6 @@ export async function evaluate(fen, callback) {
   stockfish.postMessage(`eval`);
   setTimeout(() => {
     callback(score);
-  }, 100); // Delay the callback execution to ensure the score is updated
+  }, 100);
   
 }
