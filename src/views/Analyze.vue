@@ -1,5 +1,5 @@
 <script setup>
-import EvalBar from "../components/EvalBar.vue"
+import EvalBar from '../components/EvalBar.vue'
 </script>
 
 <template>
@@ -12,7 +12,6 @@ import EvalBar from "../components/EvalBar.vue"
       <button @click="this.score = this.custom">Submit</button>
       <div v-if="score !== 0">Evaluation score: {{ score }}</div>
       <p>r1b1k1nr/pppp1ppp/2n2q2/2b1p3/2B1P1Q1/2N5/PPPP1PPP/R1B1K1NR w KQkq - 6 5</p>
-      <p>Open console to see score!</p>
     </div>
   </div>
 </template>
@@ -32,9 +31,9 @@ export default {
   methods: {
     evaluatePosition() {
       evaluate(this.fen, (score) => {
-        console.log('Received score:', score);
+        console.log('Received score:', score)
         this.score = score
-      });
+      })
     }
   },
   components: {

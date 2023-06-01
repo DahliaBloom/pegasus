@@ -7,8 +7,8 @@ let p5Obj = undefined
 
 onMounted(() => {
   const sketch = (p5) => {
-    const bgcolor = p5.color(15, 23, 42)
-    const primaryColor = p5.color(56, 189, 248)
+    const bgcolor = p5.color(31, 41, 55)
+    const primaryColor = p5.color(59, 130, 246)
 
     const maxSizeWin = () => {
       return p5.windowWidth < p5.windowHeight ? p5.windowHeight : p5.windowWidth

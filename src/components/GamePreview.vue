@@ -18,6 +18,7 @@ const game = new Chess()
 
 onBeforeMount(() => {
   game.loadPgn(props.gameData.pgn)
+  console.log(props.gameData);
 })
 
 function getResultImage() {
@@ -39,7 +40,7 @@ function getResultImage() {
     class="w-full flex flex-row justify-between"
     @click="
       () => {
-        if (userHover) $router.push('/analyze?id=' + props.gameData.url.split('/').pop())
+        if (userHover) $router.push('/analyze?id=' + props.gameData.uuid)
       }
     "
   >
