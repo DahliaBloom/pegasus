@@ -5,9 +5,11 @@ console.log('Starting stockfish')
 Stockfish().then((s) => {
   s.addMessageListener(listener)
   s.postMessage('uci')
-  //s.postMessage('setoption name EvalFile value /stockfish/nn-8d69132723e2.nnue')
   s.postMessage('setoption name use nnue value true')
-  s.postMessage('setoption name Threads value 6')
+  s.postMessage('setoption name Threads value 12')
+  s.postMessage('setoption name Hash value 128')
+  s.postMessage('setoption name UCI_AnalyseMode value true')
+
   stockfish = s
   console.log('Stockfish started')
 })

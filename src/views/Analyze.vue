@@ -38,7 +38,6 @@ export default {
     },
     onMovePlayed({ move, game }) {
       game.makeMove(move)
-      this.evaluatePosition()
     }
   },
   components: {
