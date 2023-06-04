@@ -1,6 +1,7 @@
 <script setup>
 import PerlinNoiseCircle from '@/components/PerlinNoiseCircle.vue'
 import UsernameInput from '@/components/UsernameInput.vue'
+import pegasusAnimation from '../components/pegasusAnimation.vue';
 import { onBeforeUnmount, onMounted } from 'vue'
 
 onMounted(() => {
@@ -14,7 +15,9 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="px-10 flex flex-col justify-center items-center min-h-screen space-y-10">
-    <img src="@/assets/pegasus-font-logo.svg" alt="Pegasus logo" />
+    <div>
+      <pegasusAnimation />
+    </div>
     <UsernameInput />
     <PerlinNoiseCircle class="absolute -z-10" />
   </div>
