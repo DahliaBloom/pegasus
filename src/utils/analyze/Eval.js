@@ -35,6 +35,9 @@ function listener(message) {
 
 export async function evaluate(fen, callback) {
   if (stockfish === undefined) return 0.0
+  
+  console.log("Hello World I have been called")
+  stockfish.postMessage('stop')
   stockfish.postMessage('ucinewgame')
   stockfish.postMessage(`position fen ${fen}`)
   stockfish.postMessage('go depth 20')

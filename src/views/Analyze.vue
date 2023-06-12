@@ -8,7 +8,7 @@
       <button @click="this.score = this.custom">Submit</button>
       <div v-if="score !== 0">Evaluation score: {{ score }}</div>
       <p>r1b1k1nr/pppp1ppp/2n2q2/2b1p3/2B1P1Q1/2N5/PPPP1PPP/R1B1K1NR w KQkq - 6 5</p>
-      <chess-board @onMovePlayed="onMovePlayed" v-model:fen="fen" :size="size"/>
+      <chess-board @onMovePlayed="onMovePlayed" v-model:fen="fen" :size="size" />
     </div>
   </div>
 </template>
