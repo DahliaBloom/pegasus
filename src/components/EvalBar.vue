@@ -14,6 +14,7 @@ export default {
   },
   methods: {
     update() {
+      this.heightString = this.height + "%";
       console.log("update")
       if (this.evaluation === "0.0" || this.evaluation === "0") {
         this.height = 50.0
@@ -22,6 +23,16 @@ export default {
       }
       let tmp = Number(this.evaluation)
       console.log("TMP:" + tmp)
+      if (tmp >= 100) {
+        this.height = 100
+        this.heightString = "100%"
+        return
+      }
+      if (tmp < -100) {
+        this.height = 0
+        this.heightString = "0%"
+        return
+      }
       if (tmp > 0) {
         if (Math.abs(tmp) < 1.0) {
           this.height = 50.0 + tmp * 10
@@ -95,7 +106,6 @@ export default {
       </div>
     </div>
   </div>
-  {{ this.heightString }}
 </template>
 
 <style scoped>

@@ -1,5 +1,6 @@
 let stockfish = undefined
 let score = 0.0 // Declare score variable outside the listener function
+let callbackMethod = null;
 
 console.log('Starting stockfish')
 Stockfish().then((s) => {
@@ -16,11 +17,19 @@ Stockfish().then((s) => {
 
 function listener(message) {
   console.log(message)
-  if (message.startsWith('Final')) {
-    const regex = /Final evaluation\s+([+-]?\d+\.\d+)/
+  if (message.startsWith('info depth')) {
+    const regex = /score cp (-?\d+)/
     const match = regex.exec(message)
-    score = parseFloat(match[1]) // Update the score variable
+    if (match===null){
+      const regex = /score mate (\d+)/
+      const match = regex.exec(message)
+      score = parseFloat(match[1])*100
+    }
+    else {
+      score = parseFloat(match[1])/100 // Update the score variable
+    }
     console.log('Pegasus Final Score: ' + score)
+    callbackMethod(score)
   }
 }
 
@@ -28,8 +37,6 @@ export async function evaluate(fen, callback) {
   if (stockfish === undefined) return 0.0
   stockfish.postMessage('ucinewgame')
   stockfish.postMessage(`position fen ${fen}`)
-  stockfish.postMessage(`eval`)
-  setTimeout(() => {
-    callback(score)
-  }, 100)
+  stockfish.postMessage('go depth 20')
+  callbackMethod=callback;
 }
