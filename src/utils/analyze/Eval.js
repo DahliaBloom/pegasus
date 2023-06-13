@@ -1,7 +1,9 @@
 let stockfish = undefined
 let score = 0.0 // Declare score variable outside the listener function
 let callbackMethod = null;
+let feen = "";
 
+function init() {
 console.log('Starting stockfish')
 Stockfish().then((s) => {
   s.addMessageListener(listener)
@@ -13,7 +15,8 @@ Stockfish().then((s) => {
 
   stockfish = s
   console.log('Stockfish started')
-})
+})}
+init()
 
 function listener(message) {
   console.log(message)
@@ -29,13 +32,20 @@ function listener(message) {
       score = parseFloat(match[1])/100 // Update the score variable
     }
     console.log('Pegasus Final Score: ' + score)
-    callbackMethod(score)
+    if (feen.split(" ")[1]=="w"){
+      callbackMethod(score)
+    }
+    else {
+      callbackMethod(-score)
+    }
   }
 }
 
 export async function evaluate(fen, callback) {
   if (stockfish === undefined) return 0.0
   
+  init()
+  feen=fen
   console.log("Hello World I have been called")
   stockfish.postMessage('stop')
   stockfish.postMessage('ucinewgame')

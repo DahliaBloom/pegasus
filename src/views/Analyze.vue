@@ -38,6 +38,9 @@ export default {
     },
     onMovePlayed({ move, game }) {
       game.makeMove(move)
+      console.log("FEEEEEEEEEEEEEEEEEEN:" + game.fen)
+      this.fen = game.fen;
+      this.evaluatePosition()
     }
   },
   components: {
