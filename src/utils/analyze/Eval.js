@@ -3,7 +3,7 @@ let score = 0.0 // Declare score variable outside the listener function
 let callbackMethod = null;
 let feen = "";
 
-function init() {
+
 console.log('Starting stockfish')
 Stockfish().then((s) => {
   s.addMessageListener(listener)
@@ -12,11 +12,11 @@ Stockfish().then((s) => {
   s.postMessage('setoption name Threads value 12')
   s.postMessage('setoption name Hash value 128')
   s.postMessage('setoption name UCI_AnalyseMode value true')
+  s.postMessage('ucinewgame')
 
   stockfish = s
   console.log('Stockfish started')
-})}
-init()
+})
 
 function listener(message) {
   console.log(message)
@@ -44,12 +44,8 @@ function listener(message) {
 export async function evaluate(fen, callback) {
   if (stockfish === undefined) return 0.0
   
-  init()
   feen=fen
-  console.log("Hello World I have been called")
-  stockfish.postMessage('stop')
-  stockfish.postMessage('ucinewgame')
   stockfish.postMessage(`position fen ${fen}`)
-  stockfish.postMessage('go depth 20')
+  stockfish.postMessage('go depth 10')
   callbackMethod=callback;
 }
