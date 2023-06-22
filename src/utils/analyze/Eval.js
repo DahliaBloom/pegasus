@@ -9,7 +9,7 @@ Stockfish().then((s) => {
   s.addMessageListener(listener)
   s.postMessage('uci')
   s.postMessage('setoption name use nnue value true')
-  s.postMessage('setoption name Threads value 12')
+  s.postMessage('setoption name Threads value 16')
   s.postMessage('setoption name Hash value 128')
   s.postMessage('setoption name UCI_AnalyseMode value true')
   s.postMessage('ucinewgame')
@@ -46,6 +46,6 @@ export async function evaluate(fen, callback) {
   
   feen=fen
   stockfish.postMessage(`position fen ${fen}`)
-  stockfish.postMessage('go depth 10')
+  stockfish.postMessage('go movetime 10000')
   callbackMethod=callback;
 }
