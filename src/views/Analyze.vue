@@ -5,19 +5,30 @@
       <EvalBar ref="evalBar" :evaluation="score" class="h-full"></EvalBar>
       <div class="h-full flex flex-col">
         <div
-          class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
-          <UserAnalyzeBar :profilePicture="'src\assets\magnusCarlsen.png'" :color="true" :rating="1245"
-            :username="'Magnus Carlsen'" />
+          class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg"
+        >
+          <UserAnalyzeBar
+            :profilePicture="'src\assets\magnusCarlsen.png'"
+            :color="true"
+            :rating="1245"
+            :username="'Magnus Carlsen'"
+          />
         </div>
         <chess-board @onMovePlayed="onMovePlayed" v-model:fen="fen" :size="520" />
         <div
-          class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
-          <UserAnalyzeBar :profilePicture="'src\assets\magnusCarlsen.png'" :color="false" :rating="1316"
-            :username="'Ding Liren'" />
+          class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg"
+        >
+          <UserAnalyzeBar
+            :profilePicture="'src\assets\magnusCarlsen.png'"
+            :color="false"
+            :rating="1316"
+            :username="'Ding Liren'"
+          />
         </div>
       </div>
       <div
-        class="mx-4 h-full w-fit border-2 border-secondary flex flex-col items-center justify-center bg-base-200 rounded-lg">
+        class="mx-4 h-full w-fit border-2 border-secondary flex flex-col items-center justify-center bg-base-200 rounded-lg"
+      >
         <div class="grid grid-rows-3 w-full h-full">
           <EvalCircle :evaluation="90" />
           <EvalCircle :evaluation="20" />
@@ -42,29 +53,19 @@
         </div>
         <div class="bottom-3 w-full h-12 grid grid-cols-5 gap-x-1">
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined">
-              keyboard_double_arrow_left
-            </span>
+            <span class="material-symbols-outlined"> keyboard_double_arrow_left </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined">
-              chevron_left
-            </span>
+            <span class="material-symbols-outlined"> chevron_left </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined">
-              auto_awesome
-            </span>
+            <span class="material-symbols-outlined"> auto_awesome </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined">
-              keyboard_double_arrow_right
-            </span>
+            <span class="material-symbols-outlined"> keyboard_double_arrow_right </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined">
-              chevron_right
-            </span>
+            <span class="material-symbols-outlined"> chevron_right </span>
           </button>
         </div>
       </div>
@@ -78,12 +79,18 @@ import { ChessBoard } from '@ibrahimdeniz/vue-chessboard'
 import '@ibrahimdeniz/vue-chessboard/dist/style.css'
 import EvalBar from '../components/EvalBar.vue'
 import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
-import EvalCircle from "../components/EvalCircle.vue"
+import EvalCircle from '../components/EvalCircle.vue'
+import { useRoute } from 'vue-router'
 
 export default {
+  created() {
+    this.pgn = (useRoute().query.pgn ?? undefined).toString()
+    console.log(this.pgn)
+  },
   data() {
     return {
       fen: '',
+      pgn: undefined,
       score: 0,
       stockfish: null,
       custom: 0.0,
@@ -99,8 +106,8 @@ export default {
     },
     onMovePlayed({ move, game }) {
       game.makeMove(move)
-      console.log("FEEEEEEEEEEEEEEEEEEN:" + game.fen)
-      this.fen = game.fen;
+      console.log('FEEEEEEEEEEEEEEEEEEN:' + game.fen)
+      this.fen = game.fen
       this.evaluatePosition()
     }
   },
