@@ -81,16 +81,18 @@ import EvalBar from '../components/EvalBar.vue'
 import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
+import { Chess } from 'chess.js'
 
 export default {
   created() {
-    this.pgn = (useRoute().query.pgn ?? undefined).toString()
-    console.log(this.pgn)
+    this.chess.loadPgn((useRoute().query.pgn ?? undefined).toString())
+    this.fen = this.chess.fen()
+    console.log(this.chess.ascii())
   },
   data() {
     return {
       fen: '',
-      pgn: undefined,
+      chess: new Chess(),
       score: 0,
       stockfish: null,
       custom: 0.0,
