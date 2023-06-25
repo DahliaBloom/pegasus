@@ -1,5 +1,11 @@
 <template>
-  <div class="flex items-center overflow-hidden h-screen w-full flex-row py-8">
+  <div
+    v-if="this.chess === null"
+    class="grid place-content-center min-h-screen text-secondary font-mono"
+  >
+    Invalide PGN
+  </div>
+  <div v-else class="flex items-center overflow-hidden h-screen w-full flex-row py-8">
     <div class="basis-1/12 h-full"></div>
     <div class="flex flex-row h-full items-center basis-2/3 w-full">
       <EvalBar ref="evalBar" :evaluation="score" class="h-full"></EvalBar>
@@ -85,9 +91,13 @@ import { Chess } from 'chess.js'
 
 export default {
   created() {
-    this.chess.loadPgn((useRoute().query.pgn ?? undefined).toString())
-    this.fen = this.chess.fen()
-    console.log(this.chess.ascii())
+    try {
+      this.chess.loadPgn((useRoute().query.pgn ?? undefined).toString())
+      this.fen = this.chess.fen()
+      console.log(this.chess.ascii())
+    } catch {
+      this.chess = null
+    }
   },
   data() {
     return {
