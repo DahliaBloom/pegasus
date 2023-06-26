@@ -44,6 +44,6 @@ function dropHandler(e) {
     @dragenter.prevent
     class="w-full h-64 input-primary input rounded-2xl mt-5 grid place-content-center"
   >
-    <h3 class="text-lg font-bold">Drag PGN file here ✌️</h3>
+    <h3 class="text-lg font-bold">Drag your PGN file here ✌️</h3>
   </div>
 </template>

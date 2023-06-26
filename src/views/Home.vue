@@ -28,7 +28,10 @@ onBeforeUnmount(() => {
   <input type="checkbox" id="pgnTextInput" class="modal-toggle" />
   <label for="pgnTextInput" class="modal cursor-pointer">
     <label class="modal-box relative" for="">
-      <h3 class="text-lg font-bold">🌎 🛸</h3>
+      <div class="flex pl-2 pr-2 justify-between">
+        <h3 class="text-lg font-bold">🌎 🛸</h3>
+        <label for="pgnTextInput" class="cursor-pointer">✕</label>
+      </div>
       <CustomPGNInput />
     </label>
   </label>
