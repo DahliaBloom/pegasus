@@ -18,13 +18,13 @@
       </div>
       <div
         class="mx-4 h-full w-fit border-2 border-secondary flex flex-col items-center justify-center bg-base-200 rounded-lg">
-        <div class="grid grid-rows-3 w-full h-full">
+        <div class="grid grid-rows-3 w-full h-full place-items-center">
           <EvalCircle :evaluation="90" />
           <EvalCircle :evaluation="20" />
           <EvalCircle :evaluation="40" />
         </div>
         <div class="w-16 mx-4 h-0 border border-secondary"></div>
-        <div class="grid grid-rows-3 h-full w-full">
+        <div class="grid grid-rows-3 h-full w-full place-items-center">
           <EvalCircle :evaluation="90" />
           <EvalCircle :evaluation="20" />
           <EvalCircle :evaluation="40" />
