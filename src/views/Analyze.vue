@@ -9,14 +9,12 @@
       <div class="h-full flex flex-col">
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
-          <UserAnalyzeBar :profilePicture="'src\assets\magnusCarlsen.png'" :color="true" :rating="1245"
-            :username="'Magnus Carlsen'" />
+          <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
         </div>
         <chess-board @onMovePlayed="onMovePlayed" v-model:fen="fen" :size="520" />
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
-          <UserAnalyzeBar :profilePicture="'src\assets\magnusCarlsen.png'" :color="false" :rating="1316"
-            :username="'Ding Liren'" />
+          <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
         </div>
       </div>
       <div
@@ -54,10 +52,10 @@
             <span class="material-symbols-outlined"> auto_awesome </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined"> keyboard_double_arrow_right </span>
+            <span class="material-symbols-outlined" @click="moveCall"> chevron_right </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined"> chevron_right </span>
+            <span class="material-symbols-outlined"> keyboard_double_arrow_right </span>
           </button>
         </div>
       </div>
@@ -78,16 +76,50 @@ import { Chess } from 'chess.js'
 export default {
   created() {
     try {
-      this.chess.loadPgn((useRoute().query.pgn ?? undefined).toString())
-      const history = this.chess.history().reverse()
-      const moveCall = () => {
-        this.chess.move(history.pop())
-        this.fen = this.chess.fen()
-        this.evaluatePosition()
-        if (!this.chess.isGameOver()) setTimeout(moveCall, 3500)
-      }
+      this.pgn = (useRoute().query.pgn ?? undefined).toString()
+      console.log(this.pgn)
+      this.chess.loadPgn(this.pgn)
+      this.history = this.chess.history().reverse()
       this.chess.reset()
-      moveCall()
+      const extractBlackElo = (input) => {
+        const regex = /\[BlackElo "(.*?)"]/;
+        const match = regex.exec(input);
+        if (match && match.length >= 2) {
+          return match[1];
+        }
+        return null; // Return null if no match is found
+      }
+      this.blackElo = extractBlackElo(this.pgn);
+
+      const extractWhiteElo = (input) => {
+        const regex = /\[WhiteElo "(.*?)"]/;
+        const match = regex.exec(input);
+        if (match && match.length >= 2) {
+          return match[1];
+        }
+        return null; // Return null if no match is found
+      }
+      this.whiteElo = extractWhiteElo(this.pgn);
+
+      const extractWhitePlayer = (input) => {
+        const regex = /\[White "(.*?)"]/;
+        const match = regex.exec(input);
+        if (match && match.length >= 2) {
+          return match[1];
+        }
+        return null; // Return null if no match is found
+      }
+      this.whitePlayer = extractWhitePlayer(this.pgn);
+
+      const extractBlackPlayer = (input) => {
+        const regex = /\[Black "(.*?)"]/;
+        const match = regex.exec(input);
+        if (match && match.length >= 2) {
+          return match[1];
+        }
+        return null; // Return null if no match is found
+      }
+      this.blackPlayer = extractBlackPlayer(this.pgn);
     } catch {
       this.chess = null
     }
@@ -99,7 +131,13 @@ export default {
       score: 0,
       stockfish: null,
       custom: 0.0,
-      size: 600
+      size: 600,
+      history: null,
+      pgn: "",
+      blackElo: "",
+      whiteElo: "",
+      blackPlayer: "",
+      whitePlayer: ""
     }
   },
   methods: {
@@ -114,6 +152,13 @@ export default {
       console.log('FEEEEEEEEEEEEEEEEEEN:' + game.fen)
       this.fen = game.fen
       this.evaluatePosition()
+    },
+    moveCall() {
+      if (!this.chess.isGameOver()) {
+        this.chess.move(history.pop())
+        this.fen = this.chess.fen()
+        this.evaluatePosition()
+      }
     }
   },
   components: {

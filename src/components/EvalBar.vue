@@ -101,7 +101,8 @@ export default {
   <div class="w-12 h-full relative flex-none border-accent border-2 m-4 rounded-lg">
     <div class="bg-black text-white text-center font-bold h-full rounded-lg">
       <div v-if="this.evaluation < 0.0">{{ this.evaluation }}</div>
-      <div class=" bg-white w-full text-center text-black absolute bottom-0 left-0 evalWhite rounded-b-lg">
+      <div
+        class=" bg-white w-full text-center text-black absolute bottom-0 left-0 evalWhite rounded-b-lg transition-transform">
         <span class="absolute bottom-0 left-1/4" v-if="this.evaluation >= 0.0">{{ this.evaluation }}</span>
       </div>
     </div>
