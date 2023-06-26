@@ -98,12 +98,11 @@ export default {
 </script>
 
 <template>
-  <diV class="w-12 h-full flex flex-row flex-none m-4 items-center">
+  <div class="w-18 h-full flex flex-row flex-none m-2 items-center">
 
-    <span class="mr-2 w-full" v-if="this.evaluation >= 0.0">{{ this.evaluation }}</span>
+    <span class="mr-2 w-12 p-2">{{ this.evaluation }}</span>
     <div class="w-4 h-full relative flex-none rounded-lg">
       <div class="bg-black text-white text-center font-bold h-full rounded-lg">
-        <div v-if="this.evaluation < 0.0">{{ this.evaluation }}</div>
         <div
           class=" bg-white w-full text-center text-black absolute bottom-0 left-0 evalWhite rounded-b-lg transition-transform">
 
