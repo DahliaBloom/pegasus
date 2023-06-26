@@ -7,14 +7,15 @@
     <div class="flex flex-row h-full items-center basis-2/3 w-full">
       <EvalBar ref="evalBar" :evaluation="score" class="h-full"></EvalBar>
       <div class="h-full flex flex-col">
+
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
-          <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
+          <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
         </div>
         <chess-board @onMovePlayed="onMovePlayed" v-model:fen="fen" :size="520" />
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
-          <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
+          <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
         </div>
       </div>
       <div
@@ -155,7 +156,7 @@ export default {
     },
     moveCall() {
       if (!this.chess.isGameOver()) {
-        this.chess.move(history.pop())
+        this.chess.move(this.history.pop())
         this.fen = this.chess.fen()
         this.evaluatePosition()
       }

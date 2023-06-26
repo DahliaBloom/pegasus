@@ -1,6 +1,6 @@
 <template>
     <div class="h-full w-full flex relative">
-        <img class="w-8 h-8 border-2 mr-2 rounded-lg" src="user.avatar" alt="" v-if="color" style="border-color: white;">
+        <img class="w-8 h-8 border-2 mr-2 rounded-lg" :src="user.avatar" alt="" v-if="color" style="border-color: white;">
         <img class="w-8 h-8 border-2 mr-2 rounded-lg" :src="user.avatar" alt="" v-else="color" style="border-color: black;">
         <div class="flex flex-row items-baseline">
             <h2 class="text-xl font-bold">{{ user.username }}</h2>
@@ -19,6 +19,10 @@ export default {
         },
         elo: {
             type: String,
+            required: true
+        },
+        color: {
+            type: Boolean,
             required: true
         }
     },
