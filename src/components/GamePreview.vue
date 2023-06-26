@@ -18,7 +18,6 @@ const game = new Chess()
 
 onBeforeMount(() => {
   game.loadPgn(props.gameData.pgn)
-  console.log(props.gameData);
 })
 
 function getResultImage() {

@@ -93,8 +93,15 @@ export default {
   created() {
     try {
       this.chess.loadPgn((useRoute().query.pgn ?? undefined).toString())
-      this.fen = this.chess.fen()
-      console.log(this.chess.ascii())
+      const history = this.chess.history().reverse()
+      const moveCall = () => {
+        this.chess.move(history.pop())
+        this.fen = this.chess.fen()
+        this.evaluatePosition()
+        if (!this.chess.isGameOver()) setTimeout(moveCall, 3500)
+      }
+      this.chess.reset()
+      moveCall()
     } catch {
       this.chess = null
     }
