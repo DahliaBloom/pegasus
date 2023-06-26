@@ -28,7 +28,7 @@ onBeforeUnmount(() => {
   <input type="checkbox" id="pgnTextInput" class="modal-toggle" />
   <label for="pgnTextInput" class="modal cursor-pointer">
     <label class="modal-box relative" for="">
-      <h3 class="text-lg font-bold">Paste your PGN here and press enter ✌️</h3>
+      <h3 class="text-lg font-bold">🌎 🛸</h3>
       <CustomPGNInput />
     </label>
   </label>
