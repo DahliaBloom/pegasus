@@ -1,5 +1,8 @@
 <template>
-  <div class="flex items-center overflow-hidden h-screen w-full flex-row py-8">
+  <div v-if="this.chess === null" class="grid place-content-center min-h-screen text-secondary font-mono">
+    Invalide PGN
+  </div>
+  <div v-else class="flex items-center overflow-hidden h-screen w-full flex-row py-8">
     <div class="basis-1/12 h-full"></div>
     <div class="flex flex-row h-full items-center basis-2/3 w-full">
       <EvalBar ref="evalBar" :evaluation="score" class="h-full"></EvalBar>
@@ -42,29 +45,19 @@
         </div>
         <div class="bottom-3 w-full h-12 grid grid-cols-5 gap-x-1">
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined">
-              keyboard_double_arrow_left
-            </span>
+            <span class="material-symbols-outlined"> keyboard_double_arrow_left </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined">
-              chevron_left
-            </span>
+            <span class="material-symbols-outlined"> chevron_left </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined">
-              auto_awesome
-            </span>
+            <span class="material-symbols-outlined"> auto_awesome </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined">
-              keyboard_double_arrow_right
-            </span>
+            <span class="material-symbols-outlined"> keyboard_double_arrow_right </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined">
-              chevron_right
-            </span>
+            <span class="material-symbols-outlined"> chevron_right </span>
           </button>
         </div>
       </div>
@@ -78,12 +71,24 @@ import { ChessBoard } from '@ibrahimdeniz/vue-chessboard'
 import '@ibrahimdeniz/vue-chessboard/dist/style.css'
 import EvalBar from '../components/EvalBar.vue'
 import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
-import EvalCircle from "../components/EvalCircle.vue"
+import EvalCircle from '../components/EvalCircle.vue'
+import { useRoute } from 'vue-router'
+import { Chess } from 'chess.js'
 
 export default {
+  created() {
+    try {
+      this.chess.loadPgn((useRoute().query.pgn ?? undefined).toString())
+      this.fen = this.chess.fen()
+      console.log(this.chess.ascii())
+    } catch {
+      this.chess = null
+    }
+  },
   data() {
     return {
       fen: '',
+      chess: new Chess(),
       score: 0,
       stockfish: null,
       custom: 0.0,
@@ -99,8 +104,8 @@ export default {
     },
     onMovePlayed({ move, game }) {
       game.makeMove(move)
-      console.log("FEEEEEEEEEEEEEEEEEEN:" + game.fen)
-      this.fen = game.fen;
+      console.log('FEEEEEEEEEEEEEEEEEEN:' + game.fen)
+      this.fen = game.fen
       this.evaluatePosition()
     }
   },

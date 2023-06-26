@@ -1,6 +1,7 @@
 <script setup>
 import PerlinNoiseCircle from '@/components/PerlinNoiseCircle.vue'
 import UsernameInput from '@/components/UsernameInput.vue'
+import CustomPGNInput from '@/components/CustomPGNInput.vue'
 import pegasusAnimation from '../components/pegasusAnimation.vue'
 import { onBeforeUnmount, onMounted } from 'vue'
 
@@ -14,9 +15,21 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div class="px-10 flex flex-col justify-center items-center min-h-screen space-y-10">
-    <pegasusAnimation />
-    <UsernameInput />
+  <div class="px-10 flex flex-col justify-center items-center min-h-screen">
+    <div class="w-1/3 flex flex-col space-y-10 justify-center items-center">
+      <pegasusAnimation />
+      <div class="flex flex-col items-center justify-center min-w-full">
+        <UsernameInput />
+        <label for="pgnTextInput"><i class="mt-3 link text-sm">Use own PGN</i></label>
+      </div>
+    </div>
     <PerlinNoiseCircle class="absolute -z-10" />
   </div>
+  <input type="checkbox" id="pgnTextInput" class="modal-toggle" />
+  <label for="pgnTextInput" class="modal cursor-pointer">
+    <label class="modal-box relative" for="">
+      <h3 class="text-lg font-bold">🌎 🛸</h3>
+      <CustomPGNInput />
+    </label>
+  </label>
 </template>

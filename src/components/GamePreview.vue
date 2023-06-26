@@ -40,7 +40,7 @@ function getResultImage() {
     class="w-full flex flex-row justify-between"
     @click="
       () => {
-        if (userHover) $router.push('/analyze?id=' + props.gameData.uuid)
+        if (userHover) $router.push('/analyze?pgn=' + encodeURI(props.gameData.pgn))
       }
     "
   >
