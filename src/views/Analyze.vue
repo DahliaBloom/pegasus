@@ -138,7 +138,8 @@ export default {
       blackElo: "",
       whiteElo: "",
       blackPlayer: "",
-      whitePlayer: ""
+      whitePlayer: "",
+      stockfishWorking: false,
     }
   },
   methods: {
@@ -147,6 +148,7 @@ export default {
         console.log('Received score:', score)
         this.score = score
       })
+      setTimeout(() => { this.stockfishWorking = false; }, 1000)
     },
     onMovePlayed({ move, game }) {
       game.makeMove(move)
@@ -155,7 +157,10 @@ export default {
       this.evaluatePosition()
     },
     moveCall() {
-      if (!this.chess.isGameOver()) {
+      console.log("moveCall")
+      if (!this.chess.isGameOver() && !this.stockfishWorking) {
+        this.stockfishWorking = true
+        console.log("Next Move load:")
         this.chess.move(this.history.pop())
         this.fen = this.chess.fen()
         this.evaluatePosition()

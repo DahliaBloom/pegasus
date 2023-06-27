@@ -46,6 +46,6 @@ export async function evaluate(fen, callback) {
   
   feen=fen
   stockfish.postMessage(`position fen ${fen}`)
-  stockfish.postMessage('go movetime 2000')
+  stockfish.postMessage('go movetime 1000')
   callbackMethod=callback;
 }
