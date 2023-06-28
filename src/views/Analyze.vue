@@ -7,12 +7,11 @@
     <div class="flex flex-row h-full items-center basis-2/3 w-full">
       <EvalBar ref="evalBar" :evaluation="score" class="h-full"></EvalBar>
       <div class="h-full flex flex-col">
-
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
         </div>
-        <chessboard :onPromotion="promote"/>
+        <chessboard/>
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
@@ -68,18 +67,14 @@
 
 <script>
 import { evaluate } from '../utils/analyze/Eval'
-import '@ibrahimdeniz/vue-chessboard/dist/style.css'
 import EvalBar from '../components/EvalBar.vue'
 import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
-<<<<<<< HEAD
 import {chessboard} from 'vue-chessboard'
 import 'vue-chessboard/dist/vue-chessboard.css'
-=======
 import { findOpeningName } from '../utils/analyze/Opening'
->>>>>>> d6c95ae0e738fe322d10721ed82c77a82d51a483
 
 export default {
   created() {
@@ -146,12 +141,9 @@ export default {
       whiteElo: "",
       blackPlayer: "",
       whitePlayer: "",
-<<<<<<< HEAD
-      positionInfo: null
-=======
+      positionInfo: null,
       stockfishWorking: false,
-      opening: "Startin Position",
->>>>>>> d6c95ae0e738fe322d10721ed82c77a82d51a483
+      opening: "Startin Position"
     }
   },
   methods: {
