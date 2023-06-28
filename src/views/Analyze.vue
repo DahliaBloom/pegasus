@@ -37,7 +37,9 @@
           <div class="bg-primary border-8 rounded-lg h-full w-full"></div>
         </div>
         <div class="w-full h-1/4 p-2">
-          <div class="bg-secondary border-8 rounded-lg h-full w-full"></div>
+          <div class="bg-base-300 rounded-lg h-full w-full p-2">
+            {{ opening }}
+          </div>
         </div>
         <div class="w-full h-1/2 p-2">
           <div class="bg-base-300 rounded-lg h-full w-full"></div>
@@ -72,8 +74,12 @@ import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
+<<<<<<< HEAD
 import {chessboard} from 'vue-chessboard'
 import 'vue-chessboard/dist/vue-chessboard.css'
+=======
+import { findOpeningName } from '../utils/analyze/Opening'
+>>>>>>> d6c95ae0e738fe322d10721ed82c77a82d51a483
 
 export default {
   created() {
@@ -140,15 +146,22 @@ export default {
       whiteElo: "",
       blackPlayer: "",
       whitePlayer: "",
+<<<<<<< HEAD
       positionInfo: null
+=======
+      stockfishWorking: false,
+      opening: "Startin Position",
+>>>>>>> d6c95ae0e738fe322d10721ed82c77a82d51a483
     }
   },
   methods: {
     evaluatePosition() {
+      this.opening = (findOpeningName(this.chess.history()))
       evaluate(this.fen, (score) => {
         console.log('Received score:', score)
         this.score = score
       })
+      setTimeout(() => { this.stockfishWorking = false; }, 1000)
     },
     onMovePlayed({ move, game }) {
       game.makeMove(move)
@@ -157,7 +170,10 @@ export default {
       this.evaluatePosition()
     },
     moveCall() {
-      if (!this.chess.isGameOver()) {
+      console.log("moveCall")
+      if (!this.chess.isGameOver() && !this.stockfishWorking) {
+        this.stockfishWorking = true
+        console.log("Next Move load:")
         this.chess.move(this.history.pop())
         this.fen = this.chess.fen()
         this.evaluatePosition()
