@@ -37,7 +37,9 @@
           <div class="bg-primary border-8 rounded-lg h-full w-full"></div>
         </div>
         <div class="w-full h-1/4 p-2">
-          <div class="bg-secondary border-8 rounded-lg h-full w-full"></div>
+          <div class="bg-base-300 rounded-lg h-full w-full p-2">
+            {{ opening }}
+          </div>
         </div>
         <div class="w-full h-1/2 p-2">
           <div class="bg-base-300 rounded-lg h-full w-full"></div>
@@ -73,6 +75,7 @@ import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
+import { findOpeningName } from '../utils/analyze/Opening'
 
 export default {
   created() {
@@ -140,10 +143,12 @@ export default {
       blackPlayer: "",
       whitePlayer: "",
       stockfishWorking: false,
+      opening: "Startin Position",
     }
   },
   methods: {
     evaluatePosition() {
+      this.opening = (findOpeningName(this.chess.history()))
       evaluate(this.fen, (score) => {
         console.log('Received score:', score)
         this.score = score
