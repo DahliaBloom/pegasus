@@ -12,7 +12,7 @@
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
         </div>
-        <chess-board @onMovePlayed="onMovePlayed" v-model:fen="fen" :size="520" />
+        <chessboard :onPromotion="promote"/>
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
@@ -66,13 +66,14 @@
 
 <script>
 import { evaluate } from '../utils/analyze/Eval'
-import { ChessBoard } from '@ibrahimdeniz/vue-chessboard'
 import '@ibrahimdeniz/vue-chessboard/dist/style.css'
 import EvalBar from '../components/EvalBar.vue'
 import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
+import {chessboard} from 'vue-chessboard'
+import 'vue-chessboard/dist/vue-chessboard.css'
 
 export default {
   created() {
@@ -138,7 +139,8 @@ export default {
       blackElo: "",
       whiteElo: "",
       blackPlayer: "",
-      whitePlayer: ""
+      whitePlayer: "",
+      positionInfo: null
     }
   },
   methods: {
@@ -166,7 +168,8 @@ export default {
     EvalBar,
     ChessBoard,
     UserAnalyzeBar,
-    EvalCircle
+    EvalCircle,
+    chessboard
   }
 }
 </script>
