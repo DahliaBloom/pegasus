@@ -3412,7 +3412,7 @@ export function findOpeningName(moves) {
         let theoryMoves = openingMoves.split(' ');
         theoryMoves = theoryMoves.filter((s) => !s.endsWith('.'))
         if (theoryMoves.every((move, index) => move === moves[index])) {
-            availableOptions.push({t: theoryMoves, m: opening.split('\t')[1]})
+            availableOptions.push({t: theoryMoves, m: opening.split('\t')[1], a:opening.split('\t')[0][0]})
         }
     }
 
@@ -3422,6 +3422,22 @@ export function findOpeningName(moves) {
         return null
     }
     availableOptions.sort((b)=>{b.t.length})
+
+    if (availableOptions[availableOptions.length-1].a == ['A']){
+        availableOptions[availableOptions.length-1].a = ['Flank Attack']
+    }
+    if (availableOptions[availableOptions.length-1].a == ['B']){
+        availableOptions[availableOptions.length-1].a = ['Semi-Open Game']
+    }
+    if (availableOptions[availableOptions.length-1].a == ['C']){
+        availableOptions[availableOptions.length-1].a = ['Open Game']
+    }
+    if (availableOptions[availableOptions.length-1].a == ['D']){
+        availableOptions[availableOptions.length-1].a = ['Closed Position']
+    }
+    if (availableOptions[availableOptions.length-1].a == ['E']){
+        availableOptions[availableOptions.length-1].a = ['Indian Game']
+    }
     
-    return availableOptions[availableOptions.length-1].m; // Return null if no matching opening is found
+    return availableOptions[availableOptions.length-1]; // Return null if no matching opening is found
   }

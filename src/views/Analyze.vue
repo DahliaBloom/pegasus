@@ -38,7 +38,12 @@
         </div>
         <div class="w-full h-1/4 p-2">
           <div class="bg-base-300 rounded-lg h-full w-full p-2">
-            {{ opening }}
+            {{ opening.m }}
+            <br>
+            <div v-for="(item, index) in opening.a" :key="index">
+              <div class="badge badge-accent font-bold mr-2">{{ item }}</div>
+            </div>
+
           </div>
         </div>
         <div class="w-full h-1/2 p-2">
@@ -143,7 +148,7 @@ export default {
       blackPlayer: "",
       whitePlayer: "",
       stockfishWorking: false,
-      opening: "Startin Position",
+      opening: { m: "Startin Position", t: [], a: [] },
     }
   },
   methods: {
