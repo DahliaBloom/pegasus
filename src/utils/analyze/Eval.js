@@ -21,7 +21,7 @@ Stockfish().then((s) => {
 function listener(message) {
   console.log(message)
   if (message.startsWith('info depth')) {
-    const regex = /score cp (-?\d+)/
+    const regex = / cp (-?\d+)/
     const match = regex.exec(message)
     if (match===null){
       const regex = /score mate (\d+)/
@@ -31,12 +31,15 @@ function listener(message) {
     else {
       score = parseFloat(match[1])/100 // Update the score variable
     }
+    const pvregex = / pv (.+)/
+    const pvMatch = pvregex.exec(message);
+    console.log("bestmove: " + pvMatch[1])
     console.log('Pegasus Final Score: ' + score)
     if (feen.split(" ")[1]=="w"){
-      callbackMethod(score)
+      callbackMethod(score, pvMatch[1])
     }
     else {
-      callbackMethod(-score)
+      callbackMethod(-score, pvMatch[1])
     }
   }
 }

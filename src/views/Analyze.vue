@@ -43,6 +43,7 @@
             <div v-for="(item, index) in opening.a" :key="index">
               <div class="badge badge-accent font-bold mr-2">{{ item }}</div>
             </div>
+            {{ bestmove }}
 
           </div>
         </div>
@@ -149,14 +150,19 @@ export default {
       whitePlayer: "",
       stockfishWorking: false,
       opening: { m: "Startin Position", t: [], a: [] },
+      bestmove: "",
     }
   },
   methods: {
     evaluatePosition() {
       this.opening = (findOpeningName(this.chess.history()))
-      evaluate(this.fen, (score) => {
-        console.log('Received score:', score)
+      evaluate(this.fen, (score, bestmove) => {
+        console.log('Received score:' + score)
+        console.log('Received Bestmove:' + bestmove)
         this.score = score
+        if (this.bestmove == "" || (this.bestmove.length <= bestmove.length) || this.bestmove.split(" ")[0] != bestmove.split(" ")[0]) {
+          this.bestmove = bestmove
+        }
       })
       setTimeout(() => { this.stockfishWorking = false; }, 1000)
     },
