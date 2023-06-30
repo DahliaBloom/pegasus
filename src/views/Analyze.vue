@@ -39,6 +39,7 @@
         <div class="w-full h-1/4 p-2">
           <div class="bg-secondary border-8 rounded-lg h-full w-full"></div>
         </div>
+        <MoveTimeSlider class="w-full"/>
         <div class="w-full h-1/2 p-2">
           <div class="bg-base-300 rounded-lg h-full w-full"></div>
         </div>
@@ -66,6 +67,7 @@
 
 <script>
 import { evaluate } from '../utils/analyze/Eval'
+import MoveTimeSlider from '../components/MoveTimeSlider.vue'
 import { ChessBoard } from '@ibrahimdeniz/vue-chessboard'
 import '@ibrahimdeniz/vue-chessboard/dist/style.css'
 import EvalBar from '../components/EvalBar.vue'
@@ -166,7 +168,8 @@ export default {
     EvalBar,
     ChessBoard,
     UserAnalyzeBar,
-    EvalCircle
+    EvalCircle,
+    MoveTimeSlider
   }
 }
 </script>
