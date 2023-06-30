@@ -7,12 +7,11 @@
     <div class="flex flex-row h-full items-center basis-2/3 w-full">
       <EvalBar ref="evalBar" :evaluation="score" class="h-full"></EvalBar>
       <div class="h-full flex flex-col">
-
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
         </div>
-        <chess-board @onMovePlayed="onMovePlayed" v-model:fen="fen" :size="520" />
+        <chessboard/>
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
@@ -37,7 +36,9 @@
           <div class="bg-primary border-8 rounded-lg h-full w-full"></div>
         </div>
         <div class="w-full h-1/4 p-2">
-          <div class="bg-secondary border-8 rounded-lg h-full w-full"></div>
+          <div class="bg-base-300 rounded-lg h-full w-full p-2">
+            {{ opening }}
+          </div>
         </div>
         <MoveTimeSlider class="w-full"/>
         <div class="w-full h-1/2 p-2">
@@ -75,6 +76,9 @@ import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
+import {chessboard} from 'vue-chessboard'
+import 'vue-chessboard/dist/vue-chessboard.css'
+import { findOpeningName } from '../utils/analyze/Opening'
 
 export default {
   created() {
@@ -140,15 +144,20 @@ export default {
       blackElo: "",
       whiteElo: "",
       blackPlayer: "",
-      whitePlayer: ""
+      whitePlayer: "",
+      positionInfo: null,
+      stockfishWorking: false,
+      opening: "Startin Position"
     }
   },
   methods: {
     evaluatePosition() {
+      this.opening = (findOpeningName(this.chess.history()))
       evaluate(this.fen, (score) => {
         console.log('Received score:', score)
         this.score = score
       })
+      setTimeout(() => { this.stockfishWorking = false; }, 1000)
     },
     onMovePlayed({ move, game }) {
       game.makeMove(move)
@@ -157,7 +166,10 @@ export default {
       this.evaluatePosition()
     },
     moveCall() {
-      if (!this.chess.isGameOver()) {
+      console.log("moveCall")
+      if (!this.chess.isGameOver() && !this.stockfishWorking) {
+        this.stockfishWorking = true
+        console.log("Next Move load:")
         this.chess.move(this.history.pop())
         this.fen = this.chess.fen()
         this.evaluatePosition()
@@ -168,8 +180,7 @@ export default {
     EvalBar,
     ChessBoard,
     UserAnalyzeBar,
-    EvalCircle,
-    MoveTimeSlider
+    EvalCircle
   }
 }
 </script>
