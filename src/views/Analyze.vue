@@ -93,7 +93,6 @@ import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
-import { chessboard } from 'vue-chessboard'
 import 'vue-chessboard/dist/vue-chessboard.css'
 import { findOpeningName } from '../utils/analyze/Opening'
 
@@ -103,26 +102,16 @@ export default {
       this.pgn = (useRoute().query.pgn ?? undefined).toString()
       console.log(this.pgn)
       this.chess.loadPgn(this.pgn)
-      this.history = this.chess.history().reverse()
+      this.history = this.chess.history()
       console.log(this.history)
       this.moves = []
-      if (this.history.length % 2 == 0) {
-        let i = 0;
-        while (i < this.history.length) {
-          this.moves.push([this.history[i + 1], this.history[i]])
-          i += 2;
-        }
-      }
-      else {
-        let i = 0;
-        while (i < this.history.length) {
-          this.moves.push([this.history[i + 1], this.history[i]])
-          i += 2;
-        }
-        this.moves.push([this.history[this.history.length - 1], " "])
+      let i = 0;
+      while (i < this.history.length) {
+        this.moves.push([this.history[i], this.history[i + 1]])
+        i += 2;
       }
 
-      this.moves = this.moves.reverse()
+      this.history = this.history.reverse()
 
       this.chess.reset()
       const extractBlackElo = (input) => {
