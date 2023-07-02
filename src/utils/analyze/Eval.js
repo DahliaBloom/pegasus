@@ -45,7 +45,7 @@ function listener(message) {
 }
 
 export async function evaluate(fen, callback) {
-  if (stockfish === undefined) return 0.0
+  if (stockfish === undefined) callback(0.0, "stockfish undefined")
   
   feen=fen
   stockfish.postMessage(`position fen ${fen}`)

@@ -63,7 +63,7 @@
         </div>
         <div class="bottom-3 w-full h-12 grid grid-cols-5 gap-x-1">
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined"> keyboard_double_arrow_left </span>
+            <span class="material-symbols-outlined" @click="completeBack"> keyboard_double_arrow_left </span>
           </button>
           <button class="btn-accent btn">
             <span class="material-symbols-outlined" @click="backMove"> chevron_left </span>
@@ -75,7 +75,7 @@
             <span class="material-symbols-outlined" @click="moveCall"> chevron_right </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined"> keyboard_double_arrow_right </span>
+            <span class="material-symbols-outlined" @click="completeEnd"> keyboard_double_arrow_right </span>
           </button>
         </div>
       </div>
@@ -101,7 +101,7 @@ export default {
       console.log(this.pgn)
       this.chess.loadPgn(this.pgn)
       this.history = this.chess.history().reverse()
-      console.log(this.history.length)
+      console.log(this.history)
       this.moves = []
       if (this.history.length % 2 == 0) {
         let i = 0;
@@ -188,6 +188,7 @@ export default {
   },
   methods: {
     evaluatePosition() {
+      console.log("evaluating!" + this.fen)
       evaluate(this.fen, (score, bestmove) => {
         console.log('Received score:' + score)
         console.log('Received Bestmove:' + bestmove)
@@ -196,7 +197,7 @@ export default {
           this.bestmove = bestmove
         }
       })
-      setTimeout(() => { this.stockfishWorking = false; }, 1000)
+      setTimeout(() => { this.stockfishWorking = false; console.log("back!") }, 1000)
     },
     onMovePlayed({ move, game }) {
       game.makeMove(move)
@@ -227,6 +228,26 @@ export default {
         this.history.push(this.historyStack.pop())
         this.fen = this.chess.fen()
         this.evaluatePosition()
+      }
+    },
+    completeBack() {
+      if (!this.stockfishWorking) {
+        while (this.chess.fen() != "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
+          this.chess.undo()
+          this.history.push(this.historyStack.pop())
+          this.fen = this.chess.fen()
+        }
+        this.stockfishWorking = true
+        this.evaluatePosition()
+      }
+    },
+    completeEnd() {
+      if (!this.stockfishWorking) {
+        while (this.history.length != 0) {
+          this.historyStack.push(this.history.pop())
+        }
+        this.chess.loadPgn(this.pgn)
+        this.fen = this.chess.fen()
       }
     }
   },
