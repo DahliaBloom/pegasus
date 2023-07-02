@@ -36,25 +36,37 @@
           <div class="bg-primary border-8 rounded-lg h-full w-full"></div>
         </div>
         <div class="w-full h-1/4 p-2">
-          <div class="bg-base-300 rounded-lg h-full w-full p-2">
+          <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-hidden">
             {{ opening.m }}
             <br>
             <div v-for="(item, index) in opening.a" :key="index">
               <div class="badge badge-accent font-bold mr-2">{{ item }}</div>
             </div>
+            {{ bestmove }}
 
           </div>
         </div>
         <MoveTimeSlider class="w-full" />
         <div class="w-full h-1/2 p-2">
-          <div class="bg-base-300 rounded-lg h-full w-full"></div>
+          <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-y-scroll items-center justify-center">
+            <div v-for="move in moves" class="w-full items-center justify-center">
+              <div class="my-2 grid grid-cols-2 gap-1 border border-slate-700 p-1 rounded-2xl">
+                <div class="flex justify-center">
+                  <div class="badge bg-slate-300 text-slate-900 border-slate-900">{{ move[0] }}</div>
+                </div>
+                <div class="flex justify-center">
+                  <div class="badge bg-gray-800 text-gray-200 border-gray-200">{{ move[1] }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="bottom-3 w-full h-12 grid grid-cols-5 gap-x-1">
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined"> keyboard_double_arrow_left </span>
+            <span class="material-symbols-outlined" @click="completeBack"> keyboard_double_arrow_left </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined"> chevron_left </span>
+            <span class="material-symbols-outlined" @click="backMove"> chevron_left </span>
           </button>
           <button class="btn-accent btn">
             <span class="material-symbols-outlined"> auto_awesome </span>
@@ -63,7 +75,7 @@
             <span class="material-symbols-outlined" @click="moveCall"> chevron_right </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined"> keyboard_double_arrow_right </span>
+            <span class="material-symbols-outlined" @click="completeEnd"> keyboard_double_arrow_right </span>
           </button>
         </div>
       </div>
@@ -92,6 +104,26 @@ export default {
       console.log(this.pgn)
       this.chess.loadPgn(this.pgn)
       this.history = this.chess.history().reverse()
+      console.log(this.history)
+      this.moves = []
+      if (this.history.length % 2 == 0) {
+        let i = 0;
+        while (i < this.history.length) {
+          this.moves.push([this.history[i + 1], this.history[i]])
+          i += 2;
+        }
+      }
+      else {
+        let i = 0;
+        while (i < this.history.length) {
+          this.moves.push([this.history[i + 1], this.history[i]])
+          i += 2;
+        }
+        this.moves.push([this.history[this.history.length - 1], " "])
+      }
+
+      this.moves = this.moves.reverse()
+
       this.chess.reset()
       const extractBlackElo = (input) => {
         const regex = /\[BlackElo "(.*?)"]/;
@@ -153,31 +185,73 @@ export default {
       positionInfo: null,
       stockfishWorking: false,
       opening: { m: "Startin Position", t: [], a: [] },
+      bestmove: "",
+      moves: [],
+      historyStack: [],
     }
   },
   methods: {
     evaluatePosition() {
-      this.opening = (findOpeningName(this.chess.history()))
-      evaluate(this.fen, (score) => {
-        console.log('Received score:', score)
+      console.log("evaluating!" + this.fen)
+      evaluate(this.fen, (score, bestmove) => {
+        console.log('Received score:' + score)
+        console.log('Received Bestmove:' + bestmove)
         this.score = score
+        if (this.bestmove == "" || (this.bestmove.length <= bestmove.length) || this.bestmove.split(" ")[0] != bestmove.split(" ")[0]) {
+          this.bestmove = bestmove
+        }
       })
-      setTimeout(() => { this.stockfishWorking = false; }, 1000)
+      setTimeout(() => { this.stockfishWorking = false; console.log("back!") }, 1000)
     },
     onMovePlayed({ move, game }) {
       game.makeMove(move)
       console.log('FEEEEEEEEEEEEEEEEEEN:' + game.fen)
       this.fen = game.fen
+      this.opening = (findOpeningName(this.chess.history()))
       this.evaluatePosition()
     },
     moveCall() {
       console.log("moveCall")
+      console.log(this.chess.isGameOver())
       if (!this.chess.isGameOver() && !this.stockfishWorking) {
         this.stockfishWorking = true
-        console.log("Next Move load:")
-        this.chess.move(this.history.pop())
+        console.log(console.log(this.history))
+        let tmp = this.history.pop()
+        this.chess.move(tmp)
+        this.historyStack.push(tmp)
+        this.fen = this.chess.fen()
+        this.opening = (findOpeningName(this.chess.history()))
+        this.evaluatePosition()
+      }
+    },
+    backMove() {
+      console.log(this.historyStack)
+      if (!this.stockfishWorking && this.historyStack.length != 0) {
+        this.stockfishWorking = true
+        this.chess.undo()
+        this.history.push(this.historyStack.pop())
         this.fen = this.chess.fen()
         this.evaluatePosition()
+      }
+    },
+    completeBack() {
+      if (!this.stockfishWorking) {
+        while (this.chess.fen() != "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
+          this.chess.undo()
+          this.history.push(this.historyStack.pop())
+          this.fen = this.chess.fen()
+        }
+        this.stockfishWorking = true
+        this.evaluatePosition()
+      }
+    },
+    completeEnd() {
+      if (!this.stockfishWorking) {
+        while (this.history.length != 0) {
+          this.historyStack.push(this.history.pop())
+        }
+        this.chess.loadPgn(this.pgn)
+        this.fen = this.chess.fen()
       }
     }
   },
