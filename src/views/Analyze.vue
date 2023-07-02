@@ -66,7 +66,7 @@
             <span class="material-symbols-outlined"> keyboard_double_arrow_left </span>
           </button>
           <button class="btn-accent btn">
-            <span class="material-symbols-outlined"> chevron_left </span>
+            <span class="material-symbols-outlined" @click="backMove"> chevron_left </span>
           </button>
           <button class="btn-accent btn">
             <span class="material-symbols-outlined"> auto_awesome </span>
@@ -183,11 +183,11 @@ export default {
       opening: { m: "Startin Position", t: [], a: [] },
       bestmove: "",
       moves: [],
+      historyStack: [],
     }
   },
   methods: {
     evaluatePosition() {
-      this.opening = (findOpeningName(this.chess.history()))
       evaluate(this.fen, (score, bestmove) => {
         console.log('Received score:' + score)
         console.log('Received Bestmove:' + bestmove)
@@ -202,14 +202,29 @@ export default {
       game.makeMove(move)
       console.log('FEEEEEEEEEEEEEEEEEEN:' + game.fen)
       this.fen = game.fen
+      this.opening = (findOpeningName(this.chess.history()))
       this.evaluatePosition()
     },
     moveCall() {
       console.log("moveCall")
+      console.log(this.chess.isGameOver())
       if (!this.chess.isGameOver() && !this.stockfishWorking) {
         this.stockfishWorking = true
-        console.log("Next Move load:")
-        this.chess.move(this.history.pop())
+        console.log(console.log(this.history))
+        let tmp = this.history.pop()
+        this.chess.move(tmp)
+        this.historyStack.push(tmp)
+        this.fen = this.chess.fen()
+        this.opening = (findOpeningName(this.chess.history()))
+        this.evaluatePosition()
+      }
+    },
+    backMove() {
+      console.log(this.historyStack)
+      if (!this.stockfishWorking && this.historyStack.length != 0) {
+        this.stockfishWorking = true
+        this.chess.undo()
+        this.history.push(this.historyStack.pop())
         this.fen = this.chess.fen()
         this.evaluatePosition()
       }
