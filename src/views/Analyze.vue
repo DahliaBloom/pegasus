@@ -37,7 +37,7 @@
           <div class="bg-primary border-8 rounded-lg h-full w-full"></div>
         </div>
         <div class="w-full h-1/4 p-2">
-          <div class="bg-base-300 rounded-lg h-full w-full p-2">
+          <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-hidden">
             {{ opening.m }}
             <br>
             <div v-for="(item, index) in opening.a" :key="index">
@@ -48,7 +48,18 @@
           </div>
         </div>
         <div class="w-full h-1/2 p-2">
-          <div class="bg-base-300 rounded-lg h-full w-full"></div>
+          <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-y-scroll items-center justify-center">
+            <div v-for="move in moves" class="w-full items-center justify-center">
+              <div class="my-2 grid grid-cols-2 gap-1 border border-slate-700 p-1 rounded-2xl">
+                <div class="flex justify-center">
+                  <div class="badge bg-slate-300 text-slate-900 border-slate-900">{{ move[0] }}</div>
+                </div>
+                <div class="flex justify-center">
+                  <div class="badge bg-gray-800 text-gray-200 border-gray-200">{{ move[1] }}</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
         <div class="bottom-3 w-full h-12 grid grid-cols-5 gap-x-1">
           <button class="btn-accent btn">
@@ -90,6 +101,26 @@ export default {
       console.log(this.pgn)
       this.chess.loadPgn(this.pgn)
       this.history = this.chess.history().reverse()
+      console.log(this.history.length)
+      this.moves = []
+      if (this.history.length % 2 == 0) {
+        let i = 0;
+        while (i < this.history.length) {
+          this.moves.push([this.history[i + 1], this.history[i]])
+          i += 2;
+        }
+      }
+      else {
+        let i = 0;
+        while (i < this.history.length) {
+          this.moves.push([this.history[i + 1], this.history[i]])
+          i += 2;
+        }
+        this.moves.push([this.history[this.history.length - 1], " "])
+      }
+
+      this.moves = this.moves.reverse()
+
       this.chess.reset()
       const extractBlackElo = (input) => {
         const regex = /\[BlackElo "(.*?)"]/;
@@ -151,6 +182,7 @@ export default {
       stockfishWorking: false,
       opening: { m: "Startin Position", t: [], a: [] },
       bestmove: "",
+      moves: [],
     }
   },
   methods: {
