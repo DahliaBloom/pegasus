@@ -7,12 +7,11 @@
     <div class="flex flex-row h-full items-center basis-2/3 w-full">
       <EvalBar ref="evalBar" :evaluation="score" class="h-full"></EvalBar>
       <div class="h-full flex flex-col">
-
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
         </div>
-        <chess-board @onMovePlayed="onMovePlayed" v-model:fen="fen" :size="520" />
+        <chessboard />
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
@@ -46,6 +45,7 @@
 
           </div>
         </div>
+        <MoveTimeSlider class="w-full" />
         <div class="w-full h-1/2 p-2">
           <div class="bg-base-300 rounded-lg h-full w-full"></div>
         </div>
@@ -73,6 +73,7 @@
 
 <script>
 import { evaluate } from '../utils/analyze/Eval'
+import MoveTimeSlider from '../components/MoveTimeSlider.vue'
 import { ChessBoard } from '@ibrahimdeniz/vue-chessboard'
 import '@ibrahimdeniz/vue-chessboard/dist/style.css'
 import EvalBar from '../components/EvalBar.vue'
@@ -80,6 +81,8 @@ import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
+import { chessboard } from 'vue-chessboard'
+import 'vue-chessboard/dist/vue-chessboard.css'
 import { findOpeningName } from '../utils/analyze/Opening'
 
 export default {
@@ -147,6 +150,7 @@ export default {
       whiteElo: "",
       blackPlayer: "",
       whitePlayer: "",
+      positionInfo: null,
       stockfishWorking: false,
       opening: { m: "Startin Position", t: [], a: [] },
     }
