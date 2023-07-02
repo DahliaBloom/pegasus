@@ -11,7 +11,7 @@
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
         </div>
-        <chessboard/>
+        <chessboard />
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
@@ -46,7 +46,7 @@
 
           </div>
         </div>
-        <MoveTimeSlider class="w-full"/>
+        <MoveTimeSlider class="w-full" />
         <div class="w-full h-1/2 p-2">
           <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-y-scroll items-center justify-center">
             <div v-for="move in moves" class="w-full items-center justify-center">
@@ -93,7 +93,7 @@ import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
-import {chessboard} from 'vue-chessboard'
+import { chessboard } from 'vue-chessboard'
 import 'vue-chessboard/dist/vue-chessboard.css'
 import { findOpeningName } from '../utils/analyze/Opening'
 
