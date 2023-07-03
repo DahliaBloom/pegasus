@@ -11,7 +11,7 @@
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
         </div>
-        <chessboard />
+        <custom-chessboard />
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
@@ -39,7 +39,7 @@
           <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-hidden">
             {{ opening.m }}
             <br>
-            <div v-for="(item, index) in opening.a" :key="index">
+            <div v-for="( item, index ) in  opening.a " :key="index">
               <div class="badge badge-accent font-bold mr-2">{{ item }}</div>
             </div>
             {{ bestmove }}
@@ -49,7 +49,7 @@
         <MoveTimeSlider class="w-full" />
         <div class="w-full h-1/2 p-2">
           <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-y-scroll items-center justify-center">
-            <div v-for="move in moves" class="w-full items-center justify-center">
+            <div v-for=" move  in  moves " class="w-full items-center justify-center">
               <div class="my-2 grid grid-cols-2 gap-1 border border-slate-700 p-1 rounded-2xl">
                 <div class="flex justify-center">
                   <div class="badge bg-slate-300 text-slate-900 border-slate-900">{{ move[0] }}</div>
@@ -86,15 +86,13 @@
 <script>
 import { evaluate } from '../utils/analyze/Eval'
 import MoveTimeSlider from '../components/MoveTimeSlider.vue'
-import { ChessBoard } from '@ibrahimdeniz/vue-chessboard'
-import '@ibrahimdeniz/vue-chessboard/dist/style.css'
 import EvalBar from '../components/EvalBar.vue'
 import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
-import 'vue-chessboard/dist/vue-chessboard.css'
 import { findOpeningName } from '../utils/analyze/Opening'
+import CustomChessboard from '../components/CustomChessBoard.vue'
 
 export default {
   created() {
@@ -177,6 +175,7 @@ export default {
       bestmove: "",
       moves: [],
       historyStack: [],
+      board: null,
     }
   },
   methods: {
@@ -246,9 +245,9 @@ export default {
   },
   components: {
     EvalBar,
-    ChessBoard,
     UserAnalyzeBar,
-    EvalCircle
+    EvalCircle,
+    CustomChessboard
   }
 }
 </script>
