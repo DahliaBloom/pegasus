@@ -92,7 +92,7 @@ import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
 import { findOpeningName } from '../utils/analyze/Opening'
-import CustomChessboard from '../components/CustomChessBoard.vue'
+import CustomChessboard from '../components/CustomChessboard.vue'
 
 export default {
   created() {
