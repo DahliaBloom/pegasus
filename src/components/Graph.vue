@@ -5,14 +5,19 @@ export default{
     name: "Graph",
     props:{},
     mounted(){
-
+        const data = [65, 59, 80,55,10];
         const ctx = document.getElementById("Graph");
+        let label = [];
+        let number = data.length;
+        for(let i = 0;i<number;i++){
+            label.push("");
+        } 
         const Graph = new Chart(ctx,{
             type: "line",
             data: {
-                labels:["","",""],
+                labels:label,
                 datasets: [{ 
-                    data: [65, 59, 80],
+                    data: data ,
                     fill: true,
                     borderColor: 'rgb(0,0,0)',
                 }]},
