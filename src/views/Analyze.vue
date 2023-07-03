@@ -33,7 +33,9 @@
       </div>
       <div class="h-full w-full bg-base-100 m-2 flex flex-col">
         <div class="w-full h-1/3 p-2">
-          <div class="bg-primary border-8 rounded-lg h-full w-full"></div>
+          <div class="bg-primary border-8 rounded-lg h-full w-full">
+            <graph/>
+          </div>
         </div>
         <div class="w-full h-1/4 p-2">
           <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-hidden">
@@ -93,6 +95,7 @@ import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
 import { findOpeningName } from '../utils/analyze/Opening'
 import CustomChessboard from '../components/CustomChessboard.vue'
+import Graph from '../components/Graph.vue'
 
 export default {
   created() {
@@ -247,7 +250,8 @@ export default {
     EvalBar,
     UserAnalyzeBar,
     EvalCircle,
-    CustomChessboard
+    CustomChessboard,
+    Graph
   }
 }
 </script>
