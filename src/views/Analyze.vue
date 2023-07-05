@@ -11,7 +11,7 @@
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
         </div>
-        <custom-chessboard />
+        <chessyboardy />
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
@@ -100,7 +100,7 @@ import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
 import { findOpeningName } from '../utils/analyze/Opening'
-import CustomChessboard from '../components/CustomChessBoard.vue'
+import chessyboardy from '../components/chessyboardy.vue'
 import Graph from '../components/Graph.vue'
 import moveInfo from '../components/moveInfo.vue'
 
@@ -185,10 +185,21 @@ export default {
       moves: [],
       historyStack: [],
       board: null,
+      pawnStructure: 0,
     }
   },
   methods: {
     evaluatePosition() {
+      console.log("evaluating!" + this.fen)
+      evaluate(this.fen, (scoree, bestmovee) => {
+        console.log('Received score:' + scoree)
+        console.log('Received Bestmove:' + bestmovee)
+        this.score = scoree
+        this.bestmove = bestmovee
+      })
+      setTimeout(() => { this.stockfishWorking = false; console.log("back!") }, 1000)
+    },
+    evaluatePawns() {
       console.log("evaluating!" + this.fen)
       evaluate(this.fen, (scoree, bestmovee) => {
         console.log('Received score:' + scoree)
@@ -251,7 +262,7 @@ export default {
     EvalBar,
     UserAnalyzeBar,
     EvalCircle,
-    CustomChessboard,
+    chessyboardy,
     Graph,
     moveInfo
   }
