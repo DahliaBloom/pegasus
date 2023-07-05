@@ -5,7 +5,7 @@
   
 <script>
 export default {
-    name: 'CustomChessboard'
+    name: 'chessyboardy'
 };
 </script>
   
