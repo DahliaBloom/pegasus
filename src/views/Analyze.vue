@@ -2,7 +2,7 @@
   <div v-if="this.chess === null" class="grid place-content-center min-h-screen text-secondary font-mono">
     Invalide PGN
   </div>
-  <div v-else class="flex items-center overflow-hidden h-screen w-full flex-row py-8">
+  <div v-else class="flex items-center overflow-hidden h-screen w-full flex-row py-8 hide-overflow">
     <div class="basis-1/12 h-full border-red-500 border-4"></div>
     <div class="flex flex-row h-full items-center basis-11/12 w-full  border-blue-500 border-2">
       <EvalBar ref="evalBar" :evaluation="score" class="h-full  border-green-500 border-2"></EvalBar>
@@ -46,7 +46,7 @@
           <div class="border-2 basis-5/12 border-orange-500"></div>
         </div>
         <div class="h-full border-indigo-500 border-2 flex flex-col overflow-hidden basis-7/12">
-          <div class="border-primary border-2 basis-1/2 w-full">
+          <div class="basis-1/2 w-full">
             <StockfishPanel />
           </div>
           <div class="border-secondary border-2 basis-5/12 w-full overflow-hidden ">

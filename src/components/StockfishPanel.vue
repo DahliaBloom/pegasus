@@ -6,12 +6,12 @@ import StockfishMessages from './StockfishMessages.vue'
 
 <template>
   <div
-    class="h-fit w-full bg-base-300 rounded-lg p-5 flex justify-center items-center space-y-4 flex-col"
+    class="h-full w-full bg-base-300 rounded-lg p-5 flex justify-center items-center space-y-4 flex-col"
   >
     <div class="flex space-x-2 h-fit w-full">
       <div
         class="w-full h-fit text-white py-1 px-4 rounded-full text-center"
-        :class="[running ? 'bg-green-300' : 'bg-yellow-200']"
+        :class="[running ? 'bg-green-300' : 'bg-yellow-300']"
       >
         Stockfish {{ running ? 'running' : 'paused' }}
       </div>
@@ -37,8 +37,8 @@ import StockfishMessages from './StockfishMessages.vue'
     <div class="w-full flex space-x-4 items-center">
       <UCISender />
     </div>
-    <div class="w-full h-full bg-white">
-      <StockfishPanel />
+    <div class="w-full h-full ">
+      <StockfishMessages />
     </div>
   </div>
 </template>

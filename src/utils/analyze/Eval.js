@@ -5,10 +5,17 @@ let score = 0.0 // Declare score variable outside the listener function
 let callbackMethod = null
 let feen = ''
 
-export let running = ref(false)
-export let movetime = ref(3000)
+export const running = ref(false)
+export const movetime = ref(3000)
+export const msgHistory = ref([])
+
 
 start()
+
+function Message(msg, stockfish=true) {
+  this.msg = msg
+  this.stockfish = stockfish
+}
 
 function start() {
   console.log('Starting stockfish')
@@ -27,6 +34,8 @@ function start() {
 }
 
 function eventHandler(msg) {
+  msgHistory.value.push(new Message(msg))
+
   switch (msg) {
     case 'uciok':
       running.value = true
@@ -67,8 +76,8 @@ export async function evaluate(fen, callback) {
   if (stockfish === undefined) callback(0.0, 'stockfish undefined')
 
   feen = fen
-  stockfish.postMessage(`position fen ${fen}`)
-  stockfish.postMessage(`go movetime ${movetime.value}`)
+  message(`position fen ${fen}`)
+  message(`go movetime ${movetime.value}`)
   callbackMethod = callback
 }
 
@@ -79,6 +88,9 @@ export function restart() {
 
 export function message(msg) {
   if (stockfish !== undefined) {
+    msgHistory.value.push(new Message(msg, false))
     stockfish.postMessage(msg)
+  } else {
+    msgHistory.value.push(new Message('Stockfish not running'))
   }
 }
