@@ -4,21 +4,23 @@
   </div>
   <div v-else class="flex items-center overflow-hidden h-screen w-full flex-row py-8">
     <div class="basis-1/12 h-full border-red-500 border-4"></div>
-    <div class="flex flex-row h-full items-center basis-10/12 w-full  border-blue-500 border-2">
+    <div class="flex flex-row h-full items-center basis-11/12 w-full  border-blue-500 border-2">
       <EvalBar ref="evalBar" :evaluation="score" class="h-full  border-green-500 border-2"></EvalBar>
-      <div class="h-full flex flex-col  border-purple-500 border-2">
+      <div class="w-full h-full flex flex-col basis-6/12 border-purple-500 border-2 overflow-hidden">
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
         </div>
-        <chessyboardy />
+        <div class="w-full h-full">
+          <chessyboardy />
+        </div>
         <div
           class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
           <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
         </div>
       </div>
       <div
-        class="mx-4 h-full w-fit border-2 border-secondary flex flex-col items-center justify-center bg-base-200 rounded-lg">
+        class=" mx-4 h-full w-fit border-2 border-secondary flex flex-col items-center justify-center bg-base-200 rounded-lg">
         <div class="grid grid-rows-3 w-full h-full place-items-center">
           <EvalCircle :evaluation="90" />
           <EvalCircle :evaluation="20" />
@@ -31,19 +33,19 @@
           <EvalCircle :evaluation="40" />
         </div>
       </div>
-      <div class="h-full w-full bg-base-100 m-2 flex flex-row  border-yellow-500 border-2">
-        <div class="h-full w-1/2 flex flex-col border-lime-500 border-2">
+      <div class="h-full w-full bg-base-100 m-2 flex flex-row  border-yellow-500 border-2 overflow-hidden basis-1/2 ">
+        <div class="h-full overflow-hidden basis-5/12 flex flex-col border-lime-500 border-2">
           <div class="w-full basis-1/3 overflow-hidden p-2">
             <div class="bg-slate-500 border-8 rounded-lg h-full w-full">
               <graph />
             </div>
           </div>
           <div class="w-full basis-1/4 overflow-hidden p-2">
-            <moveInfo :moves="this.chess.history()" :bestmove="this.bestmove"></moveInfo>
+            <moveInfo :moves="this.historyStack" :bestmove="this.bestmove"></moveInfo>
           </div>
           <div class="border-2 basis-5/12 border-orange-500"></div>
         </div>
-        <div class="basis-6/12 h-full border-indigo-500 border-2 flex flex-col">
+        <div class="h-full border-indigo-500 border-2 flex flex-col overflow-hidden basis-7/12">
           <div class="border-primary border-2 basis-1/2 w-full">
             <StockfishPanel />
           </div>
@@ -163,6 +165,8 @@ export default {
         return null; // Return null if no match is found
       }
       this.blackPlayer = extractBlackPlayer(this.pgn);
+
+      console.log("finished setup")
     } catch {
       this.chess = null
     }
