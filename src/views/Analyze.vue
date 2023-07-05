@@ -31,17 +31,16 @@
           <EvalCircle :evaluation="40" />
         </div>
       </div>
-      <div class="h-full w-full bg-base-100 m-2 flex flex-col">
-        <div class="w-full h-1/3 p-2">
-          <div class="bg-primary border-8 rounded-lg h-full w-full">
+      <div class="h-full w-full bg-base-100 m-2 grid grid-rows-6">
+        <div class="w-full row-span-2 overflow-hidden p-2">
+          <div class="bg-slate-500 border-8 rounded-lg h-full w-full">
             <graph />
           </div>
         </div>
-        <div class="w-full h-1/4 p-2">
+        <div class="w-full row-span-1 overflow-hidden p-2">
           <moveInfo :moves="this.chess.history()" :bestmove="this.bestmove"></moveInfo>
         </div>
-        <MoveTimeSlider class="w-full" />
-        <div class="w-full h-1/2 p-2">
+        <div class="w-full row-span-3 overflow-hidden p-2">
           <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-y-scroll items-center justify-center">
             <div v-for=" move  in  moves " class="w-full items-center justify-center">
               <div class="my-2 grid grid-cols-2 gap-1 border border-slate-700 p-1 rounded-2xl">

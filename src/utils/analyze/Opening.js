@@ -3402,8 +3402,6 @@ export function findOpeningName(moves) {
     E99	King's Indian Defense: Orthodox Variation, Classical System, Traditional Line	1. d4 Nf6 2. c4 g6 3. Nc3 Bg7 4. e4 d6 5. Nf3 O-O 6. Be2 e5 7. O-O Nc6 8. d5 Ne7 9. Ne1 Nd7 10. f3 f5`;
     
     const openingsArray = openings.split('\n').map(line => line.trim());
-    console.log(openingsArray)
-    console.log(moves)
     
     let availableOptions = []
     
@@ -3415,8 +3413,6 @@ export function findOpeningName(moves) {
             availableOptions.push({t: theoryMoves, m: opening.split('\t')[1], a:opening.split('\t')[0][0]})
         }
     }
-
-    console.log("AVAILABLE OPTIONS:"+availableOptions.length)
 
     if (availableOptions.length == 0){
         return null

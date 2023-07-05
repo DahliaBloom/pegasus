@@ -10,16 +10,33 @@ export default {
     data() {
         return {
             opening: { m: "Startin Position", t: [], a: [] },
+            oldMoves: []
         }
     },
     methods: {
         update() {
-            console.log("MOOOOOOOOOOOOOVES" + this.moves)
-            if (this.moves != []) {
-                let tmp = (findOpeningName(this.moves))
-                if (tmp != null) {
-                    this.opening = tmp
+            if (this.oldMoves != []) {
+                if (this.oldMoves.length != this.moves.length) {
+                    console.log("MOOOOOOOOOOOOOVES" + this.moves)
+                    if (this.moves != []) {
+                        let tmp = (findOpeningName(this.moves))
+                        if (tmp != null) {
+                            this.opening = tmp
+                        }
+                    }
+                    this.oldMoves = this.moves
                 }
+
+            }
+            else {
+                console.log("MOOOOOOOOOOOOOVES" + this.moves)
+                if (this.moves != []) {
+                    let tmp = (findOpeningName(this.moves))
+                    if (tmp != null) {
+                        this.opening = tmp
+                    }
+                }
+                this.oldMoves = this.moves
             }
         }
     },
