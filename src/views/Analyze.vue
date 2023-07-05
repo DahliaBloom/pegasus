@@ -31,63 +31,13 @@
           <EvalCircle :evaluation="40" />
         </div>
       </div>
-      <div class="h-full w-full bg-base-100 m-2 flex flex-col">
-        <div class="w-full h-1/3 p-2">
-          <div class="bg-primary border-8 rounded-lg h-full w-full">
-            <graph/>
-          </div>
-        </div>
-        <div class="w-full h-1/4 p-2">
-          <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-hidden">
-            {{ opening.m }}
-            <br>
-            <div v-for="( item, index ) in  opening.a " :key="index">
-              <div class="badge badge-accent font-bold mr-2">{{ item }}</div>
-            </div>
-            {{ bestmove }}
-
-          </div>
-        </div>
-        <MoveTimeSlider class="w-full" />
-        <div class="w-full h-1/2 p-2">
-          <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-y-scroll items-center justify-center">
-            <div v-for=" move  in  moves " class="w-full items-center justify-center">
-              <div class="my-2 grid grid-cols-2 gap-1 border border-slate-700 p-1 rounded-2xl">
-                <div class="flex justify-center">
-                  <div class="badge bg-slate-300 text-slate-900 border-slate-900">{{ move[0] }}</div>
-                </div>
-                <div class="flex justify-center">
-                  <div class="badge bg-gray-800 text-gray-200 border-gray-200">{{ move[1] }}</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="bottom-3 w-full h-12 grid grid-cols-5 gap-x-1">
-          <button class="btn-accent btn">
-            <span class="material-symbols-outlined" @click="completeBack"> keyboard_double_arrow_left </span>
-          </button>
-          <button class="btn-accent btn">
-            <span class="material-symbols-outlined" @click="backMove"> chevron_left </span>
-          </button>
-          <button class="btn-accent btn">
-            <span class="material-symbols-outlined"> auto_awesome </span>
-          </button>
-          <button class="btn-accent btn">
-            <span class="material-symbols-outlined" @click="moveCall"> chevron_right </span>
-          </button>
-          <button class="btn-accent btn">
-            <span class="material-symbols-outlined" @click="completeEnd"> keyboard_double_arrow_right </span>
-          </button>
-        </div>
-      </div>
+      <StockfishPanel />
     </div>
   </div>
 </template>
 
 <script>
 import { evaluate } from '../utils/analyze/Eval'
-import MoveTimeSlider from '../components/MoveTimeSlider.vue'
 import EvalBar from '../components/EvalBar.vue'
 import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
@@ -96,6 +46,7 @@ import { Chess } from 'chess.js'
 import { findOpeningName } from '../utils/analyze/Opening'
 import CustomChessboard from '../components/CustomChessboard.vue'
 import Graph from '../components/Graph.vue'
+import StockfishPanel from '../components/StockfishPanel.vue'
 
 export default {
   created() {
@@ -247,6 +198,7 @@ export default {
     }
   },
   components: {
+    StockfishPanel,
     EvalBar,
     UserAnalyzeBar,
     EvalCircle,

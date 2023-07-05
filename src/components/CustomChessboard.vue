@@ -1,5 +1,5 @@
 <template>
-    <div class="chessboard w-[500px] h-[500px] bg-white">
+    <div class="chessboard w-full h-full bg-white">
     </div>
 </template>
   
