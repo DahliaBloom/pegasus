@@ -219,7 +219,7 @@ export default {
       console.log("moveCall")
       if (!this.chess.isGameOver() && !this.stockfishWorking) {
         this.stockfishWorking = true
-        console.log(console.log(this.history))
+        console.log(this.history)
         let tmp = this.history.pop()
         this.chess.move(tmp)
         this.historyStack.push(tmp)
