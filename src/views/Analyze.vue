@@ -34,19 +34,11 @@
       <div class="h-full w-full bg-base-100 m-2 flex flex-col">
         <div class="w-full h-1/3 p-2">
           <div class="bg-primary border-8 rounded-lg h-full w-full">
-            <graph/>
+            <graph />
           </div>
         </div>
         <div class="w-full h-1/4 p-2">
-          <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-hidden">
-            {{ opening.m }}
-            <br>
-            <div v-for="( item, index ) in  opening.a " :key="index">
-              <div class="badge badge-accent font-bold mr-2">{{ item }}</div>
-            </div>
-            {{ bestmove }}
-
-          </div>
+          <moveInfo :moves="this.chess.history()" :bestmove="this.bestmove"></moveInfo>
         </div>
         <MoveTimeSlider class="w-full" />
         <div class="w-full h-1/2 p-2">
@@ -94,8 +86,9 @@ import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
 import { findOpeningName } from '../utils/analyze/Opening'
-import CustomChessboard from '../components/CustomChessboard.vue'
+import CustomChessboard from '../components/CustomChessBoard.vue'
 import Graph from '../components/Graph.vue'
+import moveInfo from '../components/moveInfo.vue'
 
 export default {
   created() {
@@ -174,7 +167,6 @@ export default {
       whitePlayer: "",
       positionInfo: null,
       stockfishWorking: false,
-      opening: { m: "Startin Position", t: [], a: [] },
       bestmove: "",
       moves: [],
       historyStack: [],
@@ -198,7 +190,6 @@ export default {
       game.makeMove(move)
       console.log('FEEEEEEEEEEEEEEEEEEN:' + game.fen)
       this.fen = game.fen
-      this.opening = (findOpeningName(this.chess.history()))
       this.evaluatePosition()
     },
     moveCall() {
@@ -211,7 +202,6 @@ export default {
         this.chess.move(tmp)
         this.historyStack.push(tmp)
         this.fen = this.chess.fen()
-        this.opening = (findOpeningName(this.chess.history()))
         this.evaluatePosition()
       }
     },
@@ -251,7 +241,8 @@ export default {
     UserAnalyzeBar,
     EvalCircle,
     CustomChessboard,
-    Graph
+    Graph,
+    moveInfo
   }
 }
 </script>

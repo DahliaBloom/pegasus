@@ -3416,9 +3416,9 @@ export function findOpeningName(moves) {
         }
     }
 
-    console.log(availableOptions)
+    console.log("AVAILABLE OPTIONS:"+availableOptions.length)
 
-    if (availableOptions == {}){
+    if (availableOptions.length == 0){
         return null
     }
     availableOptions.sort((b)=>{b.t.length})
