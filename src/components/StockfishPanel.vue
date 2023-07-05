@@ -38,7 +38,7 @@ import StockfishMessages from './StockfishMessages.vue'
       <UCISender />
     </div>
     <div
-      class="flex max-w-lg max-h-96 flex-wrap items-center justify-center gap-2 overflow-x-hidden"
+      class="flex max-w-xs max-h-36 flex-wrap items-center justify-center gap-2 overflow-x-hidden"
     >
       <StockfishMessages />
     </div>

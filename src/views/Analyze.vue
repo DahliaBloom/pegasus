@@ -44,7 +44,9 @@
           <div class="border-2 basis-5/12 border-orange-500"></div>
         </div>
         <div class="basis-6/12 h-full border-indigo-500 border-2 flex flex-col">
-          <div class="border-primary border-2 basis-1/2 w-full"></div>
+          <div class="border-primary border-2 basis-1/2 w-full">
+            <StockfishPanel />
+          </div>
           <div class="border-secondary border-2 basis-5/12 w-full overflow-hidden ">
             <div class="w-full h-full p-2">
               <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-y-scroll items-center justify-center">
@@ -100,6 +102,7 @@ import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
 import { findOpeningName } from '../utils/analyze/Opening'
 import chessyboardy from '../components/chessyboardy.vue'
+import StockfishPanel from '../components/StockfishPanel.vue'
 import Graph from '../components/Graph.vue'
 import moveInfo from '../components/moveInfo.vue'
 
