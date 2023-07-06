@@ -115,15 +115,26 @@ export default {
       console.log(this.pgn)
       this.chess.loadPgn(this.pgn)
       this.history = this.chess.history()
+      console.log("Hiii")
       console.log(this.history)
       this.moves = []
       let i = 0;
-      while (i < this.history.length) {
-        this.moves.push([this.history[i], this.history[i + 1]])
-        i += 2;
+      if (this.history[0].endsWith("5") || this.history[0].endsWith("6")) {
+        console.log("...")
+        while (i < this.history.length) {
+          this.moves.push([this.history[i + 1], this.history[i]])
+          i += 2;
+        }
+      }
+      else {
+        while (i < this.history.length) {
+          this.moves.push([this.history[i], this.history[i + 1]])
+          i += 2;
+        }
       }
 
-      this.history = this.history.reverse()
+      console.log(this.moves)
+      this.history = [].concat(...this.moves).reverse();
 
       this.chess.reset()
       const extractBlackElo = (input) => {
