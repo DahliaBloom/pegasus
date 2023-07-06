@@ -1,26 +1,34 @@
 <template>
-  <div v-if="this.chess === null" class="grid place-content-center min-h-screen text-secondary font-mono">
+  <div
+    v-if="this.chess === null"
+    class="grid place-content-center min-h-screen text-secondary font-mono"
+  >
     Invalide PGN
   </div>
-  <div v-else class="flex items-center overflow-hidden h-screen w-full flex-row py-8 hide-overflow">
+  <div v-else class="flex items-center overflow-hidden h-screen w-full flex-row py-8">
     <div class="basis-1/12 h-full border-red-500 border-4"></div>
-    <div class="flex flex-row h-full items-center basis-11/12 w-full  border-blue-500 border-2">
-      <EvalBar ref="evalBar" :evaluation="score" class="h-full  border-green-500 border-2"></EvalBar>
-      <div class="w-full h-full flex flex-col basis-6/12 border-purple-500 border-2 overflow-hidden">
+    <div class="flex flex-row h-full items-center basis-11/12 w-full border-blue-500 border-2">
+      <EvalBar ref="evalBar" :evaluation="score" class="h-full border-green-500 border-2"></EvalBar>
+      <div
+        class="w-full h-full flex flex-col basis-6/12 border-purple-500 border-2 overflow-hidden"
+      >
         <div
-          class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
+          class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg"
+        >
           <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
         </div>
         <div class="w-full h-full">
           <chessyboardy />
         </div>
         <div
-          class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg">
+          class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg"
+        >
           <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
         </div>
       </div>
       <div
-        class=" mx-4 h-full w-fit border-2 border-secondary flex flex-col items-center justify-center bg-base-200 rounded-lg">
+        class="mx-4 h-full w-fit border-2 border-secondary flex flex-col items-center justify-center bg-base-200 rounded-lg"
+      >
         <div class="grid grid-rows-3 w-full h-full place-items-center">
           <EvalCircle :evaluation="90" />
           <EvalCircle :evaluation="20" />
@@ -33,7 +41,9 @@
           <EvalCircle :evaluation="40" />
         </div>
       </div>
-      <div class="h-full w-full bg-base-100 m-2 flex flex-row  border-yellow-500 border-2 overflow-hidden basis-1/2 ">
+      <div
+        class="h-full w-full bg-base-100 m-2 flex flex-row border-yellow-500 border-2 overflow-hidden basis-1/2"
+      >
         <div class="h-full overflow-hidden basis-5/12 flex flex-col border-lime-500 border-2">
           <div class="w-full basis-1/3 overflow-hidden p-2">
             <div class="bg-slate-500 border-8 rounded-lg h-full w-full">
@@ -49,21 +59,38 @@
           <div class="basis-1/2 w-full">
             <StockfishPanel />
           </div>
-          <div class="border-secondary border-2 basis-5/12 w-full overflow-hidden ">
+          <div class="border-secondary border-2 basis-5/12 w-full overflow-hidden">
             <div class="w-full h-full p-2">
-              <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-y-scroll items-center justify-center">
-                <div v-for="( move, index ) in  this.moves " :key="index" class="w-full items-center justify-center">
+              <div
+                class="bg-base-300 rounded-lg h-full w-full p-2 overflow-y-scroll items-center justify-center"
+              >
+                <div
+                  v-for="(move, index) in this.moves"
+                  :key="index"
+                  class="w-full items-center justify-center"
+                >
                   <div class="my-2 grid grid-cols-2 gap-1 border border-slate-700 p-1 rounded-2xl">
                     <div class="flex justify-center">
-                      <div v-if="2 * index == this.historyStack.length"
-                        class="badge bg-green-300 text-slate-900 border-slate-900">{{ move[0] }}</div>
-                      <div v-else class="badge bg-slate-300 text-slate-900 border-slate-900">{{ move[0] }}
+                      <div
+                        v-if="2 * index == this.historyStack.length"
+                        class="badge bg-green-300 text-slate-900 border-slate-900"
+                      >
+                        {{ move[0] }}
+                      </div>
+                      <div v-else class="badge bg-slate-300 text-slate-900 border-slate-900">
+                        {{ move[0] }}
                       </div>
                     </div>
                     <div class="flex justify-center">
-                      <div v-if="2 * index + 1 == this.historyStack.length"
-                        class=" badge bg-green-800 text-gray-200 border-gray-200">{{ move[1] }}</div>
-                      <div v-else class=" badge bg-gray-800 text-gray-200 border-gray-200">{{ move[1] }}</div>
+                      <div
+                        v-if="2 * index + 1 == this.historyStack.length"
+                        class="badge bg-green-800 text-gray-200 border-gray-200"
+                      >
+                        {{ move[1] }}
+                      </div>
+                      <div v-else class="badge bg-gray-800 text-gray-200 border-gray-200">
+                        {{ move[1] }}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -73,7 +100,9 @@
           <div class="w-full basis-1/12">
             <div class="bottom-3 w-full h-12 grid grid-cols-5 gap-x-1">
               <button class="btn-accent btn">
-                <span class="material-symbols-outlined" @click="completeBack"> keyboard_double_arrow_left </span>
+                <span class="material-symbols-outlined" @click="completeBack">
+                  keyboard_double_arrow_left
+                </span>
               </button>
               <button class="btn-accent btn">
                 <span class="material-symbols-outlined" @click="backMove"> chevron_left </span>
@@ -85,7 +114,9 @@
                 <span class="material-symbols-outlined" @click="moveCall"> chevron_right </span>
               </button>
               <button class="btn-accent btn">
-                <span class="material-symbols-outlined" @click="completeEnd"> keyboard_double_arrow_right </span>
+                <span class="material-symbols-outlined" @click="completeEnd">
+                  keyboard_double_arrow_right
+                </span>
               </button>
             </div>
           </div>
@@ -109,6 +140,12 @@ import Graph from '../components/Graph.vue'
 import moveInfo from '../components/moveInfo.vue'
 
 export default {
+  mounted() {
+    document.body.classList.add('hide-overflow')
+  },
+  unmounted() {
+    document.body.classList.remove('hide-overflow')
+  },
   created() {
     try {
       this.pgn = (useRoute().query.pgn ?? undefined).toString()
@@ -117,56 +154,56 @@ export default {
       this.history = this.chess.history()
       console.log(this.history)
       this.moves = []
-      let i = 0;
+      let i = 0
       while (i < this.history.length) {
         this.moves.push([this.history[i], this.history[i + 1]])
-        i += 2;
+        i += 2
       }
 
       this.history = this.history.reverse()
 
       this.chess.reset()
       const extractBlackElo = (input) => {
-        const regex = /\[BlackElo "(.*?)"]/;
-        const match = regex.exec(input);
+        const regex = /\[BlackElo "(.*?)"]/
+        const match = regex.exec(input)
         if (match && match.length >= 2) {
-          return match[1];
+          return match[1]
         }
-        return null; // Return null if no match is found
+        return null // Return null if no match is found
       }
-      this.blackElo = extractBlackElo(this.pgn);
+      this.blackElo = extractBlackElo(this.pgn)
 
       const extractWhiteElo = (input) => {
-        const regex = /\[WhiteElo "(.*?)"]/;
-        const match = regex.exec(input);
+        const regex = /\[WhiteElo "(.*?)"]/
+        const match = regex.exec(input)
         if (match && match.length >= 2) {
-          return match[1];
+          return match[1]
         }
-        return null; // Return null if no match is found
+        return null // Return null if no match is found
       }
-      this.whiteElo = extractWhiteElo(this.pgn);
+      this.whiteElo = extractWhiteElo(this.pgn)
 
       const extractWhitePlayer = (input) => {
-        const regex = /\[White "(.*?)"]/;
-        const match = regex.exec(input);
+        const regex = /\[White "(.*?)"]/
+        const match = regex.exec(input)
         if (match && match.length >= 2) {
-          return match[1];
+          return match[1]
         }
-        return null; // Return null if no match is found
+        return null // Return null if no match is found
       }
-      this.whitePlayer = extractWhitePlayer(this.pgn);
+      this.whitePlayer = extractWhitePlayer(this.pgn)
 
       const extractBlackPlayer = (input) => {
-        const regex = /\[Black "(.*?)"]/;
-        const match = regex.exec(input);
+        const regex = /\[Black "(.*?)"]/
+        const match = regex.exec(input)
         if (match && match.length >= 2) {
-          return match[1];
+          return match[1]
         }
-        return null; // Return null if no match is found
+        return null // Return null if no match is found
       }
-      this.blackPlayer = extractBlackPlayer(this.pgn);
+      this.blackPlayer = extractBlackPlayer(this.pgn)
 
-      console.log("finished setup")
+      console.log('finished setup')
     } catch {
       this.chess = null
     }
@@ -180,40 +217,46 @@ export default {
       custom: 0.0,
       size: 600,
       history: null,
-      pgn: "",
-      blackElo: "",
-      whiteElo: "",
-      blackPlayer: "",
-      whitePlayer: "",
+      pgn: '',
+      blackElo: '',
+      whiteElo: '',
+      blackPlayer: '',
+      whitePlayer: '',
       positionInfo: null,
       stockfishWorking: false,
-      bestmove: "",
+      bestmove: '',
       moves: [],
       historyStack: [],
       board: null,
-      pawnStructure: 0,
+      pawnStructure: 0
     }
   },
   methods: {
     evaluatePosition() {
-      console.log("evaluating!" + this.fen)
+      console.log('evaluating!' + this.fen)
       evaluate(this.fen, (scoree, bestmovee) => {
         console.log('Received score:' + scoree)
         console.log('Received Bestmove:' + bestmovee)
         this.score = scoree
         this.bestmove = bestmovee
       })
-      setTimeout(() => { this.stockfishWorking = false; console.log("back!") }, 1000)
+      setTimeout(() => {
+        this.stockfishWorking = false
+        console.log('back!')
+      }, 1000)
     },
     evaluatePawns() {
-      console.log("evaluating!" + this.fen)
+      console.log('evaluating!' + this.fen)
       evaluate(this.fen, (scoree, bestmovee) => {
         console.log('Received score:' + scoree)
         console.log('Received Bestmove:' + bestmovee)
         this.score = scoree
         this.bestmove = bestmovee
       })
-      setTimeout(() => { this.stockfishWorking = false; console.log("back!") }, 1000)
+      setTimeout(() => {
+        this.stockfishWorking = false
+        console.log('back!')
+      }, 1000)
     },
     onMovePlayed({ move, game }) {
       game.makeMove(move)
@@ -222,7 +265,7 @@ export default {
       this.evaluatePosition()
     },
     moveCall() {
-      console.log("moveCall")
+      console.log('moveCall')
       if (!this.chess.isGameOver() && !this.stockfishWorking) {
         this.stockfishWorking = true
         console.log(this.history)
@@ -245,7 +288,7 @@ export default {
     },
     completeBack() {
       if (!this.stockfishWorking) {
-        while (this.chess.fen() != "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1") {
+        while (this.chess.fen() != 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1') {
           this.chess.undo()
           this.history.push(this.historyStack.pop())
           this.fen = this.chess.fen()
