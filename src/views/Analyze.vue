@@ -5,65 +5,64 @@
   >
     Invalide PGN
   </div>
-  <div v-else class="flex items-center overflow-hidden h-screen w-full flex-row py-8">
-    <div class="basis-1/12 h-full border-red-500 border-4"></div>
-    <div class="flex flex-row h-full items-center basis-11/12 w-full border-blue-500 border-2">
-      <EvalBar ref="evalBar" :evaluation="score" class="h-full border-green-500 border-2"></EvalBar>
-      <div
-        class="w-full h-full flex flex-col basis-6/12 border-purple-500 border-2 overflow-hidden"
-      >
-        <div
-          class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg"
-        >
-          <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
+  <div v-else class="flex items-center justify-between h-screen flex-row py-3 space-x-4">
+    <div class="h-full basis-1/2 flex">
+      <EvalBar ref="evalBar" :evaluation="score" class="h-full"></EvalBar>
+      <div class="flex flex-grow flex-col justify-between py-3 space-y-2">
+        <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
+        <chessyboardy />
+        <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
+      </div>
+    </div>
+    <div class="h-full w-full bg-base-100 m-2 flex flex-row basis-1/2 space-x-2">
+      <div class="h-full basis-1/2 flex flex-col space-y-2">
+        <div class="w-full basis-1/4 bg-base-300 rounded-lg p-2">
+            <graph />
         </div>
-        <div class="w-full h-full">
-          <chessyboardy />
+        <div class="w-full flex-grow">
+          <moveInfo :moves="this.historyStack" :bestmove="this.bestmove"></moveInfo>
         </div>
         <div
-          class="bg-base-300 w-full h-full basis-1/12 py-2 px-2 border-solid border-secondary border-2 my-2 overflow-hidden rounded-lg"
+          class="w-full basis-1/4 bg-base-300 rounded-lg p-2 flex justify-around flex-col"
         >
-          <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
+          <div class="grid grid-cols-3 w-full place-items-center">
+            <EvalCircle :evaluation="90" />
+            <EvalCircle :evaluation="20" />
+            <EvalCircle :evaluation="40" />
+          </div>
+          <div class="grid grid-cols-3 w-full place-items-center">
+            <EvalCircle :evaluation="90" />
+            <EvalCircle :evaluation="20" />
+            <EvalCircle :evaluation="40" />
+          </div>
         </div>
       </div>
-      <div
-        class="mx-4 h-full w-fit border-2 border-secondary flex flex-col items-center justify-center bg-base-200 rounded-lg"
-      >
-        <div class="grid grid-rows-3 w-full h-full place-items-center">
-          <EvalCircle :evaluation="90" />
-          <EvalCircle :evaluation="20" />
-          <EvalCircle :evaluation="40" />
+      <div class="h-full flex flex-col overflow-hidden basis-1/2 space-y-2">
+        <div class="w-full" style="flex-basis: 45%">
+          <StockfishPanel />
         </div>
-        <div class="w-16 mx-4 h-0 border border-secondary"></div>
-        <div class="grid grid-rows-3 h-full w-full place-items-center">
-          <EvalCircle :evaluation="90" />
-          <EvalCircle :evaluation="20" />
-          <EvalCircle :evaluation="40" />
-        </div>
-      </div>
-      <div
-        class="h-full w-full bg-base-100 m-2 flex flex-row border-yellow-500 border-2 overflow-hidden basis-1/2"
-      >
-        <div class="h-full overflow-hidden basis-5/12 flex flex-col border-lime-500 border-2">
-          <div class="w-full basis-1/3 overflow-hidden p-2">
-            <div class="bg-slate-500 border-8 rounded-lg h-full w-full">
-              <graph />
-            </div>
+        <div
+          class="w-full bg-base-300 rounded-lg flex flex-col p-2 space-y-2"
+          style="flex-basis: 55%"
+        >
+          <div class="flex space-x-2">
+            <button class="bg-accent rounded-full px-4 text-white flex-1" @click="completeBack">
+              &laquo;
+            </button>
+            <button class="bg-accent rounded-full py-1 px-4 text-white flex-1" @click="backMove">
+              &lsaquo;
+            </button>
+            <button class="bg-accent rounded-full py-1 px-4 text-white flex-1">🌟</button>
+            <button class="bg-accent rounded-full py-1 px-4 text-white flex-1" @click="moveCall">
+              &rsaquo;
+            </button>
+            <button class="bg-accent rounded-full py-1 px-4 text-white flex-1" @click="completeEnd">
+              &raquo;
+            </button>
           </div>
-          <div class="w-full basis-1/4 overflow-hidden p-2">
-            <moveInfo :moves="this.historyStack" :bestmove="this.bestmove"></moveInfo>
-          </div>
-          <div class="border-2 basis-5/12 border-orange-500"></div>
-        </div>
-        <div class="h-full border-indigo-500 border-2 flex flex-col overflow-hidden basis-7/12">
-          <div class="basis-1/2 w-full">
-            <StockfishPanel />
-          </div>
-          <div class="border-secondary border-2 basis-5/12 w-full overflow-hidden">
-            <div class="w-full h-full p-2">
-              <div
-                class="bg-base-300 rounded-lg h-full w-full p-2 overflow-y-scroll items-center justify-center"
-              >
+          <div class="flex-grow">
+            <div class="flex-content">
+              <div class="scrollable-content-wrapper scroll-fade">
                 <div
                   v-for="(move, index) in this.moves"
                   :key="index"
@@ -84,7 +83,7 @@
                     <div class="flex justify-center">
                       <div
                         v-if="2 * index + 1 == this.historyStack.length"
-                        class="badge bg-green-800 text-gray-200 border-gray-200"
+                        class="badge bg-green-300 text-gray-200 border-gray-200"
                       >
                         {{ move[1] }}
                       </div>
@@ -95,29 +94,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-          <div class="w-full basis-1/12">
-            <div class="bottom-3 w-full h-12 grid grid-cols-5 gap-x-1">
-              <button class="btn-accent btn">
-                <span class="material-symbols-outlined" @click="completeBack">
-                  keyboard_double_arrow_left
-                </span>
-              </button>
-              <button class="btn-accent btn">
-                <span class="material-symbols-outlined" @click="backMove"> chevron_left </span>
-              </button>
-              <button class="btn-accent btn">
-                <span class="material-symbols-outlined"> auto_awesome </span>
-              </button>
-              <button class="btn-accent btn">
-                <span class="material-symbols-outlined" @click="moveCall"> chevron_right </span>
-              </button>
-              <button class="btn-accent btn">
-                <span class="material-symbols-outlined" @click="completeEnd">
-                  keyboard_double_arrow_right
-                </span>
-              </button>
             </div>
           </div>
         </div>

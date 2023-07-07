@@ -9,74 +9,64 @@ export default {
   data() {
     return {
       height: 50.0,
-      heightString: "50%"
+      heightString: '50%'
     }
   },
   methods: {
     update() {
-      this.heightString = this.height + "%";
-      console.log("update")
-      if (this.evaluation === "0.0" || this.evaluation === "0") {
+      this.heightString = this.height + '%'
+      console.log('update')
+      if (this.evaluation === '0.0' || this.evaluation === '0') {
         this.height = 50.0
-        this.heightString = this.height + "%"
+        this.heightString = this.height + '%'
         return
       }
       let tmp = Number(this.evaluation)
-      console.log("TMP:" + tmp)
+      console.log('TMP:' + tmp)
       if (tmp >= 100) {
         this.height = 100
-        this.heightString = "100%"
+        this.heightString = '100%'
         return
       }
       if (tmp < -100) {
         this.height = 0
-        this.heightString = "0%"
+        this.heightString = '0%'
         return
       }
       if (tmp > 0) {
         if (Math.abs(tmp) < 1.0) {
           this.height = 50.0 + tmp * 10
-          console.log("-1< x <1")
-        }
-        else if (Math.abs(tmp) < 3) {
+          console.log('-1< x <1')
+        } else if (Math.abs(tmp) < 3) {
           this.height = 50.0 + tmp * 8
-          console.log("-3< x <3")
-        }
-        else if (Math.abs(tmp) < 6.0) {
+          console.log('-3< x <3')
+        } else if (Math.abs(tmp) < 6.0) {
           this.height = 70.0 + tmp * 2
-          console.log("-6< x <6")
-        }
-        else if (Math.abs(tmp) < 11.0) {
+          console.log('-6< x <6')
+        } else if (Math.abs(tmp) < 11.0) {
           this.height = 80.0 + tmp
-          console.log("-9< x <9")
-        }
-        else if (tmp > 11.0) {
+          console.log('-9< x <9')
+        } else if (tmp > 11.0) {
           this.height = 50 + Math.log(Math.abs(tmp)) * 30
         }
       }
       if (tmp < 0) {
         if (Math.abs(tmp) < 1.0) {
           this.height = 50.0 + tmp * 10
-          console.log("-1< x <1")
-        }
-        else if (Math.abs(tmp) < 3) {
+          console.log('-1< x <1')
+        } else if (Math.abs(tmp) < 3) {
           this.height = 50.0 + tmp * 8
-          console.log("-3< x <3")
-        }
-        else if (Math.abs(tmp) < 6.0) {
+          console.log('-3< x <3')
+        } else if (Math.abs(tmp) < 6.0) {
           this.height = 30.0 + tmp * 2
-          console.log("-6< x <6")
-        }
-        else if (Math.abs(tmp) < 11.0) {
+          console.log('-6< x <6')
+        } else if (Math.abs(tmp) < 11.0) {
           this.height = 20.0 + tmp
-          console.log("-9< x <9")
-        }
-        else if (tmp < -11.0) {
+          console.log('-9< x <9')
+        } else if (tmp < -11.0) {
           this.height = 50 - Math.log(Math.abs(tmp)) * 30
         }
       }
-
-
 
       if (this.height > 96) {
         this.height = 96
@@ -84,12 +74,12 @@ export default {
       if (this.height < 4) {
         this.height = 4
       }
-      this.heightString = this.height + "%";
+      this.heightString = this.height + '%'
       //console.log(this.heightString)
     }
   },
   beforeMount() {
-    this.update();
+    this.update()
   },
   updated() {
     this.update()
@@ -98,18 +88,16 @@ export default {
 </script>
 
 <template>
-  <div class="w-18 h-full flex flex-row flex-none m-2 items-center">
-
-    <span class="mr-2 w-12 p-2">{{ this.evaluation }}</span>
+  <div class="w-18 h-full flex flex-row flex-none px-3 items-center space-x-3">
+    <span>{{ this.evaluation }}</span>
     <div class="w-4 h-full relative flex-none rounded-lg">
       <div class="bg-black text-white text-center font-bold h-full rounded-lg">
         <div
-          class=" bg-white w-full text-center text-black absolute bottom-0 left-0 evalWhite rounded-b-lg transition-transform">
-
-        </div>
+          class="bg-white w-full text-center text-black absolute bottom-0 left-0 evalWhite rounded-b-lg transition-transform"
+        ></div>
       </div>
     </div>
-  </diV>
+  </div>
 </template>
 
 <style scoped>

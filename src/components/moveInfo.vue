@@ -38,7 +38,7 @@ export default {
 </script>
 
 <template>
-    <div class="bg-base-300 rounded-lg h-full w-full p-2 overflow-hidden">
+    <div class="bg-base-300 rounded-lg h-full w-full p-2">
         {{ opening.m }}
         <br>
         <div v-for="( item, index ) in  opening.a " :key="index">

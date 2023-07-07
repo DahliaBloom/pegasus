@@ -1,5 +1,5 @@
 <template>
-    <div class="h-full w-full flex relative">
+    <div class="flex relative">
         <img class="w-8 h-8 border-2 mr-2 rounded-lg" :src="user.avatar" alt="" v-if="color" style="border-color: white;">
         <img class="w-8 h-8 border-2 mr-2 rounded-lg" :src="user.avatar" alt="" v-else="color" style="border-color: black;">
         <div class="flex flex-row items-baseline">
