@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="this.chess === null"
-    class="grid place-content-center min-h-screen text-secondary font-mono"
-  >
+  <div v-if="this.chess === null" class="grid place-content-center min-h-screen text-secondary font-mono">
     Invalide PGN
   </div>
   <div v-else class="flex items-center justify-between h-screen flex-row py-3 space-x-4">
@@ -70,10 +67,8 @@
                 >
                   <div class="my-2 grid grid-cols-2 gap-1 border border-slate-700 p-1 rounded-2xl">
                     <div class="flex justify-center">
-                      <div
-                        v-if="2 * index == this.historyStack.length"
-                        class="badge bg-green-300 text-slate-900 border-slate-900"
-                      >
+                      <div v-if="2 * index == this.historyStack.length"
+                        class="badge bg-green-300 text-slate-900 border-slate-900">
                         {{ move[0] }}
                       </div>
                       <div v-else class="badge bg-slate-300 text-slate-900 border-slate-900">
@@ -128,15 +123,26 @@ export default {
       console.log(this.pgn)
       this.chess.loadPgn(this.pgn)
       this.history = this.chess.history()
+      console.log("Hiii")
       console.log(this.history)
       this.moves = []
-      let i = 0
-      while (i < this.history.length) {
-        this.moves.push([this.history[i], this.history[i + 1]])
-        i += 2
+      let i = 0;
+      if (this.history[0].endsWith("5") || this.history[0].endsWith("6")) {
+        console.log("...")
+        while (i < this.history.length) {
+          this.moves.push([this.history[i + 1], this.history[i]])
+          i += 2;
+        }
+      }
+      else {
+        while (i < this.history.length) {
+          this.moves.push([this.history[i], this.history[i + 1]])
+          i += 2;
+        }
       }
 
-      this.history = this.history.reverse()
+      console.log(this.moves)
+      this.history = [].concat(...this.moves).reverse();
 
       this.chess.reset()
       const extractBlackElo = (input) => {
