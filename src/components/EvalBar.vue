@@ -88,8 +88,8 @@ export default {
 </script>
 
 <template>
-  <div class="w-18 h-full flex flex-row flex-none px-3 items-center space-x-3">
-    <span>{{ this.evaluation }}</span>
+  <div class="h-full w-28 flex flex-row flex-none px-3 items-center space-x-3">
+    <div class="badge badge-accent flex-grow text-slate-700">{{ this.evaluation }}</div>
     <div class="w-4 h-full relative flex-none rounded-lg">
       <div class="bg-black text-white text-center font-bold h-full rounded-lg">
         <div
