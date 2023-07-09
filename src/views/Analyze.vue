@@ -1,27 +1,28 @@
 <template>
-  <div v-if="this.chess === null" class="grid place-content-center min-h-screen text-secondary font-mono">
+  <div
+    v-if="this.chess === null"
+    class="grid place-content-center min-h-screen text-secondary font-mono"
+  >
     Invalide PGN
   </div>
-  <div v-else class="flex items-center justify-between h-screen flex-row py-3 space-x-4">
+  <div v-else class="flex items-center justify-between h-screen flex-row py-3 space-x-4 px-2">
     <div class="h-full basis-1/2 flex">
       <EvalBar ref="evalBar" :evaluation="score" class="h-full"></EvalBar>
       <div class="flex flex-grow flex-col justify-between py-3 space-y-2">
         <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
-        <chessyboardy />
+        <Chessboard @move="handleMove" :fen="this.fen" />
         <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
       </div>
     </div>
     <div class="h-full w-full bg-base-100 m-2 flex flex-row basis-1/2 space-x-2">
       <div class="h-full basis-1/2 flex flex-col space-y-2">
         <div class="w-full basis-1/4 bg-base-300 rounded-lg p-2">
-            <graph />
+          <graph />
         </div>
         <div class="w-full flex-grow">
           <moveInfo :moves="this.historyStack" :bestmove="this.bestmove"></moveInfo>
         </div>
-        <div
-          class="w-full basis-1/4 bg-base-300 rounded-lg p-2 flex justify-around flex-col"
-        >
+        <div class="w-full basis-1/4 bg-base-300 rounded-lg p-2 flex justify-around flex-col">
           <div class="grid grid-cols-3 w-full place-items-center">
             <EvalCircle :evaluation="90" />
             <EvalCircle :evaluation="20" />
@@ -67,8 +68,10 @@
                 >
                   <div class="my-2 grid grid-cols-2 gap-1 border border-slate-700 p-1 rounded-2xl">
                     <div class="flex justify-center">
-                      <div v-if="2 * index == this.historyStack.length"
-                        class="badge bg-green-300 text-slate-900 border-slate-900">
+                      <div
+                        v-if="2 * index == this.historyStack.length"
+                        class="badge bg-green-300 text-slate-900 border-slate-900"
+                      >
                         {{ move[0] }}
                       </div>
                       <div v-else class="badge bg-slate-300 text-slate-900 border-slate-900">
@@ -105,7 +108,7 @@ import EvalCircle from '../components/EvalCircle.vue'
 import { useRoute } from 'vue-router'
 import { Chess } from 'chess.js'
 import { findOpeningName } from '../utils/analyze/Opening'
-import chessyboardy from '../components/chessyboardy.vue'
+import Chessboard from '../components/Chessboard.vue'
 import StockfishPanel from '../components/StockfishPanel.vue'
 import Graph from '../components/Graph.vue'
 import moveInfo from '../components/moveInfo.vue'
@@ -123,26 +126,25 @@ export default {
       console.log(this.pgn)
       this.chess.loadPgn(this.pgn)
       this.history = this.chess.history()
-      console.log("Hiii")
+      console.log('Hiii')
       console.log(this.history)
       this.moves = []
-      let i = 0;
-      if (this.history[0].endsWith("5") || this.history[0].endsWith("6")) {
-        console.log("...")
+      let i = 0
+      if (this.history[0].endsWith('5') || this.history[0].endsWith('6')) {
+        console.log('...')
         while (i < this.history.length) {
           this.moves.push([this.history[i + 1], this.history[i]])
-          i += 2;
+          i += 2
         }
-      }
-      else {
+      } else {
         while (i < this.history.length) {
           this.moves.push([this.history[i], this.history[i + 1]])
-          i += 2;
+          i += 2
         }
       }
 
       console.log(this.moves)
-      this.history = [].concat(...this.moves).reverse();
+      this.history = [].concat(...this.moves).reverse()
 
       this.chess.reset()
       const extractBlackElo = (input) => {
@@ -240,10 +242,8 @@ export default {
         console.log('back!')
       }, 1000)
     },
-    onMovePlayed({ move, game }) {
-      game.makeMove(move)
-      console.log('FEEEEEEEEEEEEEEEEEEN:' + game.fen)
-      this.fen = game.fen
+    handleMove(move) {
+      this.fen = move.after
       this.evaluatePosition()
     },
     moveCall() {
@@ -294,7 +294,7 @@ export default {
     EvalBar,
     UserAnalyzeBar,
     EvalCircle,
-    chessyboardy,
+    Chessboard,
     Graph,
     moveInfo
   }
