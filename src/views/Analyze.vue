@@ -7,7 +7,6 @@
   </div>
   <div v-else class="flex items-center justify-between h-screen flex-row py-3 space-x-4 px-2">
     <div class="h-full basis-1/2 flex">
-      <EvalBar ref="evalBar" :evaluation="score" class="h-full"></EvalBar>
       <div v-if="playerIsWhite" class="flex flex-grow flex-col py-3 space-y-4 justify-center">
         <UserAnalyzeBar
           :color="false"
@@ -15,7 +14,10 @@
           :username="this.blackPlayer"
           @turnBoard="turnBoard"
         />
-        <Chessboard @move="handleMove" :fen="this.fen" orientation="white" />
+        <div class="flex">
+          <EvalBar ref="evalBar" :evaluation="score" :whiteBottom="true" class="h-full"></EvalBar>
+          <Chessboard @move="handleMove" :fen="this.fen" orientation="white" />
+        </div>
         <UserAnalyzeBar
           :color="true"
           :elo="this.whiteElo"
@@ -30,7 +32,10 @@
           :username="this.whitePlayer"
           @turnBoard="turnBoard"
         />
-        <Chessboard @move="handleMove" :fen="this.fen" orientation="black" />
+        <div class="flex">
+          <EvalBar ref="evalBar" :evaluation="score" :whiteBottom="false" class="h-full"></EvalBar>
+          <Chessboard @move="handleMove" :fen="this.fen" orientation="black" />
+        </div>
         <UserAnalyzeBar
           :color="false"
           :elo="this.blackElo"
