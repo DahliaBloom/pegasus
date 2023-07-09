@@ -91,9 +91,9 @@ export default {
   <div class="h-full w-24 flex flex-row flex-none pr-3 items-center space-x-3">
     <div class="badge badge-accent flex-grow text-slate-700">{{ this.evaluation }}</div>
     <div class="w-4 h-full relative flex-none rounded-lg">
-      <div class="bg-black text-white text-center font-bold h-full rounded-lg">
+      <div class="bg-slate-700 text-white text-center font-bold h-full rounded-lg">
         <div
-          class="bg-white w-full text-center text-black absolute bottom-0 left-0 evalWhite rounded-b-lg transition-transform"
+          class="bg-slate-300 w-full text-center text-black absolute bottom-0 left-0 evalWhite rounded-b-lg transition-transform"
         ></div>
       </div>
     </div>

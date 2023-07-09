@@ -8,10 +8,35 @@
   <div v-else class="flex items-center justify-between h-screen flex-row py-3 space-x-4 px-2">
     <div class="h-full basis-1/2 flex">
       <EvalBar ref="evalBar" :evaluation="score" class="h-full"></EvalBar>
-      <div class="flex flex-grow flex-col justify-between py-3 space-y-2">
-        <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
-        <Chessboard @move="handleMove" :fen="this.fen" :orientation="this.firstMove" />
-        <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
+      <div v-if="playerIsWhite" class="flex flex-grow flex-col py-3 space-y-4 justify-center">
+        <UserAnalyzeBar
+          :color="false"
+          :elo="this.blackElo"
+          :username="this.blackPlayer"
+          @turnBoard="turnBoard"
+        />
+        <Chessboard @move="handleMove" :fen="this.fen" orientation="white" />
+        <UserAnalyzeBar
+          :color="true"
+          :elo="this.whiteElo"
+          :username="this.whitePlayer"
+          @turnBoard="turnBoard"
+        />
+      </div>
+      <div v-else class="flex flex-grow flex-col py-3 space-y-4 justify-center">
+        <UserAnalyzeBar
+          :color="true"
+          :elo="this.whiteElo"
+          :username="this.whitePlayer"
+          @turnBoard="turnBoard"
+        />
+        <Chessboard @move="handleMove" :fen="this.fen" orientation="black" />
+        <UserAnalyzeBar
+          :color="false"
+          :elo="this.blackElo"
+          :username="this.blackPlayer"
+          @turnBoard="turnBoard"
+        />
       </div>
     </div>
     <div class="h-full w-full bg-base-100 m-2 flex flex-row basis-1/2 space-x-2">
@@ -125,7 +150,6 @@ export default {
       this.pgn = (useRoute().query.pgn ?? undefined).toString()
       console.log(this.pgn)
       this.chess.loadPgn(this.pgn)
-      this.firstMove = this.chess.turn()
       this.history = this.chess.history()
       console.log(this.history)
       this.moves = []
@@ -194,8 +218,8 @@ export default {
   },
   data() {
     return {
+      playerIsWhite: true,
       fen: '',
-      firstMove: 'w',
       chess: new Chess(),
       score: 0,
       stockfish: null,
@@ -217,6 +241,9 @@ export default {
     }
   },
   methods: {
+    turnBoard() {
+      this.playerIsWhite = !this.playerIsWhite
+    },
     evaluatePosition() {
       console.log('evaluating!' + this.fen)
       evaluate(this.fen, (scoree, bestmovee) => {

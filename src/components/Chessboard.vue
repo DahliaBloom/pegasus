@@ -6,7 +6,7 @@ import 'vue3-chessboard/style.css'
 const props = defineProps(['fen', 'orientation'])
 
 const boardConfig = {
-  orientation: props.orientation === 'w' ? 'white' : 'black',
+  orientation: props.orientation,
 
 }
 
@@ -21,7 +21,7 @@ watch(
 </script>
 
 <template>
-  <div class="w-full h-full grid items-center">
+  <div class="w-full grid items-center">
     <TheChessboard
       @move="
         (move) => {
