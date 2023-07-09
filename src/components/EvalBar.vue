@@ -105,7 +105,7 @@ export default {
     <div class="w-4 h-full relative">
       <div class="h-full rounded-lg bg-slate-700">
         <div
-          class="w-full absolute left-0 evalWhite transition-transform bg-slate-300"
+          class="w-full absolute left-0 evalWhite bg-slate-300"
           :class="[whiteBottom ? 'bottom-0' : 'top-0', whiteBottom ? 'rounded-b-lg' : 'rounded-t-lg']"
         ></div>
       </div>
@@ -116,5 +116,6 @@ export default {
 <style scoped>
 .evalWhite {
   height: v-bind(heightString);
+  transition: height 1.5s;
 }
 </style>
