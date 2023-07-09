@@ -28,7 +28,7 @@ export default {
     },
     data() {
         return {
-            user: { name: "N", avatar: "/src/assets/magnusCarlsen.png" }
+            user: { name: "N", avatar: "/src/assets/standard-avatar.png" }
         }
     },
     beforeMount() {
