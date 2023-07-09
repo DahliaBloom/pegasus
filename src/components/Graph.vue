@@ -24,8 +24,8 @@ export default {
             data: data,
             fill: {
               target: 'origin',
-              below: 'rgb(0,0,0)',
-              above: 'rgb(255,255,255)'
+              below: '#334155',
+              above: '#cbd5e1'
             },
             borderWidth: 0,
             pointRadius: 0,

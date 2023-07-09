@@ -10,7 +10,7 @@
       <EvalBar ref="evalBar" :evaluation="score" class="h-full"></EvalBar>
       <div class="flex flex-grow flex-col justify-between py-3 space-y-2">
         <UserAnalyzeBar :color="false" :elo="this.blackElo" :username="this.blackPlayer" />
-        <Chessboard @move="handleMove" :fen="this.fen" />
+        <Chessboard @move="handleMove" :fen="this.fen" :orientation="this.firstMove" />
         <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
       </div>
     </div>
@@ -125,8 +125,8 @@ export default {
       this.pgn = (useRoute().query.pgn ?? undefined).toString()
       console.log(this.pgn)
       this.chess.loadPgn(this.pgn)
+      this.firstMove = this.chess.turn()
       this.history = this.chess.history()
-      console.log('Hiii')
       console.log(this.history)
       this.moves = []
       let i = 0
@@ -195,6 +195,7 @@ export default {
   data() {
     return {
       fen: '',
+      firstMove: 'w',
       chess: new Chess(),
       score: 0,
       stockfish: null,
