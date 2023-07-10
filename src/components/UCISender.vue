@@ -13,7 +13,7 @@ function send() {
   <input
     type="text"
     placeholder="UCI command"
-    class="input w-full h-9"
+    class="input w-full h-9 bg-slate-800 font-mono"
     v-model="command"
     @keyup.enter="send"
   />
