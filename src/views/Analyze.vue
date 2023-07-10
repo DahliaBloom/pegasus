@@ -19,20 +19,7 @@
           <UserAnalyzeBar :color="true" :elo="this.whiteElo" :username="this.whitePlayer" />
         </div>
       </div>
-      <div
-        class="mx-4 h-full w-fit border-2 border-secondary flex flex-col items-center justify-center bg-base-200 rounded-lg">
-        <div class="grid grid-rows-3 w-full h-full place-items-center">
-          <EvalCircle :evaluation="90" />
-          <EvalCircle :evaluation="20" />
-          <EvalCircle :evaluation="40" />
-        </div>
-        <div class="w-16 mx-4 h-0 border border-secondary"></div>
-        <div class="grid grid-rows-3 h-full w-full place-items-center">
-          <EvalCircle :evaluation="90" />
-          <EvalCircle :evaluation="20" />
-          <EvalCircle :evaluation="40" />
-        </div>
-      </div>
+
       <div class="h-full w-full bg-base-100 m-2 flex flex-row border-yellow-500 border-2 overflow-hidden basis-1/2">
         <div class="h-full overflow-hidden basis-5/12 flex flex-col border-lime-500 border-2">
           <div class="w-full basis-1/3 overflow-hidden p-2">
@@ -45,7 +32,7 @@
           </div>
           <div class="border-2 basis-5/12 border-orange-500"></div>
         </div>
-        <div class="h-full border-indigo-500 border-2 flex flex-col overflow-hidden basis-7/12">
+        <div class="h-full border-indigo-500 border-2 flex flex-col overflow-hidden basis-5/12">
           <div class="basis-1/2 w-full">
             <StockfishPanel />
           </div>
@@ -107,7 +94,7 @@
 </template>
 
 <script>
-import { evaluate } from '../utils/analyze/Eval'
+import { evaluate, message } from '../utils/analyze/Eval'
 import EvalBar from '../components/EvalBar.vue'
 import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
@@ -195,6 +182,9 @@ export default {
       this.blackPlayer = extractBlackPlayer(this.pgn)
 
       console.log('finished setup')
+      setTimeout(() => {
+        this.goThrough()
+      }, 1000);
     } catch {
       this.chess = null
     }
@@ -214,12 +204,12 @@ export default {
       blackPlayer: '',
       whitePlayer: '',
       positionInfo: null,
-      stockfishWorking: false,
       bestmove: '',
       moves: [],
       historyStack: [],
       board: null,
-      pawnStructure: 0
+      pawnStructure: 0,
+      fens: []
     }
   },
   methods: {
@@ -231,23 +221,29 @@ export default {
         this.score = scoree
         this.bestmove = bestmovee
       })
-      setTimeout(() => {
-        this.stockfishWorking = false
-        console.log('back!')
-      }, 1000)
     },
-    evaluatePawns() {
-      console.log('evaluating!' + this.fen)
-      evaluate(this.fen, (scoree, bestmovee) => {
-        console.log('Received score:' + scoree)
-        console.log('Received Bestmove:' + bestmovee)
-        this.score = scoree
-        this.bestmove = bestmovee
+    evaluatePositionQuick(fen) {
+      message(`position fen ${fen}`)
+      message(`go movetime 100`, (scoree, bestmovee) => {
+        console.log(scoree)
+        this.fens.append([scoree, bestmovee])
       })
-      setTimeout(() => {
-        this.stockfishWorking = false
-        console.log('back!')
-      }, 1000)
+    },
+    async goThrough() {
+      let chessy = new Chess();
+      console.log("Hello")
+      let tmp = this.history.reverse()
+      console.log(tmp)
+      chessy.reset()
+      for (let m of tmp) {
+        console.log(m)
+        chessy.move(m);
+        console.log("madeMove")
+        this.evaluatePositionQuick(chessy.fen())
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+      console.log("FEEEEEEEEEEEEEEEEEENS")
+      console.log(this.fens)
     },
     onMovePlayed({ move, game }) {
       game.makeMove(move)
@@ -257,8 +253,7 @@ export default {
     },
     moveCall() {
       console.log('moveCall')
-      if (!this.chess.isGameOver() && !this.stockfishWorking) {
-        this.stockfishWorking = true
+      if (!this.chess.isGameOver()) {
         console.log(this.history)
         let tmp = this.history.pop()
         this.chess.move(tmp)
@@ -269,8 +264,7 @@ export default {
     },
     backMove() {
       console.log(this.historyStack)
-      if (!this.stockfishWorking && this.historyStack.length != 0) {
-        this.stockfishWorking = true
+      if (this.historyStack.length != 0) {
         this.chess.undo()
         this.history.push(this.historyStack.pop())
         this.fen = this.chess.fen()
@@ -278,24 +272,20 @@ export default {
       }
     },
     completeBack() {
-      if (!this.stockfishWorking) {
-        while (this.chess.fen() != 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1') {
-          this.chess.undo()
-          this.history.push(this.historyStack.pop())
-          this.fen = this.chess.fen()
-        }
-        this.stockfishWorking = true
-        this.evaluatePosition()
-      }
-    },
-    completeEnd() {
-      if (!this.stockfishWorking) {
-        while (this.history.length != 0) {
-          this.historyStack.push(this.history.pop())
-        }
-        this.chess.loadPgn(this.pgn)
+      while (this.chess.fen() != 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1') {
+        this.chess.undo()
+        this.history.push(this.historyStack.pop())
         this.fen = this.chess.fen()
       }
+      this.evaluatePosition()
+
+    },
+    completeEnd() {
+      while (this.history.length != 0) {
+        this.historyStack.push(this.history.pop())
+      }
+      this.chess.loadPgn(this.pgn)
+      this.fen = this.chess.fen()
     }
   },
   components: {

@@ -86,7 +86,11 @@ export function restart() {
   start()
 }
 
-export function message(msg) {
+export function message(msg, callback=undefined) {
+  console.log(msg)
+  if (callback !== undefined) {
+    callbackMethod = callback
+  }
   if (stockfish !== undefined) {
     msgHistory.value.push(new Message(msg, false))
     stockfish.postMessage(msg)
