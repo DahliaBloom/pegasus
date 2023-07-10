@@ -177,9 +177,9 @@ export default {
       this.blackPlayer = extractBlackPlayer(this.pgn)
 
       console.log('finished setup')
-      setTimeout(() => {
-        this.goThrough()
-      }, 1000);
+      //setTimeout(() => {
+      //this.goThrough()
+      //}, 1000);
     } catch {
       this.chess = null
     }
