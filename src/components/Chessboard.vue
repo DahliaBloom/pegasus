@@ -18,6 +18,12 @@ watch(
     boardAPI.setPosition(props.fen)
   }
 )
+watch(
+  () => props.orientation,
+  () => {
+    boardAPI.toggleOrientation()
+  }
+)
 </script>
 
 <template>

@@ -43,17 +43,27 @@ export default {
     }
   },
   beforeMount() {
-    chessApi
-      .getPlayer(this.username)
-      .then((data) => {
-        this.user = data.body
-      })
-      .catch(() => {
-        isError.value = true
-      })
-      .finally(() => {
-        console.log(this.user)
-      })
+    this.updateUser()
+  },
+  watch: {
+    color() {
+      this.updateUser()
+    }
+  },
+  methods: {
+    updateUser() {
+      chessApi
+        .getPlayer(this.username)
+        .then((data) => {
+          this.user = data.body
+        })
+        .catch(() => {
+          isError.value = true
+        })
+        .finally(() => {
+          console.log(this.user)
+        })
+    }
   }
 }
 </script>

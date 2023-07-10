@@ -7,39 +7,21 @@
   </div>
   <div v-else class="flex items-center justify-between h-screen flex-row py-3 space-x-4 px-2">
     <div class="h-full basis-1/2 flex">
-      <div v-if="playerIsWhite" class="flex flex-grow flex-col py-3 space-y-4 justify-center">
+      <div class="flex flex-grow flex-col py-3 space-y-4 justify-center">
         <UserAnalyzeBar
-          :color="false"
-          :elo="this.blackElo"
-          :username="this.blackPlayer"
+          :color="!playerIsWhite"
+          :elo="playerIsWhite ? blackElo : whiteElo"
+          :username="playerIsWhite ? blackPlayer : whitePlayer"
           @turnBoard="turnBoard"
         />
         <div class="flex">
-          <EvalBar ref="evalBar" :evaluation="score" :whiteBottom="true" class="h-full"></EvalBar>
-          <Chessboard @move="handleMove" :fen="this.fen" orientation="white" />
+          <EvalBar ref="evalBar" :evaluation="score" :whiteBottom="playerIsWhite" class="h-full"></EvalBar>
+          <Chessboard @move="handleMove" :fen="fen" :orientation="playerIsWhite ? 'white' : 'black'" />
         </div>
         <UserAnalyzeBar
-          :color="true"
-          :elo="this.whiteElo"
-          :username="this.whitePlayer"
-          @turnBoard="turnBoard"
-        />
-      </div>
-      <div v-else class="flex flex-grow flex-col py-3 space-y-4 justify-center">
-        <UserAnalyzeBar
-          :color="true"
-          :elo="this.whiteElo"
-          :username="this.whitePlayer"
-          @turnBoard="turnBoard"
-        />
-        <div class="flex">
-          <EvalBar ref="evalBar" :evaluation="score" :whiteBottom="false" class="h-full"></EvalBar>
-          <Chessboard @move="handleMove" :fen="this.fen" orientation="black" />
-        </div>
-        <UserAnalyzeBar
-          :color="false"
-          :elo="this.blackElo"
-          :username="this.blackPlayer"
+          :color="playerIsWhite"
+          :elo="playerIsWhite ? whiteElo : blackElo"
+          :username="playerIsWhite ? whitePlayer : blackPlayer"
           @turnBoard="turnBoard"
         />
       </div>
