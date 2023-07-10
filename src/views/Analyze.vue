@@ -20,8 +20,16 @@
         <div class="w-full basis-1/4 bg-base-300 rounded-lg p-2">
           <graph />
         </div>
-        <div class="w-full flex-grow">
+        <div class="w-full flex-grow basis-1/4">
           <moveInfo :moves="this.historyStack" :bestmove="this.bestmove"></moveInfo>
+        </div>
+        <div class="h-1/2 bg-base-300 w-full rounded-lg p-2">
+          Suck my Ass
+        </div>
+      </div>
+      <div class="h-full flex flex-col overflow-hidden basis-1/2 space-y-2">
+        <div class="w-full" style="flex-basis: 45%">
+          <StockfishPanel />
         </div>
         <div class="w-full basis-1/4 bg-base-300 rounded-lg p-2 flex justify-around flex-col">
           <div class="grid grid-cols-3 w-full place-items-center">
@@ -29,35 +37,8 @@
             <EvalCircle :evaluation="20" />
             <EvalCircle :evaluation="40" />
           </div>
-          <div class="grid grid-cols-3 w-full place-items-center">
-            <EvalCircle :evaluation="90" />
-            <EvalCircle :evaluation="20" />
-            <EvalCircle :evaluation="40" />
-          </div>
-        </div>
-      </div>
-      <div class="h-full flex flex-col overflow-hidden basis-1/2 space-y-2">
-        <div class="w-full" style="flex-basis: 45%">
-          <StockfishPanel />
         </div>
         <div class="w-full bg-base-300 rounded-lg flex flex-col p-2 space-y-2" style="flex-basis: 55%">
-          <div class="bottom-3 w-full h-12 grid grid-cols-5 gap-x-1">
-            <button class="btn-accent btn">
-              <span class="material-symbols-outlined" @click="completeBack"> keyboard_double_arrow_left </span>
-            </button>
-            <button class="btn-accent btn">
-              <span class="material-symbols-outlined" @click="backMove"> chevron_left </span>
-            </button>
-            <button class="btn-accent btn">
-              <span class="material-symbols-outlined"> auto_awesome </span>
-            </button>
-            <button class="btn-accent btn">
-              <span class="material-symbols-outlined" @click="moveCall"> chevron_right </span>
-            </button>
-            <button class="btn-accent btn">
-              <span class="material-symbols-outlined" @click="completeEnd"> keyboard_double_arrow_right </span>
-            </button>
-          </div>
           <div class="flex-grow">
             <div class="flex-content">
               <div class="scrollable-content-wrapper scroll-fade">
@@ -85,6 +66,23 @@
                 </div>
               </div>
             </div>
+          </div>
+          <div class="bottom-3 w-full h-12 grid grid-cols-5 gap-x-1">
+            <button class="btn-accent btn">
+              <span class="material-symbols-outlined" @click="completeBack"> keyboard_double_arrow_left </span>
+            </button>
+            <button class="btn-accent btn">
+              <span class="material-symbols-outlined" @click="backMove"> chevron_left </span>
+            </button>
+            <button class="btn-accent btn">
+              <span class="material-symbols-outlined"> auto_awesome </span>
+            </button>
+            <button class="btn-accent btn">
+              <span class="material-symbols-outlined" @click="moveCall"> chevron_right </span>
+            </button>
+            <button class="btn-accent btn">
+              <span class="material-symbols-outlined" @click="completeEnd"> keyboard_double_arrow_right </span>
+            </button>
           </div>
         </div>
       </div>
@@ -271,11 +269,28 @@ export default {
       }
     },
     completeBack() {
-      while (this.chess.fen() != 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1') {
-        this.chess.undo()
-        this.history.push(this.historyStack.pop())
-        this.fen = this.chess.fen()
+      console.log(this.pgn)
+      this.chess.loadPgn(this.pgn)
+      this.history = this.chess.history()
+      this.moves = []
+      let i = 0
+      if (this.history[0].endsWith('5') || this.history[0].endsWith('6')) {
+        console.log('...')
+        while (i < this.history.length) {
+          this.moves.push([this.history[i + 1], this.history[i]])
+          i += 2
+        }
+      } else {
+        while (i < this.history.length) {
+          this.moves.push([this.history[i], this.history[i + 1]])
+          i += 2
+        }
       }
+
+      console.log(this.moves)
+      this.history = [].concat(...this.moves).reverse()
+
+      this.chess.reset()
       this.evaluatePosition()
 
     },
