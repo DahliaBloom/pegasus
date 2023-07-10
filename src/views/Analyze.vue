@@ -41,19 +41,21 @@
           <StockfishPanel />
         </div>
         <div class="w-full bg-base-300 rounded-lg flex flex-col p-2 space-y-2" style="flex-basis: 55%">
-          <div class="flex space-x-2">
-            <button class="bg-accent rounded-full px-4 text-white flex-1" @click="completeBack">
-              &laquo;
+          <div class="bottom-3 w-full h-12 grid grid-cols-5 gap-x-1">
+            <button class="btn-accent btn">
+              <span class="material-symbols-outlined" @click="completeBack"> keyboard_double_arrow_left </span>
             </button>
-            <button class="bg-accent rounded-full py-1 px-4 text-white flex-1" @click="backMove">
-              &lsaquo;
+            <button class="btn-accent btn">
+              <span class="material-symbols-outlined" @click="backMove"> chevron_left </span>
             </button>
-            <button class="bg-accent rounded-full py-1 px-4 text-white flex-1">🌟</button>
-            <button class="bg-accent rounded-full py-1 px-4 text-white flex-1" @click="moveCall">
-              &rsaquo;
+            <button class="btn-accent btn">
+              <span class="material-symbols-outlined"> auto_awesome </span>
             </button>
-            <button class="bg-accent rounded-full py-1 px-4 text-white flex-1" @click="completeEnd">
-              &raquo;
+            <button class="btn-accent btn">
+              <span class="material-symbols-outlined" @click="moveCall"> chevron_right </span>
+            </button>
+            <button class="btn-accent btn">
+              <span class="material-symbols-outlined" @click="completeEnd"> keyboard_double_arrow_right </span>
             </button>
           </div>
           <div class="flex-grow">
@@ -283,6 +285,7 @@ export default {
       }
       this.chess.loadPgn(this.pgn)
       this.fen = this.chess.fen()
+      this.evaluatePosition()
     }
   },
   components: {
