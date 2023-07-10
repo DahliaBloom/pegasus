@@ -18,7 +18,7 @@
     <div class="h-full w-full bg-base-100 m-2 flex flex-row basis-1/2 space-x-2">
       <div class="h-full basis-1/2 flex flex-col space-y-2">
         <div class="w-full basis-1/4 bg-base-300 rounded-lg p-2">
-          <graph />
+          <graph :evals="this.fens" />
         </div>
         <div class="w-full flex-grow basis-1/4">
           <moveInfo :moves="this.historyStack" :bestmove="this.bestmove"></moveInfo>
@@ -75,7 +75,7 @@
               <span class="material-symbols-outlined" @click="backMove"> chevron_left </span>
             </button>
             <button class="btn-accent btn">
-              <span class="material-symbols-outlined"> auto_awesome </span>
+              <span class="material-symbols-outlined" @click="evaluatePositionQuick"> auto_awesome </span>
             </button>
             <button class="btn-accent btn">
               <span class="material-symbols-outlined" @click="moveCall"> chevron_right </span>
@@ -177,9 +177,9 @@ export default {
       this.blackPlayer = extractBlackPlayer(this.pgn)
 
       console.log('finished setup')
-      //setTimeout(() => {
-      //this.goThrough()
-      //}, 1000);
+      setTimeout(() => {
+        this.goThrough()
+      }, 1000);
     } catch {
       this.chess = null
     }
@@ -187,7 +187,7 @@ export default {
   data() {
     return {
       playerIsWhite: true,
-      fen: '',
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
       chess: new Chess(),
       score: 0,
       stockfish: null,
@@ -205,7 +205,8 @@ export default {
       historyStack: [],
       board: null,
       pawnStructure: 0,
-      fens: []
+      fens: [[0.0, 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1']],
+      i: 0,
     }
   },
   methods: {
@@ -221,25 +222,44 @@ export default {
         this.bestmove = bestmovee
       })
     },
-    evaluatePositionQuick(fen) {
-      message(`position fen ${fen}`)
-      message(`go movetime 100`, (scoree, bestmovee) => {
-        console.log(scoree)
-        this.fens.append([scoree, bestmovee])
-      })
+    evaluatePositionQuick(fen = undefined) {
+      if (fen == undefined) {
+        fen = this.fen
+      }
+      evaluate(fen, (scoree, bestmovee) => {
+        console.log('Received score:' + scoree)
+        console.log('Received Bestmove:' + bestmovee)
+        console.log(this.fens[this.i])
+        console.log(fen)
+        console.log(this.i)
+        if (this.fens[this.i][1] === fen) {
+          this.fens[this.i] = [scoree, fen]
+          console.log("Overwriting...")
+        }
+        else {
+          this.fens.push([scoree, fen])
+          console.log("New FEN")
+          this.i++
+        }
+      }, 500)
     },
     async goThrough() {
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      this.evaluatePosition()
+      await new Promise((resolve) => setTimeout(resolve, 3500));
       let chessy = new Chess();
       console.log("Hello")
       let tmp = this.history.reverse()
       console.log(tmp)
       chessy.reset()
       for (let m of tmp) {
-        console.log(m)
-        chessy.move(m);
-        console.log("madeMove")
-        this.evaluatePositionQuick(chessy.fen())
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        if (m !== undefined) {
+          console.log(m)
+          chessy.move(m);
+          console.log("madeMove")
+          this.evaluatePositionQuick(chessy.fen())
+          await new Promise((resolve) => setTimeout(resolve, 2000));
+        }
       }
       console.log("FEEEEEEEEEEEEEEEEEENS")
       console.log(this.fens)

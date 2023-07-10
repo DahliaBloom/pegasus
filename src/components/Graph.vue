@@ -3,9 +3,10 @@ import Chart from 'chart.js/auto'
 
 export default {
   name: 'Graph',
-  props: {},
+  props: { evals: [] = [] },
+  setup(props) { },
   mounted() {
-    const data = [65, -59, 80, 55, 10]
+    const data = props.evals
     const ctx = document.getElementById('Graph')
     let label = []
     let x = []

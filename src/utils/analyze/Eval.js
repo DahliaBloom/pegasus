@@ -72,12 +72,16 @@ function listener(message) {
   }
 }
 
-export async function evaluate(fen, callback) {
+export async function evaluate(fen, callback, movetimee=0) {
   if (stockfish === undefined) callback(0.0, 'stockfish undefined')
+
+  if (movetimee == 0){
+    movetimee=movetime.value
+  }
 
   feen = fen
   message(`position fen ${fen}`)
-  message(`go movetime ${movetime.value}`)
+  message(`go movetime ${movetimee}`)
   callbackMethod = callback
 }
 
