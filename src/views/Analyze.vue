@@ -17,7 +17,15 @@
     </div>
     <div class="h-full w-full bg-base-100 m-2 flex flex-row basis-1/2 space-x-2">
       <div class="h-full basis-1/2 flex flex-col space-y-2">
-        <div class="w-full basis-1/4 bg-base-300 rounded-lg p-2">
+        <div v-if="!this.graphEvaled"
+          class="w-full basis-1/4 bg-base-300 rounded-lg p-2 justify-center items-center flex relative">
+          <img src="../assets/pegasus-graph-bg.png" class="">
+          <div class="absolute inset-0 flex items-center justify-center">
+            <button v-if="this.i == 0" class="px-4 py-2 btn btn-secondary" @click="goThrough">Graph</button>
+            <div v-else class="px-4 py-2 bg-secondary rounded-lg"><img src="../assets/loading.svg" /></div>
+          </div>
+        </div>
+        <div v-else class="w-full basis-1/4 bg-base-300 rounded-lg p-2">
           <graph :data="this.evals" />
         </div>
         <div class="w-full flex-grow basis-1/4">
@@ -205,8 +213,9 @@ export default {
       pawnStructure: 0,
       fens: [[0.0, 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1']],
       i: 0,
-      evals: [-1, 1],
-      historyConstant: []
+      evals: [],
+      historyConstant: [],
+      graphEvaled: false
     }
   },
   methods: {
@@ -258,7 +267,7 @@ export default {
           chessy.move(m);
           console.log("madeMove")
           this.evaluatePositionQuick(chessy.fen())
-          await new Promise((resolve) => setTimeout(resolve, 3000));
+          await new Promise((resolve) => setTimeout(resolve, 600));
         }
       }
       console.log("FEEEEEEEEEEEEEEEEEENS")
@@ -270,6 +279,7 @@ export default {
       }
       console.log(this.fens)
       this.evals = this.fens
+      this.graphEvaled = true
     },
     handleMove(move) {
       this.fen = move.after
