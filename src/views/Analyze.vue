@@ -134,6 +134,7 @@ export default {
 
       console.log(this.moves)
       this.history = [].concat(...this.moves).reverse()
+      this.historyConstant = JSON.parse(JSON.stringify(this.history));
 
       this.chess.reset()
       const extractBlackElo = (input) => {
@@ -204,7 +205,8 @@ export default {
       pawnStructure: 0,
       fens: [[0.0, 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1']],
       i: 0,
-      evals: [-1, 1]
+      evals: [-1, 1],
+      historyConstant: []
     }
   },
   methods: {
@@ -247,11 +249,11 @@ export default {
       await new Promise((resolve) => setTimeout(resolve, 3500));
       let chessy = new Chess();
       console.log("Hello")
-      let tmp = this.history.reverse()
+      let tmp = JSON.parse(JSON.stringify(this.historyConstant.reverse()))
       console.log(tmp)
       chessy.reset()
       for (let m of tmp) {
-        if (m !== undefined) {
+        if (m !== undefined && m !== null) {
           console.log(m)
           chessy.move(m);
           console.log("madeMove")
