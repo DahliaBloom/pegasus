@@ -3404,6 +3404,9 @@ export function findOpeningName(moves) {
     const openingsArray = openings.split('\n').map(line => line.trim());
     
     let availableOptions = []
+
+    console.log("UNICORN")
+    console.log(moves)
     
     for (const opening of openingsArray) {
         let openingMoves = opening.split('\t')[2];

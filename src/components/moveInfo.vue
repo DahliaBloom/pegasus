@@ -13,6 +13,17 @@ export default {
             oldMoves: []
         }
     },
+    watch: {
+        moves(n, o) {
+            console.log("UPDATE MOVES")
+            this.update()
+        },
+        bestmove(n, o) {
+            console.log("BESTMOVE update")
+            console.log(this.moves)
+            this.update()
+        }
+    },
     methods: {
         update() {
             console.log("updated called")
@@ -24,7 +35,7 @@ export default {
                         this.opening = tmp
                     }
                 }
-                this.oldMoves = this.moves
+                this.oldMoves = JSON.parse(JSON.stringify(this.moves));
             }
         }
     },
