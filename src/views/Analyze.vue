@@ -41,23 +41,23 @@
             <div class="flex-content">
               <div class="p-4 w-full flex flex-col items-center scrollable-content-wrapper">
                 <div class="flex flex-row gap-10 py-1 text-secondary">
-                  <p>1</p><img src="../assets/anotations/brilliant.png" class="h-8" />
+                  <p>1</p><img src="../assets/anotations/brilliant.png" class="h-8">
                   <p>0</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-pink-300">
-                  <p>2</p><img src="../assets/anotations/great.png" class="h-8" />
+                  <p>2</p><img src="../assets/anotations/great.png" class="h-8">
                   <p>3</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-green-500">
-                  <p>7</p><img src="../assets/anotations/bestmove.png" class="h-8" />
+                  <p>7</p><img src="../assets/anotations/bestmove.png" class="h-8">
                   <p>8</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-green-800">
-                  <p>2</p><img src="../assets/anotations/goodmove.png" class="h-8" />
+                  <p>2</p><img src="../assets/anotations/goodmove.png" class="h-8">
                   <p>2</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-green-300">
-                  <p>2</p><img src="../assets/anotations/okmove.png" class="h-8" />
+                  <p>2</p><img src="../assets/anotations/okmove.png" class="h-8">
                   <p>1</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-yellow-400">
