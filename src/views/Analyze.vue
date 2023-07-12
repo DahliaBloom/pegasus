@@ -53,7 +53,7 @@
                   <p>8</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-green-800">
-                  <p>2</p><img src="../assets/anotations/goodmove.png" class="h-8">
+                  <p>2</p><img src="../assets/anotations/goodMove.png" class="h-8">
                   <p>2</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-green-300">
@@ -61,15 +61,15 @@
                   <p>1</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-yellow-400">
-                  <p>3</p><img src="../assets/anotations/inaccuracy.png" class="h-8" />
+                  <p>3</p><img src="../assets/anotations/inaccuracy.png" class="h-8">
                   <p>5</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-orange-600">
-                  <p>5</p><img src="../assets/anotations/mistake.png" class="h-8" />
+                  <p>5</p><img src="../assets/anotations/mistake.png" class="h-8">
                   <p>6</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-red-600">
-                  <p>3</p><img src="../assets/anotations/blunder.png" class="h-8" />
+                  <p>3</p><img src="../assets/anotations/blunder.png" class="h-8">
                   <p>5</p>
                 </div>
               </div>
