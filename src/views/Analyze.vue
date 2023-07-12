@@ -25,15 +25,58 @@
             <div v-else class="px-4 py-2 bg-secondary rounded-lg"><img src="../assets/loading.svg" /></div>
           </div>
         </div>
-        <div v-else class="w-full basis-1/4 bg-base-300 rounded-lg p-2">
+        <div v-else class="w-full basis-1/6 bg-base-300 rounded-lg p-2">
           <graph :data="this.evals" />
         </div>
         <div class="w-full flex-grow basis-1/4">
           <moveInfo :moves="this.historyStack" :bestmove="this.bestmove"></moveInfo>
         </div>
-        <div class="h-1/2 bg-base-300 w-full rounded-lg p-2">
-          Suck my Ass
+        <div class="basis-2/3 bg-base-300 w-full rounded-lg p-2 flex justify-center flex-col">
+          <div class="w-full flex flex-row h-1/3 ">
+            <GameSummaryUser :accuracy="100" :color="true" :elo="whiteElo" :username="whitePlayer"></GameSummaryUser>
+            <div class="divider-vertical w-[1px] bg-slate-500 h-2/3 rounded-lg"></div>
+            <GameSummaryUser :accuracy="100" :color="false" :elo="blackElo" :username="blackPlayer"></GameSummaryUser>
+          </div>
+          <div class="flex-grow">
+            <div class="flex-content">
+              <div class="p-4 w-full flex flex-col items-center scrollable-content-wrapper">
+                <div class="flex flex-row gap-10 py-1 text-secondary">
+                  <p>1</p><img src="../assets/anotations/brilliant.png" class="h-8" />
+                  <p>0</p>
+                </div>
+                <div class="flex flex-row gap-10 py-1 text-pink-300">
+                  <p>2</p><img src="../assets/anotations/great.png" class="h-8" />
+                  <p>3</p>
+                </div>
+                <div class="flex flex-row gap-10 py-1 text-green-500">
+                  <p>7</p><img src="../assets/anotations/bestmove.png" class="h-8" />
+                  <p>8</p>
+                </div>
+                <div class="flex flex-row gap-10 py-1 text-green-800">
+                  <p>2</p><img src="../assets/anotations/goodmove.png" class="h-8" />
+                  <p>2</p>
+                </div>
+                <div class="flex flex-row gap-10 py-1 text-green-300">
+                  <p>2</p><img src="../assets/anotations/okmove.png" class="h-8" />
+                  <p>1</p>
+                </div>
+                <div class="flex flex-row gap-10 py-1 text-yellow-400">
+                  <p>3</p><img src="../assets/anotations/inaccuracy.png" class="h-8" />
+                  <p>5</p>
+                </div>
+                <div class="flex flex-row gap-10 py-1 text-orange-600">
+                  <p>5</p><img src="../assets/anotations/mistake.png" class="h-8" />
+                  <p>6</p>
+                </div>
+                <div class="flex flex-row gap-10 py-1 text-red-600">
+                  <p>3</p><img src="../assets/anotations/blunder.png" class="h-8" />
+                  <p>5</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
       </div>
       <div class="h-full flex flex-col overflow-hidden basis-1/2 space-y-2">
         <div class="w-full" style="flex-basis: 45%">
@@ -110,6 +153,7 @@ import Chessboard from '../components/Chessboard.vue'
 import StockfishPanel from '../components/StockfishPanel.vue'
 import Graph from '../components/Graph.vue'
 import moveInfo from '../components/moveInfo.vue'
+import GameSummaryUser from '../components/GameSummaryUser.vue'
 
 export default {
   mounted() {
@@ -347,7 +391,8 @@ export default {
     EvalCircle,
     Chessboard,
     Graph,
-    moveInfo
+    moveInfo,
+    GameSummaryUser
   }
 }
 </script>
