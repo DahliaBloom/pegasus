@@ -19,9 +19,10 @@
       <div class="h-full basis-1/2 flex flex-col space-y-2">
         <div v-if="!this.graphEvaled"
           class="w-full basis-1/4 bg-base-300 rounded-lg p-2 justify-center items-center flex relative">
-          <img src="../assets/pegasus-graph-bg.png" class="">
+          <img src="../assets/pegasus-graph-golden-coin-game.png" class="">
           <div class="absolute inset-0 flex items-center justify-center">
-            <button v-if="this.i == 0" class="px-4 py-2 btn btn-secondary" @click="goThrough">Graph</button>
+            <button v-if="this.i == 0" class="px-4 py-2 btn btn-secondary btn-outline" @click="goThrough">Load
+              Graph</button>
             <div v-else class="px-4 py-2 bg-secondary rounded-lg"><img src="../assets/loading.svg" /></div>
           </div>
         </div>
