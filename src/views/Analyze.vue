@@ -7,7 +7,7 @@
       <div class="flex flex-grow flex-col py-3 space-y-4 justify-center">
         <UserAnalyzeBar :color="!playerIsWhite" :elo="playerIsWhite ? blackElo : whiteElo"
           :username="playerIsWhite ? blackPlayer : whitePlayer" @turnBoard="turnBoard" />
-        <div class="flex">
+        <div class="flex h-full">
           <EvalBar ref="evalBar" :evaluation="score" :whiteBottom="playerIsWhite" class="h-full"></EvalBar>
           <Chessboard @move="handleMove" :fen="fen" :orientation="playerIsWhite ? 'white' : 'black'" />
         </div>
@@ -41,36 +41,36 @@
           <div class="flex-grow">
             <div class="flex-content">
               <div class="p-4 w-full flex flex-col items-center scrollable-content-wrapper">
-                <div class="flex flex-row gap-10 py-1 text-secondary">
-                  <p>1</p><img src="../assets/anotations/brilliant.png" class="h-8">
+                <div class="flex flex-row gap-10 py-1 text-secondary min-h-8 h-[10%]">
+                  <p>1</p><img src="../assets/anotations/brilliant.png">
                   <p>0</p>
                 </div>
-                <div class="flex flex-row gap-10 py-1 text-pink-300">
-                  <p>2</p><img src="../assets/anotations/great.png" class="h-8">
+                <div class="flex flex-row gap-10 py-1 text-pink-300 min-h-8 h-[10%]">
+                  <p>2</p><img src="../assets/anotations/great.png">
                   <p>3</p>
                 </div>
-                <div class="flex flex-row gap-10 py-1 text-green-500">
-                  <p>7</p><img src="../assets/anotations/bestmove.png" class="h-8">
+                <div class="flex flex-row gap-10 py-1 text-green-500 min-h-8 h-[10%]">
+                  <p>7</p><img src="../assets/anotations/bestmove.png">
                   <p>8</p>
                 </div>
-                <div class="flex flex-row gap-10 py-1 text-green-800">
-                  <p>2</p><img src="../assets/anotations/goodMove.png" class="h-8">
+                <div class="flex flex-row gap-10 py-1 text-green-800 min-h-8 h-[10%]">
+                  <p>2</p><img src="../assets/anotations/goodMove.png">
                   <p>2</p>
                 </div>
-                <div class="flex flex-row gap-10 py-1 text-green-300">
-                  <p>2</p><img src="../assets/anotations/okmove.png" class="h-8">
+                <div class="flex flex-row gap-10 py-1 text-green-300 min-h-8 h-[10%]">
+                  <p>2</p><img src="../assets/anotations/okmove.png">
                   <p>1</p>
                 </div>
-                <div class="flex flex-row gap-10 py-1 text-yellow-400">
-                  <p>3</p><img src="../assets/anotations/inaccuracy.png" class="h-8">
+                <div class="flex flex-row gap-10 py-1 text-yellow-400 min-h-8 h-[10%]">
+                  <p>3</p><img src="../assets/anotations/inaccuracy.png">
                   <p>5</p>
                 </div>
-                <div class="flex flex-row gap-10 py-1 text-orange-600">
-                  <p>5</p><img src="../assets/anotations/mistake.png" class="h-8">
+                <div class="flex flex-row gap-10 py-1 text-orange-600 min-h-8 h-[10%]">
+                  <p>5</p><img src="../assets/anotations/mistake.png">
                   <p>6</p>
                 </div>
-                <div class="flex flex-row gap-10 py-1 text-red-600">
-                  <p>3</p><img src="../assets/anotations/blunder.png" class="h-8">
+                <div class="flex flex-row gap-10 py-1 text-red-600 min-h-8 h-[10%]">
+                  <p>3</p><img src="../assets/anotations/blunder.png">
                   <p>5</p>
                 </div>
               </div>
@@ -143,7 +143,7 @@
 </template>
 
 <script>
-import { evaluate, message } from '../utils/analyze/Eval'
+import { evaluate, message, restart } from '../utils/analyze/Eval'
 import EvalBar from '../components/EvalBar.vue'
 import UserAnalyzeBar from '../components/UserAnalyzeBar.vue'
 import EvalCircle from '../components/EvalCircle.vue'
@@ -325,6 +325,7 @@ export default {
       console.log(this.fens)
       this.evals = this.fens
       this.graphEvaled = true
+      restart()
     },
     handleMove(move) {
       this.fen = move.after
