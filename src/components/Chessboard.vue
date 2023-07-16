@@ -31,18 +31,20 @@ watch(
     <TheChessboard @move="(move) => {
       $emit('move', move)
     }
-      " @board-created="(api) => (boardAPI = api)" :board-config="boardConfig" class="w-full h-full" />
+      " @board-created="(api) => (boardAPI = api)" :board-config="boardConfig" />
   </div>
 </template>
 
 <style>
 .main-wrap {
   width: 90%;
+  max-width: 90%;
 }
 
 @media (orientation: landscape) {
   .main-wrap {
     width: 90%;
+    max-width: 90%;
   }
 }
 
