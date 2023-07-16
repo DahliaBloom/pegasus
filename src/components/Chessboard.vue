@@ -31,7 +31,7 @@ watch(
     <TheChessboard @move="(move) => {
       $emit('move', move)
     }
-      " @board-created="(api) => (boardAPI = api)" :board-config="boardConfig" />
+      " @board-created="(api) => (boardAPI = api)" :board-config="boardConfig" class="w-full h-full" />
   </div>
 </template>
 
