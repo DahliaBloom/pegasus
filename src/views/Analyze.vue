@@ -41,6 +41,10 @@
           <div class="flex-grow">
             <div class="flex-content">
               <div class="p-4 w-full flex flex-col items-center scrollable-content-wrapper">
+                <div class="flex flex-row gap-10 py-1 text-orange-800 min-h-8 h-[10%]">
+                  <p>{{ bookMoves[0] }}</p><img src="../assets/anotations/bookMove.png">
+                  <p>{{ bookMoves[1] }}</p>
+                </div>
                 <div class="flex flex-row gap-10 py-1 text-secondary min-h-8 h-[10%]">
                   <p>1</p><img src="../assets/anotations/brilliant.png">
                   <p>0</p>
@@ -260,7 +264,8 @@ export default {
       i: 0,
       evals: [],
       historyConstant: [],
-      graphEvaled: false
+      graphEvaled: false,
+      bookMoves: [0, 0]
     }
   },
   methods: {
@@ -306,11 +311,25 @@ export default {
       let tmp = JSON.parse(JSON.stringify(this.historyConstant.reverse()))
       console.log(tmp)
       chessy.reset()
+      let sofar = []
+      let prev = ""
       for (let m of tmp) {
         if (m !== undefined && m !== null) {
           console.log(m)
           chessy.move(m);
           console.log("madeMove")
+          sofar.push(m)
+          let temp = findOpeningName(sofar).m
+          console.log("OOOOOOOOOOOOO" + temp)
+          if (temp != prev) {
+            prev = temp
+            if (sofar.length % 2 == 1) {
+              this.bookMoves[0] += 1
+            }
+            if (sofar.length % 2 == 0) {
+              this.bookMoves[1] += 1
+            }
+          }
           this.evaluatePositionQuick(chessy.fen())
           await new Promise((resolve) => setTimeout(resolve, 600));
         }

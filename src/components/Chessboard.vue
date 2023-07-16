@@ -27,7 +27,7 @@ watch(
 </script>
 
 <template>
-  <div class="w-full grid items-center h-full border-red-600 border">
+  <div class="w-full grid items-center h-full">
     <TheChessboard @move="(move) => {
       $emit('move', move)
     }
