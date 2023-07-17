@@ -319,9 +319,9 @@ export default {
           chessy.move(m);
           console.log("madeMove")
           sofar.push(m)
-          let temp = findOpeningName(sofar).m
+          let temp = findOpeningName(sofar).t
           console.log("OOOOOOOOOOOOO" + temp)
-          if (temp != prev) {
+          if (temp.length != prev.length) {
             prev = temp
             if (sofar.length % 2 == 1) {
               this.bookMoves[0] += 1
