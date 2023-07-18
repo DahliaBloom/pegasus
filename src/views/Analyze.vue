@@ -7,9 +7,10 @@
       <div class="flex flex-grow flex-col py-3 space-y-4 justify-center">
         <UserAnalyzeBar :color="!playerIsWhite" :elo="playerIsWhite ? blackElo : whiteElo"
           :username="playerIsWhite ? blackPlayer : whitePlayer" @turnBoard="turnBoard" />
-        <div class="flex h-full">
+        <div class="flex h-full relative">
           <EvalBar ref="evalBar" :evaluation="score" :whiteBottom="playerIsWhite" class="h-full"></EvalBar>
           <Chessboard @move="handleMove" :fen="fen" :orientation="playerIsWhite ? 'white' : 'black'" />
+          <Annotation :square="this.annotatedPosition" :annotation="this.annotatedMove"></Annotation>
         </div>
         <UserAnalyzeBar :color="playerIsWhite" :elo="playerIsWhite ? whiteElo : blackElo"
           :username="playerIsWhite ? whitePlayer : blackPlayer" @turnBoard="turnBoard" />
@@ -159,6 +160,7 @@ import StockfishPanel from '../components/StockfishPanel.vue'
 import Graph from '../components/Graph.vue'
 import moveInfo from '../components/moveInfo.vue'
 import GameSummaryUser from '../components/GameSummaryUser.vue'
+import Annotation from '../components/Annotation.vue'
 
 export default {
   mounted() {
@@ -265,6 +267,8 @@ export default {
       evals: [],
       historyConstant: [],
       graphEvaled: false,
+      annotatedMove: '',
+      annotatedPosition: '',
       bookMoves: [0, 0],
       bestMoves: [0, 0],
       goodMoves: [0, 0],
@@ -378,7 +382,7 @@ export default {
 
                 // GOODMOVE
                 else if (this.fens[k - 1][0] - f[0] < 0.3 && this.fens[k - 1][0] - f[0] > -0.3) {
-                  this.fens[k][3] = 'goodmove'
+                  this.fens[k][3] = 'goodMove'
                   this.goodMoves[(k + 1) % 2]++
                 }
 
@@ -419,6 +423,11 @@ export default {
         console.log(x[3])
       }
     },
+    extractDestinationSquare(chessMove) {
+      const pattern = /[a-h][1-8]$/;
+      const isMatch = pattern.test(chessMove);
+      return isMatch ? chessMove.match(pattern)[0] : '';
+    },
     handleMove(move) {
       this.fen = move.after
       this.evaluatePosition()
@@ -428,6 +437,10 @@ export default {
       if (!this.chess.isGameOver()) {
         console.log(this.history)
         let tmp = this.history.pop()
+        this.annotatedPosition = this.extractDestinationSquare(tmp)
+        console.log("_____________")
+        console.log(this.fens[this.historyStack.length])
+        this.annotatedMove = "src/assets/anotations/" + this.fens[this.historyStack.length + 1][3] + ".png"
         this.chess.move(tmp)
         this.historyStack.push(tmp)
         this.fen = this.chess.fen()
@@ -486,7 +499,8 @@ export default {
     Chessboard,
     Graph,
     moveInfo,
-    GameSummaryUser
+    GameSummaryUser,
+    Annotation
   }
 }
 </script>
