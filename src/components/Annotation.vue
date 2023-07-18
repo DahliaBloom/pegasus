@@ -1,5 +1,5 @@
 <template>
-    <div v-if="this.getPath != ''" :style="annotationStyle" class="annotation">
+    <div v-if="this.annotation != ''" :style="annotationStyle" class="annotation">
         <img :src="this.getPath" alt="Annotation" />
     </div>
 </template>
@@ -35,7 +35,9 @@ export default {
         },
         getPath() {
             console.log(this.annotation)
-            return new URL(this.annotation, import.meta.url).href
+            return process.env.NODE_ENV === 'production'
+                ? `src/assets/anotations/${this.annotation}` // For production, Vite handles the public path automatically
+                : import.meta.env.BASE_URL + 'src/assets/anotations/' + this.annotation; // For development
         }
     },
 };
