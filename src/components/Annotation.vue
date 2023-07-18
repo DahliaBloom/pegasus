@@ -1,10 +1,9 @@
 <template>
-    <div v-if="this.getPath != 'src/assets/anotations/.png' && this.getPath != ''" :style="annotationStyle"
-        class="annotation">
+    <div v-if="this.getPath != ''" :style="annotationStyle" class="annotation">
         <img :src="this.getPath" alt="Annotation" />
     </div>
 </template>
-  
+
 <script>
 export default {
     props: {
@@ -36,7 +35,7 @@ export default {
         },
         getPath() {
             console.log(this.annotation)
-            return this.annotation
+            return new URL(this.annotation, import.meta.url).href
         }
     },
 };
