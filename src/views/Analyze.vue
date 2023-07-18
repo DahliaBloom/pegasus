@@ -54,28 +54,28 @@
                   <p>3</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-green-500 min-h-8 h-[10%]">
-                  <p>7</p><img src="../assets/anotations/bestmove.png">
-                  <p>8</p>
+                  <p>{{ bestMoves[0] }}</p><img src="../assets/anotations/bestmove.png">
+                  <p>{{ bestMoves[1] }}</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-green-800 min-h-8 h-[10%]">
-                  <p>2</p><img src="../assets/anotations/goodMove.png">
-                  <p>2</p>
+                  <p>{{ goodMoves[0] }}</p><img src="../assets/anotations/goodMove.png">
+                  <p>{{ goodMoves[1] }}</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-green-300 min-h-8 h-[10%]">
-                  <p>2</p><img src="../assets/anotations/okmove.png">
-                  <p>1</p>
+                  <p>{{ okMoves[0] }}</p><img src="../assets/anotations/okmove.png">
+                  <p>{{ okMoves[1] }}</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-yellow-400 min-h-8 h-[10%]">
-                  <p>3</p><img src="../assets/anotations/inaccuracy.png">
-                  <p>5</p>
+                  <p>{{ innacurateMoves[0] }}</p><img src="../assets/anotations/inaccuracy.png">
+                  <p>{{ innacurateMoves[1] }}</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-orange-600 min-h-8 h-[10%]">
-                  <p>5</p><img src="../assets/anotations/mistake.png">
-                  <p>6</p>
+                  <p>{{ mistakeMoves[0] }}</p><img src="../assets/anotations/mistake.png">
+                  <p>{{ mistakeMoves[1] }}</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-red-600 min-h-8 h-[10%]">
-                  <p>3</p><img src="../assets/anotations/blunder.png">
-                  <p>5</p>
+                  <p>{{ blunderMoves[0] }}</p><img src="../assets/anotations/blunder.png">
+                  <p>{{ blunderMoves[1] }}</p>
                 </div>
               </div>
             </div>
@@ -260,12 +260,18 @@ export default {
       historyStack: [],
       board: null,
       pawnStructure: 0,
-      fens: [[0.0, 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1']],
+      fens: [[0.0, 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'e4e5', '']],
       i: 0,
       evals: [],
       historyConstant: [],
       graphEvaled: false,
-      bookMoves: [0, 0]
+      bookMoves: [0, 0],
+      bestMoves: [0, 0],
+      goodMoves: [0, 0],
+      okMoves: [0, 0],
+      innacurateMoves: [0, 0],
+      mistakeMoves: [0, 0],
+      blunderMoves: [0, 0]
     }
   },
   methods: {
@@ -292,15 +298,15 @@ export default {
         console.log(fen)
         console.log(this.i)
         if (this.fens[this.i][1] === fen) {
-          this.fens[this.i] = [scoree, fen]
+          this.fens[this.i] = [scoree, fen, bestmovee, ""]
           console.log("Overwriting...")
         }
         else {
-          this.fens.push([scoree, fen])
+          this.fens.push([scoree, fen, bestmovee, ""])
           console.log("New FEN")
           this.i++
         }
-      }, 500)
+      }, 1000)
     },
     async goThrough() {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -311,40 +317,107 @@ export default {
       let tmp = JSON.parse(JSON.stringify(this.historyConstant.reverse()))
       console.log(tmp)
       chessy.reset()
-      let sofar = []
-      let prev = ""
       for (let m of tmp) {
         if (m !== undefined && m !== null) {
           console.log(m)
           chessy.move(m);
           console.log("madeMove")
-          sofar.push(m)
-          let temp = findOpeningName(sofar).t
-          console.log("OOOOOOOOOOOOO" + temp)
-          if (temp.length != prev.length) {
-            prev = temp
-            if (sofar.length % 2 == 1) {
-              this.bookMoves[0] += 1
-            }
-            if (sofar.length % 2 == 0) {
-              this.bookMoves[1] += 1
-            }
-          }
           this.evaluatePositionQuick(chessy.fen())
-          await new Promise((resolve) => setTimeout(resolve, 600));
+          await new Promise((resolve) => setTimeout(resolve, 1200));
         }
       }
       console.log("FEEEEEEEEEEEEEEEEEENS")
       console.log(this.fens)
       let j = 0
       for (let x of this.fens) {
-        this.fens[j] = x[0]
+        console.log(x)
+        this.evals.push(x[0])
         j++
       }
-      console.log(this.fens)
-      this.evals = this.fens
+      console.log(this.evals)
       this.graphEvaled = true
+      this.annotateMoves()
       restart()
+    },
+    annotateMoves() {
+      let movesTmp = []
+      let prevOpening = []
+      let k = 0
+      for (let f of this.fens) {
+        movesTmp.push("" + this.historyConstant[k])
+        if (k == 0) {
+          k++
+        }
+        else {
+          if (true) {
+            try {
+              // BOOKMOVE:
+              let op = findOpeningName(movesTmp).t
+              console.log("The Opening:")
+              console.log(op)
+              console.log("The previous Opening:")
+              console.log(prevOpening)
+              console.log("The Moves")
+              console.log(movesTmp)
+              if (op.length > prevOpening.length || op.length >= movesTmp.length - 1) {
+                console.log("bookMove")
+                this.fens[k][3] = 'bookMove'
+                this.bookMoves[(k + 1) % 2]++
+                prevOpening = op
+              }
+              else {
+                //BESTMOVE
+                let posBefore = this.fens[k - 1][1]
+                let posAfter = f[1]
+                let chessTmp = new Chess(posBefore)
+                chessTmp.move(this.fens[k - 1][2].split(" ")[0], false)
+                if (chessTmp.fen() == posAfter) {
+                  this.fens[k][3] = 'bestmove'
+                  this.bestMoves[(k + 1) % 2]++
+                }
+
+                // GOODMOVE
+                else if (this.fens[k - 1][0] - f[0] < 0.3 && this.fens[k - 1][0] - f[0] > -0.3) {
+                  this.fens[k][3] = 'goodmove'
+                  this.goodMoves[(k + 1) % 2]++
+                }
+
+                // OK Move
+                else if (this.fens[k - 1][0] - f[0] < 0.7 && this.fens[k - 1][0] - f[0] > -0.7) {
+                  this.fens[k][3] = 'okmove'
+                  this.okMoves[(k + 1) % 2]++
+                }
+
+                // Innacuracy
+                else if (this.fens[k - 1][0] - f[0] < 1.0 && this.fens[k - 1][0] - f[0] > -1.0) {
+                  this.fens[k][3] = 'inaccuracy'
+                  this.innacurateMoves[(k + 1) % 2]++
+                }
+
+                // Mistake
+                else if (this.fens[k - 1][0] - f[0] < 2.5 && this.fens[k - 1][0] - f[0] > -2.5) {
+                  this.fens[k][3] = 'mistake'
+                  this.mistakeMoves[(k + 1) % 2]++
+                }
+
+                // Blunder
+                else if (this.fens[k - 1][0] - f[0] < 7.0 && this.fens[k - 1][0] - f[0] > -7.0) {
+                  this.fens[k][3] = 'blunder'
+                  this.blunderMoves[(k + 1) % 2]++
+                }
+
+              }
+            }
+            catch { }
+          }
+          k++
+        }
+        console.log(f)
+      }
+
+      for (let x of this.fens) {
+        console.log(x[3])
+      }
     },
     handleMove(move) {
       this.fen = move.after
