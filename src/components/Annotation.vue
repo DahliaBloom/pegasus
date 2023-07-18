@@ -35,9 +35,8 @@ export default {
         },
         getPath() {
             console.log(this.annotation)
-            return process.env.NODE_ENV === 'production'
-                ? `src/assets/anotations/${this.annotation}` // For production, Vite handles the public path automatically
-                : import.meta.env.BASE_URL + 'src/assets/anotations/' + this.annotation; // For development
+            // @Felix Please fix UwU
+            return `src/assets/anotations/${this.annotation}`
         }
     },
 };
