@@ -440,7 +440,7 @@ export default {
         this.annotatedPosition = this.extractDestinationSquare(tmp)
         console.log("_____________")
         console.log(this.fens[this.historyStack.length])
-        this.annotatedMove = "src/assets/anotations/" + this.fens[this.historyStack.length + 1][3] + ".png"
+        this.annotatedMove = "@/assets/anotations/" + this.fens[this.historyStack.length + 1][3] + ".png"
         this.chess.move(tmp)
         this.historyStack.push(tmp)
         this.fen = this.chess.fen()
