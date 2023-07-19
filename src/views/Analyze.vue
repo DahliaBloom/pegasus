@@ -90,9 +90,10 @@
         </div>
         <div class="w-full basis-1/4 bg-base-300 rounded-lg p-2 flex justify-around flex-col">
           <div class="grid grid-cols-3 w-full place-items-center">
-            <EvalCircle :evaluation="90" />
-            <EvalCircle :evaluation="20" />
-            <EvalCircle :evaluation="40" />
+            <EvalCircle :evaluation="this.pawnEvaluation" :typee="'pawn'" />
+            <EvalCircle :evaluation="20" :typee="'NotPawn'" />
+            <EvalCircle :evaluation="40" :typee="'AlsoNotPawn'" />
+            <button class="btn-primary btn" @click="evaluatePawns">Eval Pawns</button>
           </div>
         </div>
         <div class="w-full bg-base-300 rounded-lg flex flex-col p-2 space-y-2" style="flex-basis: 55%">
@@ -275,7 +276,8 @@ export default {
       okMoves: [0, 0],
       innacurateMoves: [0, 0],
       mistakeMoves: [0, 0],
-      blunderMoves: [0, 0]
+      blunderMoves: [0, 0],
+      pawnEvaluation: 50
     }
   },
   methods: {
@@ -489,6 +491,45 @@ export default {
       this.chess.loadPgn(this.pgn)
       this.fen = this.chess.fen()
       this.evaluatePosition()
+    },
+    evaluatePawns() {
+      let feen = this.extractPawnsAndKingsFromFEN(this.chess.fen())
+      console.log('evaluating Pawns! ' + feen)
+      evaluate(feen, (scoree, bestmovee) => {
+        console.log('Received score:' + scoree)
+        this.pawnEvaluation = 50 - scoree * 5;
+        console.log(this.pawnEvaluation)
+      }, 1000)
+    },
+    extractPawnsAndKingsFromFEN(fen) {
+      const [board, activeColor, castling, enPassant, halfMoveClock] = fen.split(" ");
+
+      // Filter out pieces other than pawns ('p' and 'P') and kings ('k' and 'K')
+      const filteredBoard = board.replace(/[^pkPK1-8/]/g, "_");
+      console.log(filteredBoard)
+
+      // Replace the count of consecutive empty squares with the correct number
+      let validBoard = "";
+      let emptySquareCount = 0;
+      for (let i = 0; i < filteredBoard.length; i++) {
+        const char = filteredBoard.charAt(i);
+        if (char === "_") {
+          emptySquareCount++
+        }
+        else {
+          if (emptySquareCount > 0) {
+            validBoard += emptySquareCount
+            emptySquareCount = 0
+          }
+          validBoard += char;
+        }
+      }
+      if (emptySquareCount > 0) {
+        validBoard += emptySquareCount
+      }
+      // Reconstruct the valid FEN string
+      const validFEN = [validBoard, activeColor, "-", enPassant, halfMoveClock].join(" ");
+      return validFEN;
     }
   },
   components: {
