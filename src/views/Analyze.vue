@@ -43,39 +43,39 @@
             <div class="flex-content">
               <div class="p-4 w-full flex flex-col items-center scrollable-content-wrapper">
                 <div class="flex flex-row gap-10 py-1 text-orange-800 min-h-8 h-[10%]">
-                  <p>{{ bookMoves[0] }}</p><img src="../assets/anotations/bookMove.png">
+                  <p>{{ bookMoves[0] }}</p><img src="/anotations/bookMove.png">
                   <p>{{ bookMoves[1] }}</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-secondary min-h-8 h-[10%]">
-                  <p>1</p><img src="../assets/anotations/brilliant.png">
+                  <p>1</p><img src="/anotations/brilliant.png">
                   <p>0</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-pink-300 min-h-8 h-[10%]">
-                  <p>2</p><img src="../assets/anotations/great.png">
+                  <p>2</p><img src="/anotations/great.png">
                   <p>3</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-green-500 min-h-8 h-[10%]">
-                  <p>{{ bestMoves[0] }}</p><img src="../assets/anotations/bestmove.png">
+                  <p>{{ bestMoves[0] }}</p><img src="/anotations/bestmove.png">
                   <p>{{ bestMoves[1] }}</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-green-800 min-h-8 h-[10%]">
-                  <p>{{ goodMoves[0] }}</p><img src="../assets/anotations/goodMove.png">
+                  <p>{{ goodMoves[0] }}</p><img src="/anotations/goodMove.png">
                   <p>{{ goodMoves[1] }}</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-green-300 min-h-8 h-[10%]">
-                  <p>{{ okMoves[0] }}</p><img src="../assets/anotations/okmove.png">
+                  <p>{{ okMoves[0] }}</p><img src="/anotations/okmove.png">
                   <p>{{ okMoves[1] }}</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-yellow-400 min-h-8 h-[10%]">
-                  <p>{{ innacurateMoves[0] }}</p><img src="../assets/anotations/inaccuracy.png">
+                  <p>{{ innacurateMoves[0] }}</p><img src="/anotations/inaccuracy.png">
                   <p>{{ innacurateMoves[1] }}</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-orange-600 min-h-8 h-[10%]">
-                  <p>{{ mistakeMoves[0] }}</p><img src="../assets/anotations/mistake.png">
+                  <p>{{ mistakeMoves[0] }}</p><img src="/anotations/mistake.png">
                   <p>{{ mistakeMoves[1] }}</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-red-600 min-h-8 h-[10%]">
-                  <p>{{ blunderMoves[0] }}</p><img src="../assets/anotations/blunder.png">
+                  <p>{{ blunderMoves[0] }}</p><img src="/anotations/blunder.png">
                   <p>{{ blunderMoves[1] }}</p>
                 </div>
               </div>

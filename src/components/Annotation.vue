@@ -1,6 +1,6 @@
 <template>
     <div v-if="this.annotation != ''" :style="annotationStyle" class="annotation">
-        <img :src="this.getPath" alt="Annotation" />
+        <img :src="'/anotations/' + annotation" alt="Annotation" />
     </div>
 </template>
 
@@ -32,11 +32,6 @@ export default {
                 top: `${rankIndex * 13}%`, // Adjust the percentage as needed for proper positioning.
                 transform: 'translate(-50%, -50%)', // Center the annotation on the square.
             };
-        },
-        getPath() {
-            console.log(this.annotation)
-            // @Felix Please fix UwU
-            return `src/assets/anotations/${this.annotation}`
         }
     },
 };
