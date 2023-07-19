@@ -1,6 +1,6 @@
 <template>
     <div v-if="this.annotation != ''" :style="annotationStyle" class="annotation">
-        <img :src="'/anotations/' + annotation" alt="Annotation" />
+        <img :src="'/pegasus/anotations/' + annotation" alt="Annotation" />
     </div>
 </template>
 
