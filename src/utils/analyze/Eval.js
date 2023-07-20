@@ -1,20 +1,35 @@
+import PriorityQueue from 'js-priority-queue'
 import { ref } from 'vue'
 
 let stockfish = undefined
 let score = 0.0 // Declare score variable outside the listener function
 let callbackMethod = null
 let feen = ''
+let activeCm = undefined
+
+const queue = new PriorityQueue({
+  comparator: (a, b) => {
+    return b.priority - a.priority
+  }
+})
 
 export const running = ref(false)
 export const movetime = ref(3000)
 export const msgHistory = ref([])
 
-
 start()
 
-function Message(msg, stockfish=true) {
+function Message(msg, stockfish = true) {
   this.msg = msg
   this.stockfish = stockfish
+}
+
+function Command(commands, priority, callback, resolve, reject) {
+  this.commands = commands
+  this.priority = priority
+  this.callback = callback
+  this.resolve = resolve
+  this.reject = reject
 }
 
 function start() {
@@ -33,8 +48,30 @@ function start() {
   })
 }
 
+function dequeue() {
+  if (queue.length > 0) {
+    const cm = queue.dequeue()
+    //console.log('Dequeue: ' + cm.commands)
+    for (let msg of cm.commands) {
+      msgHistory.value.push(new Message(msg, false))
+      stockfish.postMessage(msg)
+      if (cm.callback !== undefined) {
+        callbackMethod = cm.callback
+      }
+    }
+    activeCm = cm
+  } else {
+    activeCm = undefined
+  }
+}
+
 function eventHandler(msg) {
   msgHistory.value.push(new Message(msg))
+
+  if (!msg.startsWith('info') && activeCm != undefined) {
+    activeCm.resolve(msg)
+    dequeue()
+  }
 
   switch (msg) {
     case 'uciok':
@@ -72,17 +109,17 @@ function listener(message) {
   }
 }
 
-export async function evaluate(fen, callback, movetimee=0) {
+export function evaluate(fen, callback, movetimee = 0, priority = 0) {
   if (stockfish === undefined) callback(0.0, 'stockfish undefined')
 
-  if (movetimee == 0){
-    movetimee=movetime.value
+  if (movetimee == 0) {
+    movetimee = movetime.value
   }
 
   feen = fen
-  message(`position fen ${fen}`)
-  message(`go movetime ${movetimee}`)
   callbackMethod = callback
+
+  return message([`position fen ${fen}`, `go movetime ${movetimee}`], undefined, priority)
 }
 
 export function restart() {
@@ -90,15 +127,22 @@ export function restart() {
   start()
 }
 
-export function message(msg, callback=undefined) {
+export function message(msg, callback = undefined, priority = 0) {
   console.log(msg)
-  if (callback !== undefined) {
-    callbackMethod = callback
-  }
   if (stockfish !== undefined) {
-    msgHistory.value.push(new Message(msg, false))
-    stockfish.postMessage(msg)
+    let resolve = undefined
+    let reject = undefined
+    const p = new Promise((res, rej) => {
+      resolve = res
+      reject = rej
+    })
+    queue.queue(new Command(msg, priority, callback, resolve, reject))
+    if (activeCm === undefined) {
+      dequeue()
+    }
+    return p
   } else {
     msgHistory.value.push(new Message('Stockfish not running'))
+    return new Promise((_, rej) => rej('Stockfish not running'))
   }
 }
