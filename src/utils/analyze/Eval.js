@@ -128,6 +128,7 @@ export function restart() {
 }
 
 export function message(msg, callback = undefined, priority = 0) {
+  if (msg.constructor !== Array) msg = [msg]
   console.log(msg)
   if (stockfish !== undefined) {
     let resolve = undefined
