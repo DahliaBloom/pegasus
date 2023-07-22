@@ -101,22 +101,159 @@
             <div class="flex-content">
               <div class="scrollable-content-wrapper scroll-fade">
                 <div v-for="(move, index) in this.moves" :key="index" class="w-full items-center justify-center">
-                  <div class="my-2 grid grid-cols-2 gap-1 border border-slate-700 p-1 rounded-2xl">
-                    <div class="flex justify-center">
-                      <div v-if="2 * index == this.historyStack.length"
+                  <div v-if="2 * index + 2 == this.historyStack.length || 2 * index + 1 == this.historyStack.length"
+                    class="my-2 grid grid-cols-2 gap-1 border border-slate-700 p-1 rounded-2xl bg-accent">
+                    <div v-if="this.graphEvaled" class="flex justify-center">
+                      <div v-if="this.annotationPairs[index][0] == 'bookMove'"
+                        class="badge bg-orange-900 text-slate-200 border-slate-200">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][0] == 'bestmove'"
+                        class="badge bg-green-500 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][0] == 'goodMove'"
+                        class="badge bg-green-500 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][0] == 'okmove'"
                         class="badge bg-green-300 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][0] == 'inaccuracy'"
+                        class="badge bg-yellow-500 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][0] == 'mistake'"
+                        class="badge bg-orange-500 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][0] == 'blunder'"
+                        class="badge bg-red-700 text-slate-900 border-slate-900">
                         {{ move[0] }}
                       </div>
                       <div v-else class="badge bg-slate-300 text-slate-900 border-slate-900">
                         {{ move[0] }}
                       </div>
                     </div>
-                    <div class="flex justify-center">
-                      <div v-if="2 * index + 1 == this.historyStack.length"
-                        class="badge bg-green-300 text-gray-200 border-gray-200">
+                    <div v-else class="flex justify-center">
+                      <div class="badge bg-slate-300 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                    </div>
+                    <div v-if="this.graphEvaled" class="flex justify-center">
+                      <div v-if="this.annotationPairs[index][1] == 'bookMove'"
+                        class="badge bg-orange-900 text-slate-200 border-slate-200">
                         {{ move[1] }}
                       </div>
-                      <div v-else class="badge bg-gray-800 text-gray-200 border-gray-200">
+                      <div v-else-if="this.annotationPairs[index][1] == 'bestmove'"
+                        class="badge bg-green-500 text-slate-900 border-slate-900">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][1] == 'goodMove'"
+                        class="badge bg-green-500 text-slate-900 border-slate-900">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][1] == 'okmove'"
+                        class="badge bg-green-300 text-slate-900 border-slate-900">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][1] == 'inaccuracy'"
+                        class="badge bg-yellow-500 text-slate-900 border-slate-900">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][1] == 'mistake'"
+                        class="badge bg-orange-500 text-slate-900 border-slate-900">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][1] == 'blunder'"
+                        class="badge bg-red-700 text-slate-900 border-slate-900">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else class="badge bg-slate-900 text-slate-100 border-slate-100">
+                        {{ move[1] }}
+                      </div>
+                    </div>
+                    <div v-else class="flex justify-center">
+                      <div class="badge bg-slate-900 text-slate-100 border-slate-100">
+                        {{ move[1] }}
+                      </div>
+                    </div>
+                  </div>
+                  <div v-else class="my-2 grid grid-cols-2 gap-1 border border-slate-700 p-1 rounded-2xl">
+                    <div v-if="this.graphEvaled" class="flex justify-center">
+                      <div v-if="this.annotationPairs[index][0] == 'bookMove'"
+                        class="badge bg-orange-900 text-slate-200 border-slate-200">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][0] == 'bestmove'"
+                        class="badge bg-green-500 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][0] == 'goodMove'"
+                        class="badge bg-green-500 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][0] == 'okmove'"
+                        class="badge bg-green-300 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][0] == 'inaccuracy'"
+                        class="badge bg-yellow-500 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][0] == 'mistake'"
+                        class="badge bg-orange-500 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][0] == 'blunder'"
+                        class="badge bg-red-700 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                      <div v-else class="badge bg-slate-300 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                    </div>
+                    <div v-else class="flex justify-center">
+                      <div class="badge bg-slate-300 text-slate-900 border-slate-900">
+                        {{ move[0] }}
+                      </div>
+                    </div>
+                    <div v-if="this.graphEvaled" class="flex justify-center">
+                      <div v-if="this.annotationPairs[index][1] == 'bookMove'"
+                        class="badge bg-orange-900 text-slate-200 border-slate-200">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][1] == 'bestmove'"
+                        class="badge bg-green-500 text-slate-900 border-slate-900">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][1] == 'goodMove'"
+                        class="badge bg-green-500 text-slate-900 border-slate-900">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][1] == 'okmove'"
+                        class="badge bg-green-300 text-slate-900 border-slate-900">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][1] == 'inaccuracy'"
+                        class="badge bg-yellow-500 text-slate-900 border-slate-900">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][1] == 'mistake'"
+                        class="badge bg-orange-500 text-slate-900 border-slate-900">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else-if="this.annotationPairs[index][1] == 'blunder'"
+                        class="badge bg-red-700 text-slate-900 border-slate-900">
+                        {{ move[1] }}
+                      </div>
+                      <div v-else class="badge bg-slate-900 text-slate-100 border-slate-100">
+                        {{ move[1] }}
+                      </div>
+                    </div>
+                    <div v-else class="flex justify-center">
+                      <div class="badge bg-slate-900 text-slate-100 border-slate-100">
                         {{ move[1] }}
                       </div>
                     </div>
@@ -263,7 +400,7 @@ export default {
       historyStack: [],
       board: null,
       pawnStructure: 0,
-      fens: [[0.0, 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'e4e5', '']],
+      fens: [[0.0, 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'e4e5', 'bookMove']],
       i: 0,
       evals: [],
       historyConstant: [],
@@ -277,7 +414,8 @@ export default {
       innacurateMoves: [0, 0],
       mistakeMoves: [0, 0],
       blunderMoves: [0, 0],
-      pawnEvaluation: 50
+      pawnEvaluation: 50,
+      annotationPairs: [],
     }
   },
   methods: {
@@ -407,7 +545,7 @@ export default {
                 }
 
                 // Blunder
-                else if (this.fens[k - 1][0] - f[0] < 7.0 && this.fens[k - 1][0] - f[0] > -7.0) {
+                else {
                   this.fens[k][3] = 'blunder'
                   this.blunderMoves[(k + 1) % 2]++
                 }
@@ -424,6 +562,17 @@ export default {
       for (let x of this.fens) {
         console.log(x[3])
       }
+      let x = 1;
+      while (x < this.fens.length) {
+        try {
+          this.annotationPairs.push([this.fens[x][3], this.fens[x + 1][3]])
+        }
+        catch {
+          this.annotationPairs.push([this.fens[x][3], ''])
+        }
+        x += 2;
+      }
+      console.log(this.annotationPairs)
     },
     extractDestinationSquare(chessMove) {
       const pattern = /[a-h][1-8]$/;
