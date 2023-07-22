@@ -4,6 +4,7 @@ import UsernameInput from '@/components/UsernameInput.vue'
 import CustomPGNInput from '@/components/CustomPGNInput.vue'
 import pegasusAnimation from '../components/pegasusAnimation.vue'
 import { onBeforeUnmount, onMounted } from 'vue'
+import BurgerMenu from '../components/BurgerMenu.vue'
 
 onMounted(() => {
   document.body.classList.add('hide-overflow')
@@ -15,6 +16,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+  <BurgerMenu class="absolute top-0 left-0"></BurgerMenu>
   <div class="px-10 flex flex-col justify-center items-center min-h-screen">
     <div class="w-1/3 flex flex-col space-y-10 justify-center items-center">
       <pegasusAnimation />
