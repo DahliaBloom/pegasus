@@ -35,4 +35,6 @@ onBeforeUnmount(() => {
       <CustomPGNInput />
     </label>
   </label>
+  <p class="absolute bottom-0 text-center w-full text-primary">By <a href="https://github.com/DahliaBloom">Felix
+      Steinbrecht</a> & <a href="https://github.com/BambooTheBear">Benno Kolar</a></p>
 </template>
