@@ -93,21 +93,16 @@ export default {
 
 <template>
   <div class="h-full w-24 flex flex-row flex-none pr-3 items-center space-x-3">
-    <div
-      class="badge flex-grow border-none"
-      :class="[
-        evaluation >= 0 ? 'bg-slate-300' : 'bg-slate-700',
-        evaluation >= 0 ? 'text-sla' : 'text-slate-300'
-      ]"
-    >
-      {{ Math.abs(evaluation) }}
+    <div class="badge flex-grow border-none" :class="[
+      evaluation >= 0 ? 'bg-slate-300' : 'bg-slate-700',
+      evaluation >= 0 ? 'text-sla' : 'text-slate-300'
+    ]">
+      {{ Math.abs(evaluation) >= 100 ? 'M ' + Math.abs(evaluation) / 100 : Math.abs(evaluation) }}
     </div>
     <div class="w-4 h-full relative">
       <div class="h-full rounded-lg bg-slate-700">
-        <div
-          class="w-full absolute left-0 evalWhite bg-slate-300"
-          :class="[whiteBottom ? 'bottom-0' : 'top-0', whiteBottom ? 'rounded-b-lg' : 'rounded-t-lg']"
-        ></div>
+        <div class="w-full absolute left-0 evalWhite bg-slate-300"
+          :class="[whiteBottom ? 'bottom-0' : 'top-0', whiteBottom ? 'rounded-b-lg' : 'rounded-t-lg']"></div>
       </div>
     </div>
   </div>

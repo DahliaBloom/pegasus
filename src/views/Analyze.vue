@@ -563,11 +563,12 @@ export default {
         console.log(x[3])
       }
       let x = 1;
-      while (x < this.fens.length) {
+      while (x <= this.fens.length) {
         try {
           this.annotationPairs.push([this.fens[x][3], this.fens[x + 1][3]])
         }
         catch {
+          console.log("UNEVEN")
           this.annotationPairs.push([this.fens[x][3], ''])
         }
         x += 2;

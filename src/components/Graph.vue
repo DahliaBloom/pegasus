@@ -28,13 +28,21 @@ export default {
         this.chart.destroy()
       }
 
+      let tmp = []
+
+      for (let i of this.data) {
+        tmp.push(i < 0 ? (i < -20 ? -20 : i) : (i > 20 ? 20 : i))
+      }
+
+      tmp.pop()
+
       this.chart = new Chart(ctx, {
         type: 'line',
         data: {
           labels: label,
           datasets: [
             {
-              data: this.data,
+              data: tmp,
               fill: {
                 target: 'origin',
                 below: '#334155',
