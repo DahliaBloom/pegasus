@@ -22,6 +22,8 @@
 
 <script>
 import { chessApi } from '@/utils/chessApi'
+import standardAvatar from '@/assets/standard-avatar.png'
+
 export default {
   props: {
     username: {
@@ -39,7 +41,7 @@ export default {
   },
   data() {
     return {
-      user: { name: 'N', avatar: '/src/assets/standard-avatar.png' }
+      user: { name: 'N', avatar: standardAvatar }
     }
   },
   beforeMount() {

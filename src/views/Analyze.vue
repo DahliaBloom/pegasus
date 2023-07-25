@@ -1,4 +1,5 @@
 <template>
+  <HomeButton />
   <div v-if="this.chess === null" class="grid place-content-center min-h-screen text-secondary font-mono">
     Invalide PGN
   </div>
@@ -299,6 +300,7 @@ import Graph from '../components/Graph.vue'
 import moveInfo from '../components/moveInfo.vue'
 import GameSummaryUser from '../components/GameSummaryUser.vue'
 import Annotation from '../components/Annotation.vue'
+import HomeButton from '../components/HomeButton.vue'
 
 export default {
   mounted() {
@@ -691,7 +693,8 @@ export default {
     Graph,
     moveInfo,
     GameSummaryUser,
-    Annotation
+    Annotation,
+    HomeButton
   }
 }
 </script>
