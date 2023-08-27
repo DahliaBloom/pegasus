@@ -584,7 +584,7 @@ export default {
     updateEverythingAfterButtonPress() {
       console.log("FEN:")
       console.log(this.fens[this.moveNumberManual][1])
-      this.annotatedPosition = this.extractDestinationSquare(this.fens[this.moveNumberManual][2])
+      this.annotatedPosition = this.extractDestinationSquare(this.fens[this.moveNumberManual][4])
       console.log(this.fens[this.moveNumberManual])
       this.annotatedMove = this.fens[this.historyStack.length + 1][3] + ".png"
       this.chess.move(this.fens[this.moveNumberManual][4], false)
@@ -600,10 +600,8 @@ export default {
     },
     backMove() {
       console.log("backMove")
-      if (this.historyStack.length != 0) {
-        this.moveNumberManual -= 1
-        this.updateEverythingAfterButtonPress()
-      }
+      this.moveNumberManual -= 1
+      this.updateEverythingAfterButtonPress()
     },
     completeBack() {
       console.log("Back to the Start call")
