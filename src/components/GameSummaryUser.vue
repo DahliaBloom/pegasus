@@ -24,7 +24,7 @@
     </div>
     <div
       class="items-center flex justify-center border border-white border-solid rounded-lg w-10 h-10 mt-6 bg-black tooltip-bottom tooltip"
-      data-tip="avg. CP Loss">{{
+      data-tip="avg. Pawn Loss">{{
         this.accuracy
       }}</div>
   </div>

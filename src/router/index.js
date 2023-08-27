@@ -14,6 +14,10 @@ const router = createRouter({
     {
       path: '/analyze',
       component: () => import('../views/Analyze.vue')
+    },
+    {
+     path: '/puzzle/classic',
+     component: () => import('../views/PuzzleClassic.vue')
     }
   ]
 })
