@@ -42,9 +42,11 @@
         </div>
         <div class="basis-2/3 bg-base-300 w-full rounded-lg p-2 flex justify-center flex-col">
           <div class="w-full flex flex-row h-1/3 ">
-            <GameSummaryUser :accuracy="100" :color="true" :elo="whiteElo" :username="whitePlayer"></GameSummaryUser>
+            <GameSummaryUser :accuracy="whiteCPLoss" :color="true" :elo="whiteElo" :username="whitePlayer">
+            </GameSummaryUser>
             <div class="divider-vertical w-[1px] bg-slate-500 h-2/3 rounded-lg"></div>
-            <GameSummaryUser :accuracy="100" :color="false" :elo="blackElo" :username="blackPlayer"></GameSummaryUser>
+            <GameSummaryUser :accuracy="blackCPLoss" :color="false" :elo="blackElo" :username="blackPlayer">
+            </GameSummaryUser>
           </div>
           <div class="flex-grow">
             <div class="flex-content">
@@ -54,12 +56,12 @@
                   <p>{{ bookMoves[1] }}</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-secondary min-h-8 h-[10%]">
-                  <p>1</p><img src="/anotations/brilliant.png">
-                  <p>0</p>
+                  <p>-</p><img src="/anotations/brilliant.png">
+                  <p>-</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-pink-300 min-h-8 h-[10%]">
-                  <p>2</p><img src="/anotations/great.png">
-                  <p>3</p>
+                  <p>-</p><img src="/anotations/great.png">
+                  <p>-</p>
                 </div>
                 <div class="flex flex-row gap-10 py-1 text-green-500 min-h-8 h-[10%]">
                   <p>{{ bestMoves[0] }}</p><img src="/anotations/bestmove.png">
@@ -355,6 +357,8 @@ export default {
       pawnEvaluation: 50,
       annotationPairs: [],
       moveNumberManual: 0,
+      whiteCPLoss: 0,
+      blackCPLoss: 0,
     }
   },
   created() {
@@ -571,6 +575,21 @@ export default {
         }
         x += 2;
       }
+      this.calculateCP()
+    },
+    calculateCP() {
+      let x = 1
+      while (x < this.fens.length) {
+        if (x % 2 == 1) {
+          this.whiteCPLoss += this.fens[x - 1][0] - this.fens[x][0]
+        }
+        else {
+          this.blackCPLoss -= this.fens[x - 1][0] - this.fens[x][0]
+        }
+        x++
+      }
+      this.whiteCPLoss = (this.whiteCPLoss / (this.fens.length / 2)).toFixed(2);
+      this.blackCPLoss = (this.blackCPLoss / (this.fens.length / 2)).toFixed(2);
     },
     extractDestinationSquare(chessMove) {
       const pattern = /[a-h][1-8]$/;

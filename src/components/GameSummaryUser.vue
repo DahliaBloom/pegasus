@@ -8,7 +8,8 @@
       </div>
     </div>
     <div
-      class="items-center flex justify-center border border-black border-solid rounded-lg w-10 h-10 mt-6 bg-white text-black">
+      class="items-center flex justify-center border border-black border-solid rounded-lg w-10 h-10 mt-6 bg-white text-black tooltip-bottom tooltip"
+      data-tip="avg. CP Loss">
       {{
         this.accuracy
       }}</div>
@@ -21,9 +22,11 @@
         <p class="text-xs px-3">{{ this.elo }}</p>
       </div>
     </div>
-    <div class="items-center flex justify-center border border-white border-solid rounded-lg w-10 h-10 mt-6 bg-black">{{
-      this.accuracy
-    }}</div>
+    <div
+      class="items-center flex justify-center border border-white border-solid rounded-lg w-10 h-10 mt-6 bg-black tooltip-bottom tooltip"
+      data-tip="avg. CP Loss">{{
+        this.accuracy
+      }}</div>
   </div>
 </template>
   
