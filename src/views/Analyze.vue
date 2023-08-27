@@ -32,7 +32,13 @@
           <graph :data="this.evals" />
         </div>
         <div class="w-full flex-grow basis-1/4">
-          <moveInfo :moves="this.historyStack" :bestmove="this.bestmove"></moveInfo>
+          <div v-if="this.i == 0" class="bg-base-300 rounded-lg h-full w-full p-2 flex items-center justify-center">
+            <button class="px-4 py-2 btn btn-secondary btn-outline" @click="goThrough">Load
+              Analysis</button>
+
+          </div>
+
+          <moveInfo v-else :moves="this.historyStack" :bestmove="this.bestmove"></moveInfo>
         </div>
         <div class="basis-2/3 bg-base-300 w-full rounded-lg p-2 flex justify-center flex-col">
           <div class="w-full flex flex-row h-1/3 ">
@@ -309,17 +315,68 @@ export default {
   unmounted() {
     document.body.classList.remove('hide-overflow')
   },
+
+  data() {
+    return {
+      playerIsWhite: true,
+      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
+      chess: new Chess(),
+      score: 0,
+      stockfish: null,
+      custom: 0.0,
+      size: 600,
+      history: null,
+      pgn: '',
+      blackElo: '',
+      whiteElo: '',
+      blackPlayer: '',
+      whitePlayer: '',
+      positionInfo: null,
+      bestmove: '',
+      moves: [],
+      historyStack: [],
+      board: null,
+      pawnStructure: 0,
+      //fens = [[eval, fen, bestmove, anotation, lastmove]]
+      fens: [[0.0, 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'e4e5', 'bookMove', '']],
+      i: 0,
+      evals: [],
+      historyConstant: [],
+      graphEvaled: false,
+      annotatedMove: '',
+      annotatedPosition: '',
+      bookMoves: [0, 0],
+      bestMoves: [0, 0],
+      goodMoves: [0, 0],
+      okMoves: [0, 0],
+      innacurateMoves: [0, 0],
+      mistakeMoves: [0, 0],
+      blunderMoves: [0, 0],
+      pawnEvaluation: 50,
+      annotationPairs: [],
+      moveNumberManual: 0,
+    }
+  },
   created() {
     try {
       this.pgn = (useRoute().query.pgn ?? undefined).toString()
+      console.log("initial pgn:")
       console.log(this.pgn)
       this.chess.loadPgn(this.pgn)
       this.history = this.chess.history()
-      console.log(this.history)
+
+      let chessTmp = new Chess("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1")
+      for (const move of this.history) {
+        chessTmp.move(move, false)
+        this.fens.push([0.0, chessTmp.fen(), "", "", move])
+      }
+
+      console.log("The this.fens after initialization")
+      console.log(JSON.parse(JSON.stringify(this.fens)))
+
       this.moves = []
       let i = 0
       if (this.history[0].endsWith('5') || this.history[0].endsWith('6')) {
-        console.log('...')
         while (i < this.history.length) {
           this.moves.push([this.history[i + 1], this.history[i]])
           i += 2
@@ -331,7 +388,6 @@ export default {
         }
       }
 
-      console.log(this.moves)
       this.history = [].concat(...this.moves).reverse()
       this.historyConstant = JSON.parse(JSON.stringify(this.history));
 
@@ -376,48 +432,11 @@ export default {
       }
       this.blackPlayer = extractBlackPlayer(this.pgn)
 
+
+      this.i = 0
       console.log('finished setup')
     } catch {
       this.chess = null
-    }
-  },
-  data() {
-    return {
-      playerIsWhite: true,
-      fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-      chess: new Chess(),
-      score: 0,
-      stockfish: null,
-      custom: 0.0,
-      size: 600,
-      history: null,
-      pgn: '',
-      blackElo: '',
-      whiteElo: '',
-      blackPlayer: '',
-      whitePlayer: '',
-      positionInfo: null,
-      bestmove: '',
-      moves: [],
-      historyStack: [],
-      board: null,
-      pawnStructure: 0,
-      fens: [[0.0, 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 'e4e5', 'bookMove']],
-      i: 0,
-      evals: [],
-      historyConstant: [],
-      graphEvaled: false,
-      annotatedMove: '',
-      annotatedPosition: '',
-      bookMoves: [0, 0],
-      bestMoves: [0, 0],
-      goodMoves: [0, 0],
-      okMoves: [0, 0],
-      innacurateMoves: [0, 0],
-      mistakeMoves: [0, 0],
-      blunderMoves: [0, 0],
-      pawnEvaluation: 50,
-      annotationPairs: [],
     }
   },
   methods: {
@@ -438,19 +457,22 @@ export default {
         fen = this.fen
       }
       evaluate(fen, (scoree, bestmovee) => {
-        console.log('Received score:' + scoree)
-        console.log('Received Bestmove:' + bestmovee)
-        console.log(this.fens[this.i])
+        console.log('Received score: from quick eval' + scoree)
+        console.log('Received Bestmove: from quick eval' + bestmovee)
+        console.log(console.log(JSON.parse(JSON.stringify(this.fens[this.i]))))
         console.log(fen)
-        console.log(this.i)
+        console.log(console.log(JSON.parse(JSON.stringify(this.fens))))
         if (this.fens[this.i][1] === fen) {
-          this.fens[this.i] = [scoree, fen, bestmovee, ""]
+          this.fens[this.i] = [scoree, fen, bestmovee, "", this.fens[this.i][4]]
           console.log("Overwriting...")
         }
         else {
-          this.fens.push([scoree, fen, bestmovee, ""])
-          console.log("New FEN")
-          this.i++
+          if (this.i < this.fens.length) {
+            this.fens[this.i + 1] = [scoree, fen, bestmovee, "", this.fens[this.i + 1][4]]
+            console.log("New FEN")
+            this.i++
+          }
+
         }
       }, 1000)
     },
@@ -458,25 +480,15 @@ export default {
       await new Promise((resolve) => setTimeout(resolve, 1000));
       this.evaluatePosition()
       await new Promise((resolve) => setTimeout(resolve, 3500));
-      let chessy = new Chess();
-      console.log("Hello")
-      let tmp = JSON.parse(JSON.stringify(this.historyConstant.reverse()))
-      console.log(tmp)
-      chessy.reset()
-      for (let m of tmp) {
-        if (m !== undefined && m !== null) {
-          console.log(m)
-          chessy.move(m);
-          console.log("madeMove")
-          this.evaluatePositionQuick(chessy.fen())
-          await new Promise((resolve) => setTimeout(resolve, 1200));
-        }
+      for (let fen of this.fens) {
+        this.evaluatePositionQuick(fen[1])
+        await new Promise((resolve) => setTimeout(resolve, 1200));
+
       }
-      console.log("FEEEEEEEEEEEEEEEEEENS")
-      console.log(this.fens)
+      console.log("The fens after Evaluating every fen for graph")
+      console.log(console.log(JSON.parse(JSON.stringify(this.fens))))
       let j = 0
       for (let x of this.fens) {
-        console.log(x)
         this.evals.push(x[0])
         j++
       }
@@ -490,92 +502,75 @@ export default {
       let prevOpening = []
       let k = 0
       for (let f of this.fens) {
-        movesTmp.push("" + this.historyConstant[k])
         if (k == 0) {
           k++
         }
         else {
-          if (true) {
-            try {
-              // BOOKMOVE:
-              let op = findOpeningName(movesTmp).t
-              console.log("The Opening:")
-              console.log(op)
-              console.log("The previous Opening:")
-              console.log(prevOpening)
-              console.log("The Moves")
-              console.log(movesTmp)
-              if (op.length > prevOpening.length || op.length >= movesTmp.length - 1) {
-                console.log("bookMove")
-                this.fens[k][3] = 'bookMove'
-                this.bookMoves[(k + 1) % 2]++
-                prevOpening = op
-              }
-              else {
-                //BESTMOVE
-                let posBefore = this.fens[k - 1][1]
-                let posAfter = f[1]
-                let chessTmp = new Chess(posBefore)
-                chessTmp.move(this.fens[k - 1][2].split(" ")[0], false)
-                if (chessTmp.fen() == posAfter) {
-                  this.fens[k][3] = 'bestmove'
-                  this.bestMoves[(k + 1) % 2]++
-                }
-
-                // GOODMOVE
-                else if (this.fens[k - 1][0] - f[0] < 0.3 && this.fens[k - 1][0] - f[0] > -0.3) {
-                  this.fens[k][3] = 'goodMove'
-                  this.goodMoves[(k + 1) % 2]++
-                }
-
-                // OK Move
-                else if (this.fens[k - 1][0] - f[0] < 0.7 && this.fens[k - 1][0] - f[0] > -0.7) {
-                  this.fens[k][3] = 'okmove'
-                  this.okMoves[(k + 1) % 2]++
-                }
-
-                // Innacuracy
-                else if (this.fens[k - 1][0] - f[0] < 1.0 && this.fens[k - 1][0] - f[0] > -1.0) {
-                  this.fens[k][3] = 'inaccuracy'
-                  this.innacurateMoves[(k + 1) % 2]++
-                }
-
-                // Mistake
-                else if (this.fens[k - 1][0] - f[0] < 2.5 && this.fens[k - 1][0] - f[0] > -2.5) {
-                  this.fens[k][3] = 'mistake'
-                  this.mistakeMoves[(k + 1) % 2]++
-                }
-
-                // Blunder
-                else {
-                  this.fens[k][3] = 'blunder'
-                  this.blunderMoves[(k + 1) % 2]++
-                }
-
-              }
+          movesTmp.push(f[4])
+          try {
+            // BOOKMOVE:
+            let op = findOpeningName(movesTmp).t
+            if (op.length > prevOpening.length || op.length >= movesTmp.length - 1) {
+              this.fens[k][3] = 'bookMove'
+              this.bookMoves[(k + 1) % 2]++
+              prevOpening = op
             }
-            catch { }
+            else {
+              //BESTMOVE
+              if (this.fens[k - 1][2].endsWith(f[4])) {
+                this.fens[k][3] = 'bestmove'
+                this.bestMoves[(k + 1) % 2]++
+              }
+
+              // GOODMOVE
+              else if (this.fens[k - 1][0] - f[0] < 0.3 && this.fens[k - 1][0] - f[0] > -0.3) {
+                this.fens[k][3] = 'goodMove'
+                this.goodMoves[(k + 1) % 2]++
+              }
+
+              // OK Move
+              else if (this.fens[k - 1][0] - f[0] < 0.7 && this.fens[k - 1][0] - f[0] > -0.7) {
+                this.fens[k][3] = 'okmove'
+                this.okMoves[(k + 1) % 2]++
+              }
+
+              // Innacuracy
+              else if (this.fens[k - 1][0] - f[0] < 1.0 && this.fens[k - 1][0] - f[0] > -1.0) {
+                this.fens[k][3] = 'inaccuracy'
+                this.innacurateMoves[(k + 1) % 2]++
+              }
+
+              // Mistake
+              else if (this.fens[k - 1][0] - f[0] < 2.5 && this.fens[k - 1][0] - f[0] > -2.5) {
+                this.fens[k][3] = 'mistake'
+                this.mistakeMoves[(k + 1) % 2]++
+              }
+
+              // Blunder
+              else {
+                this.fens[k][3] = 'blunder'
+                this.blunderMoves[(k + 1) % 2]++
+              }
+
+            }
           }
+          catch (err) { console.log(err) }
           k++
         }
-        console.log(f)
       }
 
-      for (let x of this.fens) {
-        console.log(x[3])
-      }
+      console.log("The this.fens after annotating them")
+      console.log(console.log(JSON.parse(JSON.stringify(this.fens))))
       let x = 1;
       while (x <= this.fens.length) {
         try {
           this.annotationPairs.push([this.fens[x][3], this.fens[x + 1][3]])
         }
         catch {
-          console.log("UNEVEN")
           this.annotationPairs.push([this.fens[x][3], ''])
         }
         x += 2;
       }
-      console.log(this.annotationPairs)
     },
     extractDestinationSquare(chessMove) {
       const pattern = /[a-h][1-8]$/;
@@ -586,71 +581,45 @@ export default {
       this.fen = move.after
       this.evaluatePosition()
     },
+    updateEverythingAfterButtonPress() {
+      console.log("FEN:")
+      console.log(this.fens[this.moveNumberManual][1])
+      this.annotatedPosition = this.extractDestinationSquare(this.fens[this.moveNumberManual][2])
+      console.log(this.fens[this.moveNumberManual])
+      this.annotatedMove = this.fens[this.historyStack.length + 1][3] + ".png"
+      this.chess.move(this.fens[this.moveNumberManual][4], false)
+      this.fen = this.fens[this.moveNumberManual][1]
+      this.evaluatePosition()
+    },
     moveCall() {
       console.log('moveCall')
       if (!this.chess.isGameOver()) {
-        console.log(this.history)
-        let tmp = this.history.pop()
-        this.annotatedPosition = this.extractDestinationSquare(tmp)
-        console.log("_____________")
-        console.log(this.fens[this.historyStack.length])
-        this.annotatedMove = this.fens[this.historyStack.length + 1][3] + ".png"
-        this.chess.move(tmp)
-        this.historyStack.push(tmp)
-        this.fen = this.chess.fen()
-        this.evaluatePosition()
+        this.moveNumberManual += 1
+        this.updateEverythingAfterButtonPress()
       }
     },
     backMove() {
-      console.log(this.historyStack)
+      console.log("backMove")
       if (this.historyStack.length != 0) {
-        this.chess.undo()
-        this.history.push(this.historyStack.pop())
-        this.fen = this.chess.fen()
-        this.evaluatePosition()
+        this.moveNumberManual -= 1
+        this.updateEverythingAfterButtonPress()
       }
     },
     completeBack() {
-      console.log(this.pgn)
-      this.chess.loadPgn(this.pgn)
-      this.history = this.chess.history()
-      this.moves = []
-      let i = 0
-      if (this.history[0].endsWith('5') || this.history[0].endsWith('6')) {
-        console.log('...')
-        while (i < this.history.length) {
-          this.moves.push([this.history[i + 1], this.history[i]])
-          i += 2
-        }
-      } else {
-        while (i < this.history.length) {
-          this.moves.push([this.history[i], this.history[i + 1]])
-          i += 2
-        }
-      }
-
-      console.log(this.moves)
-      this.history = [].concat(...this.moves).reverse()
-
-      this.chess.reset()
-      this.evaluatePosition()
-
+      console.log("Back to the Start call")
+      this.moveNumberManual = 0
+      this.updateEverythingAfterButtonPress()
     },
     completeEnd() {
-      while (this.history.length != 0) {
-        this.historyStack.push(this.history.pop())
-      }
-      this.chess.loadPgn(this.pgn)
-      this.fen = this.chess.fen()
-      this.evaluatePosition()
+      console.log("All the way to end of game")
+      this.moveNumberManual = this.fens.length - 1
+      this.updateEverythingAfterButtonPress()
     },
     evaluatePawns() {
       let feen = this.extractPawnsAndKingsFromFEN(this.chess.fen())
       console.log('evaluating Pawns! ' + feen)
       evaluate(feen, (scoree, bestmovee) => {
-        console.log('Received score:' + scoree)
         this.pawnEvaluation = 50 - scoree * 5;
-        console.log(this.pawnEvaluation)
       }, 1000)
     },
     extractPawnsAndKingsFromFEN(fen) {
@@ -658,7 +627,6 @@ export default {
 
       // Filter out pieces other than pawns ('p' and 'P') and kings ('k' and 'K')
       const filteredBoard = board.replace(/[^pkPK1-8/]/g, "_");
-      console.log(filteredBoard)
 
       // Replace the count of consecutive empty squares with the correct number
       let validBoard = "";
