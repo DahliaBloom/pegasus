@@ -1,8 +1,9 @@
 <template>
     <div class="h-screen flex justify-center items-center">
-        <div class="w-1/2">
+        <div class="w-1/2 relative flex h-full">
             <Chessboard @move="handleMove" :fen="fen" :orientation="isWhite ? 'white' : 'black'">
             </Chessboard>
+            <Checkmark :square="square" ref="checkMark" :white="isWhite" />
         </div>
     </div>
 </template>
@@ -10,6 +11,7 @@
 import { getPuzzleByRating } from '../utils/databaseApi'
 import { Chess } from 'chess.js'
 import Chessboard from '../components/Chessboard.vue'
+import Checkmark from '../components/checkMark.vue'
 export default {
     mounted() {
         document.body.classList.add('hide-overflow')
@@ -22,10 +24,11 @@ export default {
         return {
             difficulty: 1000,
             fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
-            isWhite: true,
+            isWhite: false,
             puzzle: null,
             correctMoves: [],
             moveNumber: 0,
+            square: ''
         }
     },
     async created() {
@@ -45,6 +48,7 @@ export default {
         },
         async makeFirstMove() {
             this.fen = "" + this.puzzle.FEN
+            this.$refs.checkMark.deactivate()
             await this.sleep(500)
             const chess = new Chess(this.fen)
             chess.move(this.correctMoves[0])
@@ -54,6 +58,7 @@ export default {
         async handleMove(move) {
             console.log(move)
             if (this.correctMoves[this.moveNumber] == move.from + move.to) {
+                this.square = move.to
                 if (this.moveNumber == this.correctMoves.length - 1) {
                     var audio = new Audio("/src/assets/success_sound.wav");
                     audio.play();
@@ -65,6 +70,7 @@ export default {
                 else {
                     var audio = new Audio("/src/assets/click_double.wav");
                     audio.play();
+                    this.$refs.checkMark.activate()
 
                     const chess = new Chess(this.fen)
                     chess.move(move)
@@ -76,13 +82,15 @@ export default {
             else {
                 var audio = new Audio("/src/assets/puzzle_fail.wav");
                 audio.play()
+                this.$refs.checkMark.deactivate()
 
                 await this.makeFirstMove()
             }
         },
     },
     components: {
-        Chessboard
+        Chessboard,
+        Checkmark
     }
 }
 </script>
