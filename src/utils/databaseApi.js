@@ -17,15 +17,18 @@ export async function getPuzzleByRating(rating, margin) {
 
     const puzzleCollection = collection(db, "puzzles")
     const q = query(puzzleCollection, where("Rating", "<=", rating+margin), where("Rating", ">=", rating-margin), limit(1));
-    console.log(q)
+
+    let data = null
     
-    getDocs(q)
+    await getDocs(q)
     .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            console.log(doc.id, '=>', doc.data());
+            data = doc.data()
         });
     })
     .catch((error) => {
         console.error('Error getting documents: ', error);
     });
+
+    return data
 }

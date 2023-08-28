@@ -1,8 +1,15 @@
 <template>
-    <div class="w-full h-screen flex items-center justify-center">{{ this.difficulty }}</div>
+    <div class="h-screen flex justify-center items-center">
+        <div class="w-1/2">
+            <Chessboard @move="handleMove" :fen="fen" :orientation="isWhite ? 'white' : 'black'">
+            </Chessboard>
+        </div>
+    </div>
 </template>
 <script>
 import { getPuzzleByRating } from '../utils/databaseApi'
+import { Chess } from 'chess.js'
+import Chessboard from '../components/Chessboard.vue'
 export default {
     mounted() {
         document.body.classList.add('hide-overflow')
@@ -13,11 +20,55 @@ export default {
 
     data() {
         return {
-            difficulty: 100,
+            difficulty: 1000,
+            fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
+            isWhite: true,
+            puzzle: null,
+            correctMoves: [],
+            moveNumber: 0,
         }
     },
-    created() {
-        getPuzzleByRating(1000, 10)
+    async created() {
+        await this.getNewPuzzle()
+    },
+    methods: {
+        async getNewPuzzle() {
+            this.puzzle = await getPuzzleByRating(this.difficulty, 25)
+            console.log(this.puzzle)
+            this.fen = "" + this.puzzle.FEN
+            this.correctMoves = this.puzzle.Moves.split(" ")
+            this.isWhite = (this.fen.split(" ")[1] == "b")
+            await this.makeFirstMove()
+        },
+        async sleep(milliseconds) {
+            return new Promise(resolve => setTimeout(resolve, milliseconds))
+        },
+        async makeFirstMove() {
+            this.fen = "" + this.puzzle.FEN
+            await this.sleep(500)
+            const chess = new Chess(this.fen)
+            chess.move(this.correctMoves[0])
+            this.fen = chess.fen()
+            this.moveNumber = 1
+        },
+        async handleMove(move) {
+            console.log(move)
+            if (this.correctMoves[this.moveNumber] == move.from + move.to) {
+                alert("correct")
+                const chess = new Chess(this.fen)
+                chess.move(move)
+                chess.move(this.correctMoves[this.moveNumber + 1])
+                this.fen = chess.fen()
+                this.moveNumber += 2
+            }
+            else {
+                alert("false")
+                await this.makeFirstMove()
+            }
+        },
+    },
+    components: {
+        Chessboard
     }
 }
 </script>
