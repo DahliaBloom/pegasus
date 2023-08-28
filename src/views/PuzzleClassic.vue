@@ -54,15 +54,29 @@ export default {
         async handleMove(move) {
             console.log(move)
             if (this.correctMoves[this.moveNumber] == move.from + move.to) {
-                alert("correct")
-                const chess = new Chess(this.fen)
-                chess.move(move)
-                chess.move(this.correctMoves[this.moveNumber + 1])
-                this.fen = chess.fen()
-                this.moveNumber += 2
+                if (this.moveNumber == this.correctMoves.length - 1) {
+                    var audio = new Audio("/src/assets/success_sound.wav");
+                    audio.play();
+
+                    this.difficulty += 100
+                    await this.getNewPuzzle()
+                }
+
+                else {
+                    var audio = new Audio("/src/assets/click_double.wav");
+                    audio.play();
+
+                    const chess = new Chess(this.fen)
+                    chess.move(move)
+                    chess.move(this.correctMoves[this.moveNumber + 1])
+                    this.fen = chess.fen()
+                    this.moveNumber += 2
+                }
             }
             else {
-                alert("false")
+                var audio = new Audio("/src/assets/puzzle_fail.wav");
+                audio.play()
+
                 await this.makeFirstMove()
             }
         },
