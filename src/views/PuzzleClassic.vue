@@ -10,7 +10,22 @@
                 </div>
                 <div class="ml-36 relative w-1/2 scale-[3] flex items-center justify-center">
                     <img src="../assets/fire_icon.svg" class="absolute z-10" />
-                    <div class="absolute z-20 text-black font-bold mt-5 text-xs">5</div>
+                    <div class="absolute z-20 text-black font-bold mt-5 text-xs">{{ streak }}</div>
+                </div>
+            </div>
+            <div class="border-accent border-4 rounded-xl m-4 w-full h-1/2">
+                <div class="flex-grow w-full h-full">
+                    <div class="flex-content">
+                        <div class="scrollable-content-wrapper">
+                            <div v-for="(row) in history2" class="flex flex-row justify-around my-8">
+                                <div v-for="item in row"><img v-if="item == 0" class="scale-150"
+                                        src="../assets/award_star.svg" />
+                                    <img v-if="item > 0" class="scale-150" src="../assets/skull.svg" />
+                                    <img v-else class="scale-150 invisible" src="../assets/award_star.svg" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -19,7 +34,7 @@
             </Chessboard>
             <Checkmark :square="square" ref="checkMark" :white="isWhite" />
         </div>
-        <div class="basis-1/4">Slider</div>
+        <div class="basis-1/4">Pegasus</div>
     </div>
 </template>
 <script>
@@ -45,8 +60,10 @@ export default {
             moveNumber: 0,
             square: '',
             wrongAttempts: 0,
-            history: [],
-            accuracy: { total: 0, right: 0, percent: 100 }
+            history: [0],
+            accuracy: { total: 0, right: 0, percent: 100 },
+            streak: 0,
+            history2: [[-1, -1, -1, -1, -1]]
         }
     },
     async created() {
@@ -83,14 +100,17 @@ export default {
                     audio.play();
 
                     if (this.wrongAttempts == 0) {
-                        this.difficulty += 20
+                        this.difficulty += (20 + this.streak + Math.floor(Math.random() * 10))
                         this.accuracy.right++
+                        this.streak++
                     }
                     if (this.wrongAttempts == 1) {
-                        this.difficulty -= 5
+                        this.difficulty -= (5 + Math.floor(Math.random() * 10))
+                        this.streak = 0
                     }
                     if (this.wrongAttempts > 1) {
-                        this.difficulty -= 15
+                        this.difficulty -= (15 + Math.floor(Math.random() * 10))
+                        this.strek = 0
                     }
 
                     if (this.difficulty > 3000) {
@@ -98,6 +118,12 @@ export default {
                     }
 
                     this.history.push(this.wrongAttempts)
+
+                    if (this.history2[this.history2.length - 1][4] != -1) {
+                        this.history2.push([-1, -1, -1, -1, -1])
+                    }
+                    this.history2[this.history2.length - 1][this.history2[this.history2.length - 1].indexOf(-1)] = this.wrongAttempts
+
                     this.accuracy.percent = Math.floor(this.accuracy.right / this.accuracy.total * 100)
 
                     this.wrongAttempts = 0
