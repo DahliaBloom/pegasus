@@ -38,11 +38,22 @@
             </div>
         </div>
         <div class="w-1/2 relative flex h-full">
-            <Chessboard @move="handleMove" :fen="fen" :orientation="isWhite ? 'white' : 'black'">
+            <Chessboard @move="handleMove" :fen="fen" :orientation="isWhite ? 'white' : 'black'" ref="chessboard">
             </Chessboard>
             <Checkmark :square="square" ref="checkMark" :white="isWhite" />
         </div>
-        <div class="basis-1/4">Pegasus</div>
+        <div class="basis-1/4 h-full w-full py-4 flex justify-around"><button @click="makeHint"
+                class="btn w-1/4 btn-primary mr-2 tooltip tooltip-bottom" data-tip="Hint"><span
+                    class="material-symbols-outlined">
+                    lightbulb
+                </span></button><button class="btn w-1/4 btn-primary btn-square mr-2 tooltip tooltip-bottom"
+                data-tip="Solution"><span class="material-symbols-outlined">
+                    saved_search
+                </span></button><button class="btn w-1/4 btn-primary btn-square mr-2 tooltip-bottom tooltip" data-tip="Skip"
+                @click="skip"><span class="material-symbols-outlined">
+                    skip_next
+                </span></button>
+        </div>
     </div>
 </template>
 <script>
@@ -121,7 +132,7 @@ export default {
                     }
                     if (this.wrongAttempts > 1) {
                         this.difficulty -= (15 + Math.floor(Math.random() * 10))
-                        this.strek = 0
+                        this.streak = 0
                     }
 
                     if (this.difficulty > 3000) {
@@ -164,6 +175,28 @@ export default {
                 await this.makeFirstMove()
             }
         },
+        async skip() {
+            this.accuracy.total++
+            this.difficulty -= (15 + Math.floor(Math.random() * 10))
+            this.streak = 0
+
+            this.history.push(5)
+
+            if (this.history2[this.history2.length - 1][4] != -1) {
+                this.history2.push([-1, -1, -1, -1, -1])
+            }
+            this.history2[this.history2.length - 1][this.history2[this.history2.length - 1].indexOf(-1)] = 5
+
+            this.accuracy.percent = Math.floor(this.accuracy.right / this.accuracy.total * 100)
+
+            this.wrongAttempts = 0
+
+            await this.getNewPuzzle()
+        },
+        makeHint() {
+            console.log(this.$refs.chessboard)
+            this.$refs.chessboard.markMove("e4", "c6")
+        }
     },
     watch: {
         difficulty(newVal) {
