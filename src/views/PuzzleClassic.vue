@@ -1,7 +1,8 @@
 <template>
     <div class="h-screen flex justify-center items-center">
-        <div class="basis-1/4 flex flex-col h-full p-6 items-center">
-            <input type="range" min="400" max="3000" v-model="difficulty" class=" range range-accent" />
+        <div class="basis-1/4 flex flex-col h-full p-4 items-center">
+            <BurgerMenuHorizontal class="w-full "></BurgerMenuHorizontal>
+            <input type="range" min="400" max="3000" v-model="difficulty" class=" range range-accent mt-4" />
             <p class="text-xl mt-2">{{ difficulty }}</p>
             <div class="flex w-full justify-between p-4">
                 <div class="relative w-1/2 scale-110">
@@ -28,6 +29,13 @@
                     </div>
                 </div>
             </div>
+            <div class="w-full h-[8%] overflow-hidden">
+                <div class="h-full w-full flex flex-wrap">
+                    <div v-for="chip in puzzle.Themes">
+                        <div class="badge-secondary badge p-1 mx-1">{{ chip }}</div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="w-1/2 relative flex h-full">
             <Chessboard @move="handleMove" :fen="fen" :orientation="isWhite ? 'white' : 'black'">
@@ -42,6 +50,8 @@ import { getPuzzleByRating } from '../utils/databaseApi'
 import { Chess } from 'chess.js'
 import Chessboard from '../components/Chessboard.vue'
 import Checkmark from '../components/checkMark.vue'
+import BurgerMenuHorizontal from '../components/BurgerMenuHorizontal.vue'
+
 export default {
     mounted() {
         document.body.classList.add('hide-overflow')
@@ -55,7 +65,7 @@ export default {
             difficulty: 1000,
             fen: "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1",
             isWhite: false,
-            puzzle: null,
+            puzzle: { Themes: [] },
             correctMoves: [],
             moveNumber: 0,
             square: '',
@@ -74,6 +84,7 @@ export default {
             this.puzzle = await getPuzzleByRating(this.difficulty, Math.floor(Math.random() * 25))
             console.log(this.puzzle)
             this.fen = "" + this.puzzle.FEN
+            this.puzzle.Themes = this.puzzle.Themes.split(" ")
             this.correctMoves = this.puzzle.Moves.split(" ")
             this.isWhite = (this.fen.split(" ")[1] == "b")
             await this.makeFirstMove()
@@ -161,7 +172,8 @@ export default {
     },
     components: {
         Chessboard,
-        Checkmark
+        Checkmark,
+        BurgerMenuHorizontal
     }
 }
 </script>
