@@ -1,6 +1,6 @@
 <script setup>
 import { TheChessboard } from 'vue3-chessboard'
-import { watch } from 'vue'
+import { watch, onMounted } from 'vue'
 import 'vue3-chessboard/style.css'
 
 const props = defineProps(['fen', 'orientation'])
@@ -24,6 +24,10 @@ watch(
     boardAPI.toggleOrientation()
   }
 )
+
+onMounted(() => {
+  $emit('board-created', boardAPI)
+})
 </script>
 
 <template>
