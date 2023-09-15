@@ -1,4 +1,4 @@
-import{C as ai}from"./chess-19eddd7f.js";import{_ as ku}from"./Chessboard-68d82425.js";import{_ as os,b as st,c as it,A as mo,l as _n,g as R,n as Mu,m as xu,h as or,i as ar,w as Ou,v as Lu,t as rn,F as ur,s as hr}from"./index-77e90094.js";import{_ as Fu}from"./burgerMenu-ba336864.js";/**
+import{C as ai}from"./chess-19eddd7f.js";import{_ as ku}from"./Chessboard-e1526f56.js";import{_ as os,b as st,c as it,A as mo,l as _n,g as R,n as Mu,m as xu,h as or,i as ar,w as Ou,v as Lu,t as rn,F as ur,s as hr}from"./index-f4bd2e01.js";import{_ as Fu}from"./burgerMenu-ba336864.js";/**
  * @license
  * Copyright 2017 Google LLC
  *
