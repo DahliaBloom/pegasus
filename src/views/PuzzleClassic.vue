@@ -38,7 +38,8 @@
             </div>
         </div>
         <div class="w-1/2 relative flex h-full">
-            <Chessboard @board-created="(api) => (boardAPI = api)" @move="handleMove" :fen="fen" :orientation="isWhite ? 'white' : 'black'" ref="chessboard">
+            <Chessboard @board-created="(api) => (boardAPI = api)" @move="handleMove" :fen="fen"
+                :orientation="isWhite ? 'white' : 'black'" ref="chessboard">
             </Chessboard>
             <Checkmark :square="square" ref="checkMark" :white="isWhite" />
         </div>
@@ -85,7 +86,7 @@ export default {
             accuracy: { total: 0, right: 0, percent: 100 },
             streak: 0,
             history2: [[-1, -1, -1, -1, -1]],
-            boardAPI
+            boardAPI: null
         }
     },
     async created() {

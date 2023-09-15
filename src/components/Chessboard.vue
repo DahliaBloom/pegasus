@@ -26,7 +26,7 @@ watch(
 )
 
 onMounted(() => {
-  $emit('board-created', boardAPI)
+  this.$emit('board-created', boardAPI)
 })
 </script>
 
