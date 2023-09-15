@@ -1,9 +1,10 @@
 <script setup>
 import { TheChessboard } from 'vue3-chessboard'
-import { watch, onMounted } from 'vue'
+import { watch, onMounted, defineEmits } from 'vue'
 import 'vue3-chessboard/style.css'
 
 const props = defineProps(['fen', 'orientation'])
+const emit = defineEmits(['move'])
 
 const boardConfig = {
   orientation: props.orientation,
