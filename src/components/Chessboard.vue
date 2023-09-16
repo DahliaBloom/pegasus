@@ -27,14 +27,14 @@ watch(
 )
 
 onMounted(() => {
-  this.$emit('board-created', boardAPI)
+  emit('board-created', boardAPI)
 })
 </script>
 
 <template>
   <div class="w-full grid items-center h-full">
     <TheChessboard @move="(move) => {
-      $emit('move', move)
+      emit('move', move)
     }
       " @board-created="(api) => (boardAPI = api)" :board-config="boardConfig" />
   </div>

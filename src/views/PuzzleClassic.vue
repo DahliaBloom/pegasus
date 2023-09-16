@@ -48,7 +48,7 @@
                     class="material-symbols-outlined">
                     lightbulb
                 </span></button><button class="btn w-1/4 btn-primary btn-square mr-2 tooltip tooltip-bottom"
-                data-tip="Solution"><span class="material-symbols-outlined">
+                data-tip="Solution" @click="makeSolution"><span class="material-symbols-outlined">
                     saved_search
                 </span></button><button class="btn w-1/4 btn-primary btn-square mr-2 tooltip-bottom tooltip" data-tip="Skip"
                 @click="skip"><span class="material-symbols-outlined">
@@ -86,7 +86,8 @@ export default {
             accuracy: { total: 0, right: 0, percent: 100 },
             streak: 0,
             history2: [[-1, -1, -1, -1, -1]],
-            boardAPI: null
+            boardAPI: null,
+            offset: 0,
         }
     },
     async created() {
@@ -127,6 +128,7 @@ export default {
                         this.difficulty += (20 + this.streak + Math.floor(Math.random() * 10))
                         this.accuracy.right++
                         this.streak++
+                        this.difficulty -= this.offset
                     }
                     if (this.wrongAttempts == 1) {
                         this.difficulty -= (5 + Math.floor(Math.random() * 10))
@@ -161,7 +163,7 @@ export default {
                     this.$refs.checkMark.activate()
 
                     const chess = new Chess(this.fen)
-                    chess.move(move)
+                    chess.move(move.from + move.to)
                     chess.move(this.correctMoves[this.moveNumber + 1])
                     this.fen = chess.fen()
                     this.moveNumber += 2
@@ -196,8 +198,66 @@ export default {
             await this.getNewPuzzle()
         },
         makeHint() {
-            console.log(this.$refs.chessboard)
-            this.$refs.chessboard.markMove("e4", "c6")
+            console.log(this.correctMoves[this.moveNumber])
+            this.boardAPI.board.selectSquare(this.correctMoves[this.moveNumber][0] + this.correctMoves[this.moveNumber][1])
+            this.offset = 10
+        },
+        async makeSolution() {
+            this.$refs.checkMark.deactivate()
+            const chess = new Chess(this.fen)
+            chess.move(this.correctMoves[this.moveNumber])
+            this.moveNumber++
+            this.fen = chess.fen()
+            this.wrongAttempts = 2
+            if (this.moveNumber == this.correctMoves.length) {
+                this.accuracy.total++
+                var audio = new Audio("/src/assets/success_sound.wav");
+                audio.play();
+                await this.sleep(1000)
+
+                if (this.wrongAttempts == 0) {
+                    this.difficulty += (20 + this.streak + Math.floor(Math.random() * 10))
+                    this.accuracy.right++
+                    this.streak++
+                }
+                if (this.wrongAttempts == 1) {
+                    this.difficulty -= (5 + Math.floor(Math.random() * 10))
+                    this.streak = 0
+                }
+                if (this.wrongAttempts > 1) {
+                    this.difficulty -= (15 + Math.floor(Math.random() * 10))
+                    this.streak = 0
+                }
+
+                if (this.difficulty > 3000) {
+                    this.difficulty = 3000
+                }
+
+                this.history.push(this.wrongAttempts)
+
+                if (this.history2[this.history2.length - 1][4] != -1) {
+                    this.history2.push([-1, -1, -1, -1, -1])
+                }
+                this.history2[this.history2.length - 1][this.history2[this.history2.length - 1].indexOf(-1)] = this.wrongAttempts
+
+                this.accuracy.percent = Math.floor(this.accuracy.right / this.accuracy.total * 100)
+
+                this.wrongAttempts = 0
+
+                await this.getNewPuzzle()
+            }
+
+            else {
+                var audio = new Audio("/src/assets/click_double.wav");
+                audio.play();
+
+                await this.sleep(1000)
+
+                const chess = new Chess(this.fen)
+                chess.move(this.correctMoves[this.moveNumber])
+                this.moveNumber++
+                this.fen = chess.fen()
+            }
         }
     },
     watch: {
