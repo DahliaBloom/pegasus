@@ -117,7 +117,9 @@ export default {
         },
         async handleMove(move) {
             console.log(move)
-            if (this.correctMoves[this.moveNumber] == move.from + move.to) { //Promotion doenst work
+            const chessy = new Chess(this.fen)
+            chessy.move(move)
+            if (chessy.isCheckmate() || this.correctMoves[this.moveNumber] == move.from + move.to) { //Promotion doenst work
                 this.square = move.to
                 if (this.moveNumber == this.correctMoves.length - 1) {
                     this.accuracy.total++
@@ -209,7 +211,7 @@ export default {
             this.moveNumber++
             this.fen = chess.fen()
             this.wrongAttempts = 2
-            if (this.moveNumber == this.correctMoves.length) {
+            if (chess.isCheckmate() || this.moveNumber == this.correctMoves.length) {
                 this.accuracy.total++
                 var audio = new Audio("/src/assets/success_sound.wav");
                 audio.play();
