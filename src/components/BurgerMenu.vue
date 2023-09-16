@@ -15,8 +15,7 @@
                 </a>
             </li>
             <li>
-                <a class="tooltip tooltip-right rounded-lg" data-tip="Puzzles"
-                    href="https://www.youtube.com/watch?v=dQw4w9WgXcQ&ab_channel=RickAstley" target="_blank">
+                <a class="tooltip tooltip-right rounded-lg" data-tip="Puzzles" :href="this.puzzleRoute">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-7">
                         <path stroke-linecap="round" stroke-linejoin="round"
@@ -30,10 +29,14 @@
 </template>
 <script>
 export default {
+    mounted() {
+        this.puzzleRoute += 'puzzle'
+    },
     data() {
         return {
             clicked: false,
-            className: "btn btn-square btn-primary btn-outline"
+            className: "btn btn-square btn-primary btn-outline",
+            puzzleRoute: import.meta.env.BASE_URL
         }
     },
     methods: {

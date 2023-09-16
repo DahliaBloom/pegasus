@@ -18,7 +18,11 @@ const router = createRouter({
     {
      path: '/puzzle/classic',
      component: () => import('../views/PuzzleClassic.vue')
-    }
+    },
+    {
+      path: '/puzzle',
+      component: () => import('../views/PuzzleHome.vue')
+     }
   ]
 })
 
