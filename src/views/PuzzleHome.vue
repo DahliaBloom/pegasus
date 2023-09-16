@@ -1,4 +1,5 @@
 <template>
+    <BurgerMenu class="absolute top-0 left-0"></BurgerMenu>
     <div class="h-screen w-full flex justify-center items-center overflow-hidden">
         <div
             class="w-1/2 h-32 rounded-2xl border border-primary p-2 hover:border-4 scale-100 hover:scale-110 transition-all hover:border-accent flex">
@@ -13,7 +14,7 @@
     </div>
 </template>
 <script>
-import BurgerMenuHorizontal from '../components/BurgerMenuHorizontal.vue'
+import BurgerMenu from '../components/BurgerMenu.vue'
 
 export default {
     mounted() {
@@ -29,7 +30,7 @@ export default {
     methods: {
     },
     components: {
-        BurgerMenuHorizontal
+        BurgerMenu
     }
 }
 </script>
