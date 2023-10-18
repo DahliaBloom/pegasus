@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen flex justify-center items-center">
+    <div class="h-screen flex justify-center items-center z-0">
         <div class="basis-1/4 flex flex-col h-full p-4 items-center">
             <BurgerMenuHorizontal class="w-full "></BurgerMenuHorizontal>
             <div class="flex w-full justify-between p-4">
@@ -38,12 +38,43 @@
             </Chessboard>
             <Checkmark :square="square" ref="checkMark" :white="isWhite" />
         </div>
-        <div class="basis-1/4 h-full w-full py-4 flex justify-around"><img class="w-20 h-20 grayscale"
-                src="../assets/heart.svg" v-if="mistakes > 0" /><img class="w-20 h-20 grayscale" src="../assets/heart.svg"
-                v-if="mistakes > 1" /><img class="w-20 h-20 grayscale" src="../assets/heart.svg" v-if="mistakes > 2" /><img
-                class="w-20 h-20" src="../assets/heart.svg" v-if="mistakes < 1" /><img class="w-20 h-20"
-                src="../assets/heart.svg" v-if="mistakes < 2" /><img class="w-20 h-20" src="../assets/heart.svg"
-                v-if="mistakes < 3" />
+        <div class="basis-1/4 h-full w-full py-4 flex flex-col">
+            <div class="flex flex-row justify-around w-full"><img class="w-20 h-20 grayscale" src="../assets/heart.svg"
+                    v-if="mistakes > 0" /><img class="w-20 h-20 grayscale" src="../assets/heart.svg"
+                    v-if="mistakes > 1" /><img class="w-20 h-20 grayscale" src="../assets/heart.svg"
+                    v-if="mistakes > 2" /><img class="w-20 h-20" src="../assets/heart.svg" v-if="mistakes < 1" /><img
+                    class="w-20 h-20" src="../assets/heart.svg" v-if="mistakes < 2" /><img class="w-20 h-20"
+                    src="../assets/heart.svg" v-if="mistakes < 3" /></div>
+            <div class="w-full flex justify-around text-9xl text-accent"><p>{{ ((countdown-(countdown%60))/60) }}:{{ (((countdown%60)-((countdown%60)%10))/10) }}{{ countdown%10 }}</p>
+
+            </div>
+        </div>
+    </div>
+    <div v-if="this.mistakes == 3 || this.countdown<=0" class="absolute w-full h-full  z-10 top-0 left-0 flex items-center justify-center">
+        <div class="absolute w-full h-full bg-black z-20 top-0 left-0 flex items-center justify-center opacity-60"></div>
+        <div class="w-1/2 h-2/3 bg-base-100 z-30 rounded-2xl flex items-center justify-center">
+            <div class="w-[98%] h-[97%] border-2 border-primary z-40 rounded-2xl flex justify-start flex-col items-center">
+                <h1 class="text-6xl font-bold text-accent">You Lost</h1>
+                <br>
+                <p>get Good! By training more!</p>
+                <br>
+                <div class="w-full h-1/2 flex items-center justify-around flex-row">
+                    <div class="h-full w-full m-4 relative"><img src="../assets/fire_icon.svg"
+                            class="h-full w-full absolute z-10" />
+                        <div class="h-full w-full absolute flex items-center justify-center">
+                            <p class="absolute z-20 text-slate-900 text-6xl mt-20 font-bold">{{ bestStreak }}</p>
+                        </div>
+                    </div>
+                    <div class="h-full w-full text-8xl text-accent m-4 flex items-center justify-center">{{ ((countdown-(countdown%60))/60) }}:{{ (((countdown%60)-((countdown%60)%10))/10) }}{{ countdown%10 }}</div>
+                    <div class="h-full w-full m-4 relative"><img src="../assets/trophy.svg"
+                            class="h-full w-full absolute z-10" />
+                        <div class="h-full w-full absolute flex items-center justify-center">
+                            <p class="absolute z-20 text-slate-900 text-6xl mb-20 font-bold">{{ wins }}</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="btn-primary btn mt-8 w-1/6 h-12" @click="reload">Retry</button>
+            </div>
         </div>
     </div>
 </template>
@@ -57,6 +88,12 @@ import BurgerMenuHorizontal from '../components/BurgerMenuHorizontal.vue'
 export default {
     mounted() {
         document.body.classList.add('hide-overflow')
+        setInterval(() => {
+            console.log("Time: " + this.countdown)
+            if (this.countdown>0 && this.mistakes<3){
+                this.countdown--;
+            }
+        }, 1000)
     },
     unmounted() {
         document.body.classList.remove('hide-overflow')
@@ -75,9 +112,12 @@ export default {
             history: [0],
             accuracy: { total: 0, right: 0, percent: 100 },
             streak: 0,
+            wins: 0,
             history2: [[-1, -1, -1, -1, -1]],
             boardAPI: null,
             mistakes: 0,
+            bestStreak: 0,
+            countdown: 3 * 60,
         }
     },
     async created() {
@@ -117,6 +157,8 @@ export default {
                     audio.play();
 
                     this.difficulty += (20 + Math.floor(Math.random() * 10))
+
+                    this.wins++
                     this.streak++
 
                     if (this.difficulty > 3000) {
@@ -150,18 +192,17 @@ export default {
                 audio.play()
                 this.$refs.checkMark.deactivate()
                 this.mistakes++
-
-                if (this.mistakes == 3) {
-                    my_modal_1.showModal()
-                }
-
                 await this.skip()
             }
         },
         async skip() {
             this.accuracy.total++
             this.difficulty -= (15 + Math.floor(Math.random() * 10))
+            if (this.streak > this.bestStreak) {
+                this.bestStreak = this.streak
+            }
             this.streak = 0
+
 
             this.history.push(5)
 
@@ -176,6 +217,9 @@ export default {
 
             await this.getNewPuzzle()
         },
+        reload() {
+            window.location.reload();
+        }
     },
     watch: {
         difficulty(newVal) {
