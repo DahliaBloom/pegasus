@@ -4,18 +4,18 @@
         <button :class="className" @click="update"><img src="../assets/burgerMenu.png" class="w-1/2" /></button>
         <ul v-if="clicked" class="menu bg-base-200 rounded-lg ml-4 flex-row h-full">
             <li>
-                <a class="tooltip tooltip-right rounded-lg" data-tip="Home" @click="$router.push('/')">
+                <a class="tooltip tooltip-right rounded-lg w-full" data-tip="Home" @click="$router.push('/')">
                     <span class="material-symbols-outlined "> home </span>
                 </a>
             </li>
             <li>
-                <a class="tooltip tooltip-right rounded-lg" data-tip="Download Extension"
+                <a class="tooltip tooltip-right rounded-lg w-full" data-tip="Download Extension"
                     href="https://github.com/DahliaBloom/pegasus/blob/master/public/chess.com2pegasus.crx" target="_blank">
                     <span class="material-symbols-outlined "> Download </span>
                 </a>
             </li>
             <li>
-                <a class="tooltip tooltip-right rounded-lg" data-tip="Puzzles" @click="$router.push('/puzzle')">
+                <a class="tooltip tooltip-right rounded-lg w-full" data-tip="Puzzles" @click="$router.push('/puzzle')">
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
                         stroke="currentColor" class="w-6 h-7">
                         <path stroke-linecap="round" stroke-linejoin="round"
