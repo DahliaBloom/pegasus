@@ -3,7 +3,7 @@
     <div class="h-screen w-full flex justify-center items-center overflow-hidden">
         <div
             class="w-1/2 h-32 rounded-2xl border border-primary p-2 hover:border-4 scale-100 hover:scale-110 transition-all hover:border-accent flex">
-            <a :href="$route.fullPath + '/puzzle/classic'" class="w-full h-32 absolute top-0 left-0 "></a>
+            <a @click="$router.push('/puzzle/classic')" class="w-full h-32 absolute top-0 left-0 "></a>
             <img class="h-full mr-8" src="../assets/puzzle_classic.svg" />
             <div class="h-full w-full">
                 <h1 class="text-4xl text-yellow-800">Puzzle Classic</h1>
