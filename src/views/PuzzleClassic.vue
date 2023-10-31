@@ -1,10 +1,10 @@
 <template>
-    <div class="h-screen flex justify-center items-center">
-        <div class="basis-1/4 flex flex-col h-full p-4 items-center">
-            <BurgerMenuHorizontal class="w-full "></BurgerMenuHorizontal>
-            <input type="range" min="400" max="3000" v-model="difficulty" class=" range range-accent mt-4" />
+    <div class="h-screen flex flex-col w-full sm:flex-row justify-center items-center">
+        <div class="sm:basis-1/4 w-full bg-red-500 flex flex-col h-full p-4 items-center">
+            <BurgerMenuHorizontal class="w-full  hidden sm:block"></BurgerMenuHorizontal>
+            <input type="range" min="400" max="3000" v-model="difficulty" class=" range range-accent mt-4 sm:scale-100 scale-50" />
             <p class="text-xl mt-2">{{ difficulty }}</p>
-            <div class="flex w-full justify-between p-4">
+            <div class="sm:flex w-full  hidden bg-black justify-between p-4">
                 <div class="relative w-1/2 scale-110">
                     <div class="radial-progress bg-primary text-primary-content border-4 border-primary"
                         :style="'--value:' + accuracy.percent">{{ accuracy.percent }}</div>
@@ -14,7 +14,7 @@
                     <div class="absolute z-20 text-black font-bold mt-5 text-xs">{{ streak }}</div>
                 </div>
             </div>
-            <div class="border-accent border-4 rounded-xl m-4 w-full h-1/2">
+            <div class="border-accent hidden sm:block bg-blue-500 border-4 rounded-xl m-4 w-full h-1/2">
                 <div class="flex-grow w-full h-full">
                     <div class="flex-content">
                         <div class="scrollable-content-wrapper">
@@ -29,7 +29,7 @@
                     </div>
                 </div>
             </div>
-            <div class="w-full h-[8%] overflow-hidden">
+            <div class="bg-green-500 hidden sm:block w-full h-[8%] overflow-hidden">
                 <div class="h-full w-full flex flex-wrap">
                     <div v-for="chip in puzzle.Themes">
                         <div class="badge-secondary badge p-1 mx-1">{{ chip }}</div>
@@ -37,13 +37,13 @@
                 </div>
             </div>
         </div>
-        <div class="w-1/2 relative flex h-full">
+        <div class="bg-yellow-400 w-full sm:w-1/2 relative flex h-full">
             <Chessboard @board-created="(api) => (boardAPI = api)" @move="handleMove" :fen="fen"
                 :orientation="isWhite ? 'white' : 'black'" ref="chessboard">
             </Chessboard>
             <Checkmark :square="square" ref="checkMark" :white="isWhite" />
         </div>
-        <div class="basis-1/4 h-full w-full py-4 flex justify-around"><button @click="makeHint"
+        <div class="sm:basis-1/4 bg-purple-500 h-full w-full py-4 flex justify-around"><button @click="makeHint"
                 class="btn w-1/4 btn-primary mr-2 tooltip tooltip-bottom" data-tip="Hint"><span
                     class="material-symbols-outlined">
                     lightbulb
