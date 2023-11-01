@@ -1,5 +1,5 @@
 <template>
-    <div class="flex flex-row overflow-hidden h-12">
+    <div class="flex flex-row overflow-hidden">
         <button v-if="false" class="btn btn-square btn-primary btn-outline rotate-90"> </button>
         <button :class="className" @click="update"><img src="../assets/burgerMenu.png" class="w-1/2" /></button>
         <ul v-if="clicked" class="menu bg-base-200 rounded-lg ml-4 flex-row h-full">
@@ -35,7 +35,7 @@ export default {
     data() {
         return {
             clicked: false,
-            className: "btn btn-square btn-primary btn-outline",
+            className: "btn btn-square btn-primary btn-outline mb-2",
             puzzleRoute: import.meta.env.BASE_URL
         }
     },
@@ -43,10 +43,10 @@ export default {
         update() {
             this.clicked = !this.clicked
             if (this.clicked) {
-                this.className = "btn btn-square btn-primary"
+                this.className = "btn btn-square btn-primary mb-2"
             }
             if (!this.clicked) {
-                this.className = "btn btn-square btn-primary btn-outline"
+                this.className = "btn btn-square btn-primary btn-outline mb-2"
             }
         }
     }
