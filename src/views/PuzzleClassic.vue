@@ -10,12 +10,12 @@
                     class=" range range-accent mt-4 sm:scale-100 scale-75" />
             </div>
             <p class="text-xl mt-2">{{ difficulty }}</p>
-            <div class="flex w-full justify-between p-4">
+            <div class="sm:flex w-full justify-between p-4 hidden">
                 <div class="relative w-1/2 scale-110">
                     <div class="radial-progress bg-primary text-primary-content border-4 border-primary"
                         :style="'--value:' + accuracy.percent">{{ accuracy.percent }}</div>
                 </div>
-                <div class="ml-36 relative w-1/2 scale-[3] flex items-center justify-center">
+                <div class="ml-36  relative w-1/2 scale-[3] flex items-center justify-center">
                     <img src="../assets/fire_icon.svg" class="absolute z-10" />
                     <div class="absolute z-20 text-black font-bold mt-5 text-xs">{{ streak }}</div>
                 </div>
