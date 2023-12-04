@@ -8,6 +8,10 @@
                     <span class="material-symbols-outlined scale-150"> home </span>
                 </a><input type="range" min="400" max="3000" v-model="difficulty"
                     class=" range range-accent mt-4 sm:scale-100 scale-75" />
+                <div class="ml-36  relative w-1/2 scale-[3] sm:hidden flex items-center justify-center">
+                    <img src="../assets/trophy.svg" class="absolute z-10" />
+                    <div class="absolute z-20 text-black font-bold text-xs mb-2">{{ streak }}</div>
+                </div>
             </div>
             <p class="text-xl mt-2">{{ difficulty }}</p>
             <div class="sm:flex w-full justify-between p-4 hidden">
