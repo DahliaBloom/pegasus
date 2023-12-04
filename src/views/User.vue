@@ -45,11 +45,14 @@ onBeforeMount(() => {
   <div v-else>
     <HomeButton />
     <div class="p-5 flex flex-col items-center space-y-8 min-h-screen">
-      <div><UserInfo :data="user" /></div>
-      <div><PlayedGamesTable :username="user.username" /></div>
+      <div>
+        <UserInfo :data="user" />
+      </div>
+      <div>
+        <PlayedGamesTable :username="user.username" />
+      </div>
       <div class="text-xs ml-auto text-right flex-grow flex items-end">
-        <a target="_blank" href="https://icons8.com/icon/57992/laurel-wreath">Laurel Wreath</a
-        >&nbsp;icon by&nbsp;
+        <a target="_blank" href="https://icons8.com/icon/57992/laurel-wreath">Laurel Wreath</a>&nbsp;icon by&nbsp;
         <a target="_blank" href="https://icons8.com">Icons8</a>
         &nbsp;&nbsp;|&nbsp;&nbsp;
         <a target="_blank" href="https://icons8.com/icon/KI9OU8UQdUam/sword">Sword</a>&nbsp;icon
@@ -57,5 +60,4 @@ onBeforeMount(() => {
         <a target="_blank" href="https://icons8.com">Icons8</a>
       </div>
     </div>
-  </div>
-</template>
+  </div></template>

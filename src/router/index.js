@@ -16,17 +16,21 @@ const router = createRouter({
       component: () => import('../views/Analyze.vue')
     },
     {
-     path: '/puzzle/classic',
-     component: () => import('../views/PuzzleClassic.vue')
+      path: '/puzzle/classic',
+      component: () => import('../views/PuzzleClassic.vue')
     },
     {
       path: '/puzzle/rush',
       component: () => import('../views/PuzzleRush.vue')
-     },
+    },
     {
       path: '/puzzle',
       component: () => import('../views/PuzzleHome.vue')
-     }
+    },
+    {
+      path: '/wrapped',
+      component: () => import('../views/Wrapped.vue')
+    }
   ]
 })
 
